@@ -312,7 +312,6 @@ class Db extends Core
         }
 
         $scope_data = $this->selectScopeData($topicmap, [ 'association' => $association_ids ]);
-error_log(print_r($scope_data, true));
         
         foreach ($scope_data as $scope_row)
         {
