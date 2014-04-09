@@ -1,7 +1,7 @@
 # XDDB database schema for MySQL
 #
 # Make sure to use utf8mb4 for the character set:
-# create database xddb_test character set utf8mb4 collate utf8mb4_unicode_ci;
+# create database xddb_test character set utf8mb4 collate utf8mb4_bin;
 #
 # This requires MySQL >= 5.5 and these my.cnf settings:
 #
@@ -26,7 +26,7 @@ create table <?=$prefix?>_topic
     topic_updated timestamp not null,
     primary key <?=$prefix?>_topic_id (topic_id)
 )
-engine = InnoDB character set utf8mb4 collate utf8mb4_unicode_ci row_format DYNAMIC;
+engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
 
 
 create table <?=$prefix?>_subject
@@ -38,7 +38,7 @@ create table <?=$prefix?>_subject
     primary key <?=$prefix?>_subject_id (subject_id),
     foreign key <?=$prefix?>_subject_topic (subject_topic) references <?=$prefix?>_topic (topic_id) on delete cascade
 )
-engine = InnoDB character set utf8mb4 collate utf8mb4_unicode_ci row_format DYNAMIC;
+engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
 
 
 create table <?=$prefix?>_type
@@ -50,7 +50,7 @@ create table <?=$prefix?>_type
     foreign key <?=$prefix?>_type_topic (type_topic) references <?=$prefix?>_topic (topic_id) on delete cascade,
     foreign key <?=$prefix?>_type_type (type_type) references <?=$prefix?>_topic (topic_id)
 )
-engine = InnoDB character set utf8mb4 collate utf8mb4_unicode_ci row_format DYNAMIC;
+engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
 
 
 create table <?=$prefix?>_name
@@ -65,7 +65,7 @@ create table <?=$prefix?>_name
     foreign key <?=$prefix?>_name_type (name_type) references <?=$prefix?>_topic (topic_id),
     foreign key <?=$prefix?>_name_reifier (name_reifier) references <?=$prefix?>_topic (topic_id)
 )
-engine = InnoDB character set utf8mb4 collate utf8mb4_unicode_ci row_format DYNAMIC;
+engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
 
 
 create table <?=$prefix?>_occurrence
@@ -82,7 +82,7 @@ create table <?=$prefix?>_occurrence
     foreign key <?=$prefix?>_occurrence_datatype (occurrence_datatype) references <?=$prefix?>_topic (topic_id),
     foreign key <?=$prefix?>_occurrence_reifier (occurrence_reifier) references <?=$prefix?>_topic (topic_id)
 )
-engine = InnoDB character set utf8mb4 collate utf8mb4_unicode_ci row_format DYNAMIC;
+engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
 
 
 create table <?=$prefix?>_association
@@ -97,7 +97,7 @@ create table <?=$prefix?>_association
     foreign key <?=$prefix?>_association_type (association_type) references <?=$prefix?>_topic (topic_id),
     foreign key <?=$prefix?>_association_reifier (association_reifier) references <?=$prefix?>_topic (topic_id)
 )
-engine = InnoDB character set utf8mb4 collate utf8mb4_unicode_ci row_format DYNAMIC;
+engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
 
 
 create table <?=$prefix?>_role
@@ -113,7 +113,7 @@ create table <?=$prefix?>_role
     foreign key <?=$prefix?>_role_type (role_type) references <?=$prefix?>_topic (topic_id),
     foreign key <?=$prefix?>_role_reifier (role_reifier) references <?=$prefix?>_topic (topic_id)
 )
-engine = InnoDB character set utf8mb4 collate utf8mb4_unicode_ci row_format DYNAMIC;
+engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
 
 
 create table <?=$prefix?>_scope
@@ -129,4 +129,4 @@ create table <?=$prefix?>_scope
     foreign key <?=$prefix?>_scope_occurrence (scope_occurrence) references <?=$prefix?>_occurrence (occurrence_id) on delete cascade,
     foreign key <?=$prefix?>_scope_scope (scope_scope) references <?=$prefix?>_topic (topic_id)
 )
-engine = InnoDB character set utf8mb4 collate utf8mb4_unicode_ci row_format DYNAMIC;
+engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
