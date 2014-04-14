@@ -37,10 +37,34 @@ class Occurrence extends Core implements \Xddb\Interfaces\iOccurrence
     }
     
     
+    public function getAll()
+    {
+        $result = 
+        [
+            'value' => $this->getValue(),
+            'datatype' => $this->getDatatype()
+        ];
+
+        $result = array_merge($result, $this->getAllTyped());
+
+        $result = array_merge($result, $this->getAllReified());
+
+        $result = array_merge($result, $this->getAllScoped());
+            
+        return $result;
+    }
+    
+    
     public function setAll(array $data)
     {
-        $ok = $this->setValue(isset($data[ 'value' ]) ? $data[ 'value' ] : false);
-        $ok = $this->setDatatype(isset($data[ 'datatype' ]) ? $data[ 'datatype' ] : false);
+        $data = array_merge(
+        [
+            'value' => false,
+            'datatype' => false
+        ], $data);
+        
+        $ok = $this->setValue($data[ 'value' ]);
+        $ok = $this->setDatatype($data[ 'datatype' ]);
         
         if ($ok >= 0)
             $ok = $this->setAllTyped($data);

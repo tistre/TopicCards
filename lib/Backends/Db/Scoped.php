@@ -21,8 +21,22 @@ trait Scoped
     }
 
 
+    public function getAllScoped()
+    {
+        return
+        [
+            'scope' => $this->getScope()
+        ];
+    }
+
+
     public function setAllScoped(array $data)
     {
-        return $this->setScope(isset($data[ 'scope' ]) ? $data[ 'scope' ] : [ ]);
+        $data = array_merge(
+        [
+            'scope' => [ ]
+        ], $data);
+        
+        return $this->setScope($data[ 'scope' ]);
     }
 }

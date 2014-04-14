@@ -21,8 +21,22 @@ trait Reified
     }
 
 
+    public function getAllReified()
+    {
+        return
+        [
+            'reifier' => $this->getReifier()
+        ];
+    }
+
+
     public function setAllReified(array $data)
     {
-        return $this->setReifier(isset($data[ 'reifier' ]) ? $data[ 'reifier' ] : false);
+        $data = array_merge(
+        [
+            'reifier' => false
+        ], $data);
+        
+        return $this->setReifier($data[ 'reifier' ]);
     }
 }

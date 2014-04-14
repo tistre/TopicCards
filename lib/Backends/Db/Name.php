@@ -23,9 +23,31 @@ class Name extends Core implements \Xddb\Interfaces\iName
     }
     
     
+    public function getAll()
+    {
+        $result = 
+        [
+            'value' => $this->getValue()
+        ];
+
+        $result = array_merge($result, $this->getAllTyped());
+
+        $result = array_merge($result, $this->getAllReified());
+
+        $result = array_merge($result, $this->getAllScoped());
+            
+        return $result;
+    }
+    
+    
     public function setAll(array $data)
     {
-        $ok = $this->setValue(isset($data[ 'value' ]) ? $data[ 'value' ] : false);
+        $data = array_merge(
+        [
+            'value' => false
+        ], $data);
+        
+        $ok = $this->setValue($data[ 'value' ]);
         
         if ($ok >= 0)
             $ok = $this->setAllTyped($data);

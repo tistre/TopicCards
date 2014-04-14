@@ -21,8 +21,22 @@ trait Typed
     }
 
 
+    public function getAllTyped()
+    {
+        return
+        [
+            'type' => $this->getType()
+        ];
+    }
+
+
     public function setAllTyped(array $data)
     {
-        return $this->setType(isset($data[ 'type' ]) ? $data[ 'type' ] : false);
+        $data = array_merge(
+        [
+            'type' => false
+        ], $data);
+        
+        return $this->setType($data[ 'type' ]);
     }
 }

@@ -47,8 +47,37 @@ class Association extends Core implements \Xddb\Interfaces\iAssociation
     }
     
     
+    public function getAll()
+    {
+        $result = 
+        [
+            'roles' => [ ]
+        ];
+
+        foreach ($this->getRoles() as $role)
+            $result[ 'roles' ][ ] = $role->getAll();
+            
+        $result = array_merge($result, $this->getAllPersistent());
+
+        $result = array_merge($result, $this->getAllTyped());
+
+        $result = array_merge($result, $this->getAllReified());
+
+        $result = array_merge($result, $this->getAllScoped());
+
+        return $result;
+    }
+    
+    
     public function setAll(array $data)
     {
+        $data = array_merge(
+        [
+            'roles' => [ ]
+        ], $data);
+        
+        $this->setAllPersistent($data);
+        
         $this->setAllTyped($data);
             
         $this->setAllReified($data);

@@ -23,9 +23,29 @@ class Role extends Core implements \Xddb\Interfaces\iRole
     }
     
     
+    public function getAll()
+    {
+        $result =
+        [
+            'player' => $this->getPlayer()
+        ];
+        
+        $result = array_merge($result, $this->getAllTyped());
+
+        $result = array_merge($result, $this->getAllReified());
+            
+        return $result;
+    }
+    
+    
     public function setAll(array $data)
     {
-        $ok = $this->setPlayer(isset($data[ 'player' ]) ? $data[ 'player' ] : false);
+        $data = array_merge(
+        [
+            'player' => false
+        ], $data);
+        
+        $ok = $this->setPlayer($data[ 'player' ]);
         
         if ($ok >= 0)
             $ok = $this->setAllTyped($data);

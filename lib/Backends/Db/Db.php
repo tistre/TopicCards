@@ -31,6 +31,37 @@ class Db extends Core
     }
 
 
+    public function datetimeToDb($date)
+    {
+        // "2004-02-12T15:19:21+00:00" => "2004-02-12 15:19:21"
+        // XXX hacked
+        
+        return str_replace('T', ' ', substr($date, 0, 19));
+    }
+    
+    
+    public function prepareInsertSql($table, array $values)
+    {
+        $ok = $this->connect();
+        
+        if ($ok < 0)
+            return $ok;
+        
+        $sql = $this->db->prepare(sprintf
+        (
+            'insert into %s (%s) values (%s)', 
+            $table, 
+            implode(', ', array_column($values, 'column')),
+            implode(', ', array_column($values, 'bind_param'))
+        ));
+
+        foreach ($values as $value)
+            $sql->bindValue($value[ 'bind_param' ], $value[ 'value' ], $value[ 'datatype' ]);
+            
+        return $sql;
+    }
+    
+
     public function selectTopicIds(\Xddb\Interfaces\iTopicMap $topicmap, array $filters)
     {
         $ok = $this->connect();
@@ -127,6 +158,69 @@ class Db extends Core
         }
 
         return $result;        
+    }
+    
+    
+    public function insertTopicData(\Xddb\Interfaces\iTopicMap $topicmap, array $data)
+    {
+        $ok = $this->connect();
+        
+        if ($ok < 0)
+            return $ok;
+        
+        $now = date('c');        
+        $data[ 'created' ] = $data[ 'updated' ] = $now;
+        
+        $data[ 'version' ] = 1;
+        
+        $values = [ ];
+        
+        foreach ($data as $key => $value)
+        {
+$ignore = [ 'types', 'subject_identifiers', 'subject_locators', 'names', 'occurrences' ];
+if (in_array($key, $ignore))
+    continue;
+            
+            if (($key === 'created') || ($key === 'updated'))
+                $value = $this->datetimeToDb($value);
+            
+            $datatype = \PDO::PARAM_STR;
+            
+            if ($key === 'version')
+                $datatype = \PDO::PARAM_INT;
+                
+            $values[ ] =
+            [
+                'column' => 'topic_' . $key,
+                'bind_param' => ':topic_' . $key,
+                'value' => $value,
+                'datatype' => $datatype
+            ];
+        }
+        
+        // XXX add transactions
+        
+        $sql = $this->prepareInsertSql($topicmap->getUrl() . '_topic', $values);
+        
+        $ok = $sql->execute();
+        
+        if ($ok === false)
+            return -1;
+
+        $type_data = [ ];
+        
+        foreach ($data[ 'types' ] as $type)
+        {
+            $type_data[ ] = 
+            [
+                'type' => $type,
+                'topic' => $data[ 'id' ]
+            ];
+        }
+        
+        $ok = $this->insertTypeData($topicmap, $type_data);
+
+        return 1;
     }
     
     
@@ -434,6 +528,40 @@ class Db extends Core
             $result[ ] = $this->stripColumnPrefix('type_', $row);
             
         return $result;
+    }
+    
+    
+    public function insertTypeData(\Xddb\Interfaces\iTopicMap $topicmap, array $types_data)
+    {
+        $ok = $this->connect();
+        
+        if ($ok < 0)
+            return $ok;
+        
+        $values = [ ];
+        
+        foreach ($types_data as $data)
+        {
+            foreach ($data as $key => $value)
+            {
+                $values[ ] =
+                [
+                    'column' => 'type_' . $key,
+                    'bind_param' => ':type_' . $key,
+                    'value' => $value,
+                    'datatype' => \PDO::PARAM_STR
+                ];
+            }
+        }
+        
+        $sql = $this->prepareInsertSql($topicmap->getUrl() . '_type', $values);
+        
+        $ok = $sql->execute();
+        
+        if ($ok === false)
+            return -1;
+
+        return 1;
     }
     
     

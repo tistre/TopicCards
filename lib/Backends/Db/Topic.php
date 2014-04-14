@@ -14,6 +14,17 @@ class Topic extends Core implements \Xddb\Interfaces\iTopic
     protected $occurrences = [ ];
 
 
+    public function __construct(\Xddb\Interfaces\iServices $services, $data = false)
+    {
+        parent::__construct($services);
+        
+        if (! is_array($data))
+            $data = array();
+            
+        $this->setAll($data);        
+    }
+    
+    
     public function getSubjectIdentifiers()
     {
         return $this->subject_identifiers;
@@ -123,8 +134,48 @@ class Topic extends Core implements \Xddb\Interfaces\iTopic
     }
     
     
-    public function setAll(array $data)
+    public function save()
     {
+        return $this->services->db->insertTopicData($this->getTopicmap(), $this->getAll());
+    }
+    
+    
+    public function getAll()
+    {   
+        $result = 
+        [
+            'types' => $this->getTypes(), 
+            'subject_identifiers' => $this->getSubjectIdentifiers(), 
+            'subject_locators' => $this->getSubjectLocators(), 
+            'names' => [ ], 
+            'occurrences' => [ ]
+        ];
+        
+        foreach ($this->names as $name)
+            $result[ 'names' ][ ] = $name->getAll();
+        
+        foreach ($this->occurrences as $occurrence)
+            $result[ 'occurrences' ][ ] = $occurrence->getAll();
+        
+        $result = array_merge($result, $this->getAllPersistent());
+                
+        return $result;
+    }
+
+
+    public function setAll(array $data)
+    {   
+        $data = array_merge(
+        [
+            'types' => [ ], 
+            'subject_identifiers' => [ ], 
+            'subject_locators' => [ ], 
+            'names' => [ ], 
+            'occurrences' => [ ]
+        ], $data);
+        
+        $this->setAllPersistent($data);
+        
         $this->setTypes($data[ 'types' ]);
 
         $this->setSubjectIdentifiers($data[ 'subject_identifiers' ]);
