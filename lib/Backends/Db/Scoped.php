@@ -5,6 +5,8 @@ namespace Xddb\Backends\Db;
 
 trait Scoped
 {
+    use ScopedDbAdapter;
+    
     protected $scope = [ ];
     
     

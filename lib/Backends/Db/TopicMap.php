@@ -28,15 +28,13 @@ class TopicMap extends Core implements \Xddb\Interfaces\iTopicMap
     {   
         $topic = new Topic($this->services);
         
-        $topic->setTopicMap($this);
-        
         return $topic;
     }
     
     
     public function getTopics(array $filters)
     {
-        return $this->services->db->selectTopicIds($this, $filters);
+        return $this->services->db_utils->selectTopicIds($filters);
     }
     
     
@@ -44,14 +42,12 @@ class TopicMap extends Core implements \Xddb\Interfaces\iTopicMap
     {
         $association = new Association($this->services);
         
-        $association->setTopicMap($this);
-        
         return $association;
     }
     
     
     public function getAssociations(array $filters)
     {
-        return $this->services->db->selectAssociationIds($this, $filters);
+        return $this->services->db_utils->selectAssociationIds($filters);
     }
 }

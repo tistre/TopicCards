@@ -5,7 +5,7 @@ namespace Xddb\Backends\Db;
 
 class Name extends Core implements \Xddb\Interfaces\iName
 {
-    use Reified, Scoped, Typed;
+    use Reified, Scoped, Typed, NameDbAdapter;
     
     protected $value = false;
     

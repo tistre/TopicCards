@@ -5,7 +5,7 @@ namespace Xddb\Backends\Db;
 
 class Association extends Core implements \Xddb\Interfaces\iAssociation
 {
-    use Persistent, Reified, Scoped, Typed;
+    use Persistent, Reified, Scoped, Typed, AssociationDbAdapter;
     
     protected $roles = [ ];
     
@@ -35,7 +35,7 @@ class Association extends Core implements \Xddb\Interfaces\iAssociation
     
     public function load($id)
     {
-        $rows = $this->services->db->selectAssociationData($this->getTopicMap(), [ 'id' => $id ]);
+        $rows = $this->selectAll([ 'id' => $id ]);
         
         if (! is_array($rows))
             return $rows;
@@ -44,6 +44,21 @@ class Association extends Core implements \Xddb\Interfaces\iAssociation
             return -1;
             
         return $this->setAll($rows[ 0 ]);
+    }
+    
+    
+    public function save()
+    {
+        if ($this->getVersion() === 0)
+        {
+            $ok = $this->insertAll($this->getAll());
+        }
+        else
+        {
+            $ok = $this->updateAll($this->getAll());
+        }
+        
+        return $ok;
     }
     
     

@@ -5,7 +5,7 @@ namespace Xddb\Backends\Db;
 
 class Occurrence extends Core implements \Xddb\Interfaces\iOccurrence
 {
-    use Reified, Scoped, Typed;
+    use Reified, Scoped, Typed, OccurrenceDbAdapter;
     
     protected $value = false;
     protected $datatype = false;

@@ -5,12 +5,14 @@ namespace Xddb\Backends\Db;
 
 class Services implements \Xddb\Interfaces\iServices
 {
-    public $db;
+    public $topicmap;
+    public $db_utils;
+    public $db = false;
     
     
     public function __construct()
     {
-        $this->db = new Db($this);
+        $this->db_utils = new DbUtils($this);
     }
     
     

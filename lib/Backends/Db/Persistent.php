@@ -5,25 +5,11 @@ namespace Xddb\Backends\Db;
 
 trait Persistent
 {
-    protected $topicmap;
     protected $id = false;
     protected $created = false;
     protected $modified = false;
     protected $version = false;
     
-    
-    public function getTopicMap()
-    {
-        return $this->topicmap;
-    }
-    
-    
-    public function setTopicMap(\Xddb\Interfaces\iTopicMap $topicmap)
-    {
-        $this->topicmap = $topicmap;
-        return 1;
-    }
-
     
     public function getId()
     {

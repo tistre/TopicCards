@@ -5,7 +5,7 @@ namespace Xddb\Backends\Db;
 
 class Topic extends Core implements \Xddb\Interfaces\iTopic
 {
-    use Persistent;
+    use Persistent, TopicDbAdapter;
     
     protected $subject_identifiers = [ ];
     protected $subject_locators = [ ];
@@ -122,7 +122,7 @@ class Topic extends Core implements \Xddb\Interfaces\iTopic
     
     public function load($id)
     {
-        $rows = $this->services->db->selectTopicData($this->getTopicMap(), [ 'id' => $id ]);
+        $rows = $this->selectAll([ 'id' => $id ]);
         
         if (! is_array($rows))
             return $rows;
@@ -136,7 +136,16 @@ class Topic extends Core implements \Xddb\Interfaces\iTopic
     
     public function save()
     {
-        return $this->services->db->insertTopicData($this->getTopicmap(), $this->getAll());
+        if ($this->getVersion() === 0)
+        {
+            $ok = $this->insertAll($this->getAll());
+        }
+        else
+        {
+            $ok = $this->updateAll($this->getAll());
+        }
+        
+        return $ok;
     }
     
     
