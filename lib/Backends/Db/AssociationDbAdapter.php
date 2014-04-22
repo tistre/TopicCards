@@ -35,6 +35,8 @@ trait AssociationDbAdapter
         foreach ($sql->fetchAll() as $row)
         {
             $row = $this->services->db_utils->stripColumnPrefix('association_', $row);
+
+            $row[ 'scope' ] = $this->selectScopes([ 'association' => $row[ 'id' ] ]);
             
             $row[ 'roles' ] = $role->selectAll([ 'association' => $row[ 'id' ] ]);
 
@@ -91,8 +93,11 @@ trait AssociationDbAdapter
         $ok = ($ok === false ? -1 : 1);
         
         if ($ok >= 0)
+            $ok = $this->insertScopes('association', $data[ 'id' ], $data[ 'scope' ]);
+
+        if ($ok >= 0)
         {
-            $name = new Role($this->services);
+            $role = new Role($this->services);
             $ok = $role->insertAll($data[ 'id' ], $data[ 'roles' ]);
         }
 

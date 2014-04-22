@@ -7,8 +7,8 @@ trait Persistent
 {
     protected $id = false;
     protected $created = false;
-    protected $modified = false;
-    protected $version = false;
+    protected $updated = false;
+    protected $version = 0;
     
     
     public function getId()

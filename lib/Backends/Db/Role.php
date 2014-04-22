@@ -5,7 +5,7 @@ namespace Xddb\Backends\Db;
 
 class Role extends Core implements \Xddb\Interfaces\iRole
 {
-    use Reified, Typed;
+    use Reified, Typed, RoleDbAdapter;
     
     protected $player = false;
     
