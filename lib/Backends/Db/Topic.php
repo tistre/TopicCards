@@ -143,6 +143,9 @@ class Topic extends Core implements \Xddb\Interfaces\iTopic
         else
         {
             $ok = $this->updateAll($this->getAll());
+            
+            if ($ok >= 0)
+                $this->setVersion($this->getVersion() + 1);
         }
         
         return $ok;

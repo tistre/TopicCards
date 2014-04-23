@@ -86,4 +86,28 @@ trait OccurrenceDbAdapter
         
         return 1;
     }
+    
+    
+    public function updateAll($topic_id, array $data)
+    {
+        $ok = $this->services->db_utils->connect();
+        
+        if ($ok < 0)
+            return $ok;
+
+        $sql = $this->services->db_utils->prepareDeleteSql
+        (
+            $this->services->topicmap->getUrl() . '_occurrence', 
+            [ 
+                [ 'column' => 'occurrence_topic', 'value' => $topic_id ]
+            ]
+        );
+    
+        $ok = $sql->execute();
+    
+        if ($ok === false)
+            return -1;
+
+        return $this->insertAll($topic_id, $data);        
+    }
 }

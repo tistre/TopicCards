@@ -58,7 +58,7 @@ trait Persistent
     
     public function setVersion($version)
     {
-        $this->version = $version;
+        $this->version = intval($version);
         return 1;
     }
     

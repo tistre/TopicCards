@@ -291,4 +291,159 @@ trait TopicDbAdapter
         
         return 1;
     }
+
+
+    public function updateAll(array $data)
+    {
+        $ok = $this->services->db_utils->connect();
+        
+        if ($ok < 0)
+            return $ok;
+        
+        $this->services->db->beginTransaction();
+        
+        $previous_version = $data[ 'version' ];
+        
+        $data[ 'updated' ] = date('c');        
+        $data[ 'version' ]++;
+        
+        $values = [ ];
+        
+        foreach ($data as $key => $value)
+        {
+            $ignore = [ 'id', 'created', 'types', 'subject_identifiers', 'subject_locators', 'names', 'occurrences' ];
+            
+            if (in_array($key, $ignore))
+                continue;
+            
+            if (($key === 'created') || ($key === 'updated'))
+                $value = $this->services->db_utils->datetimeToDb($value);
+            
+            $datatype = \PDO::PARAM_STR;
+            
+            if ($key === 'version')
+                $datatype = \PDO::PARAM_INT;
+                
+            $values[ ] =
+            [
+                'column' => 'topic_' . $key,
+                'value' => $value,
+                'datatype' => $datatype
+            ];
+        }
+        
+        $sql = $this->services->db_utils->prepareUpdateSql
+        (
+            $this->services->topicmap->getUrl() . '_topic', 
+            $values,
+            [
+                [
+                    'column' => 'topic_id',
+                    'value' => $data[ 'id' ]
+                ],
+                [
+                    'column' => 'topic_version',
+                    'value' => $previous_version,
+                    'datatype' => \PDO::PARAM_INT
+                ]
+            ]
+        );
+
+        $ok = $sql->execute();
+        
+        $ok = ($ok === false ? -1 : 1);
+        
+        if (($ok >= 0) && ($sql->rowCount() !== 1))
+            $ok = -2;
+
+        if ($ok >= 0)
+            $ok = $this->updateTypes($data[ 'id' ], $data[ 'types' ]);
+        
+        if ($ok >= 0)
+            $ok = $this->updateSubjectIdentifiers($data[ 'id' ], $data[ 'subject_identifiers' ]);
+        
+        if ($ok >= 0)
+            $ok = $this->updateSubjectLocators($data[ 'id' ], $data[ 'subject_locators' ]);
+        
+        if ($ok >= 0)
+        {
+            $name = new Name($this->services);
+            $ok = $name->updateAll($data[ 'id' ], $data[ 'names' ]);
+        }
+
+        if ($ok >= 0)
+        {
+            $occurrence = new Occurrence($this->services);
+            $ok = $occurrence->updateAll($data[ 'id' ], $data[ 'occurrences' ]);
+        }
+
+        if ($ok < 0)
+        {
+            $this->services->db->rollBack();
+            return $ok;
+        }
+
+        $this->services->db->commit();
+
+        return $ok;
+    }
+
+
+    protected function updateTypes($topic_id, array $types)
+    {
+        $ok = $this->services->db_utils->connect();
+        
+        if ($ok < 0)
+            return $ok;
+
+        $sql = $this->services->db_utils->prepareDeleteSql
+        (
+            $this->services->topicmap->getUrl() . '_type', 
+            [ [ 'column' => 'type_topic', 'value' => $topic_id ] ]
+        );
+    
+        $ok = $sql->execute();
+    
+        if ($ok === false)
+            return -1;
+        
+        return $this->insertTypes($topic_id, $types);
+    }
+
+
+    protected function updateSubjectIdentifiers($topic_id, array $subject_identifiers)
+    {
+        return $this->updateSubjects($topic_id, $subject_identifiers, 0);
+    }
+    
+
+    protected function updateSubjectLocators($topic_id, array $subject_locators)
+    {
+        return $this->updateSubjects($topic_id, $subject_locators, 1);
+    }
+    
+
+    protected function updateSubjects($topic_id, array $subjects, $islocator)
+    {
+        $ok = $this->services->db_utils->connect();
+        
+        if ($ok < 0)
+            return $ok;
+
+        $sql = $this->services->db_utils->prepareDeleteSql
+        (
+            $this->services->topicmap->getUrl() . '_subject', 
+            [ 
+                [ 'column' => 'subject_topic', 'value' => $topic_id ],
+                [ 'column' => 'subject_islocator', 'value' => intval($islocator), 'datatype' => \PDO::PARAM_INT ]
+            ]
+        );
+    
+        $ok = $sql->execute();
+    
+        if ($ok === false)
+            return -1;
+        
+        return $this->insertSubjects($topic_id, $subjects, $islocator);
+    }
 }

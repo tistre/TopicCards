@@ -44,18 +44,7 @@ class DbUtils extends Core
         if ($ok < 0)
             return $ok;
 
-        $stmts = [ ];
-        
-        foreach ($where as $key => $value)
-        {
-            if (! isset($value[ 'bind_param' ]))
-                $where[ $key ][ 'bind_param' ] = ':' . $value[ 'column' ];
-
-            if (! isset($value[ 'datatype' ]))
-                $where[ $key ][ 'datatype' ] = \PDO::PARAM_STR;
-                
-            $stmts[ ] = sprintf('%s=%s', $where[ $key ][ 'column' ], $where[ $key ][ 'bind_param' ]);
-        }
+        $this->columnValueStatements($where, '', $stmts, $bind);
         
         $sql = $this->services->db->prepare(sprintf
         (
@@ -66,13 +55,40 @@ class DbUtils extends Core
             $postfix
         ));
 
-        foreach ($where as $value)
+        foreach ($bind as $value)
             $sql->bindValue($value[ 'bind_param' ], $value[ 'value' ], $value[ 'datatype' ]);
             
         return $sql;
     }
     
 
+    protected function columnValueStatements($values, $bind_post, &$stmts, &$bind)
+    {
+        $stmts = [ ];
+        $bind = [ ];
+        
+        foreach ($values as $key => $value)
+        {
+            if (! isset($value[ 'bind_param' ]))
+                $value[ 'bind_param' ] = ':' . $value[ 'column' ];
+                
+            $value[ 'bind_param' ] .= $bind_post;
+
+            if (! isset($value[ 'datatype' ]))
+                $value[ 'datatype' ] = \PDO::PARAM_STR;
+                
+            $stmts[ ] = sprintf('%s=%s', $value[ 'column' ], $value[ 'bind_param' ]);
+            
+            $bind[ ] = 
+            [
+                'bind_param' => $value[ 'bind_param' ],
+                'value' => $value[ 'value' ],
+                'datatype' => $value[ 'datatype' ]
+            ];
+        }
+    }
+    
+    
     public function prepareInsertSql($table, array $values)
     {
         $ok = $this->connect();
@@ -87,6 +103,14 @@ class DbUtils extends Core
 
             if (! isset($value[ 'datatype' ]))
                 $values[ $key ][ 'datatype' ] = \PDO::PARAM_STR;
+                
+            if (strlen($value[ 'value' ]) === 0)
+            {
+                // Ugly PDO hack; why can't I use \PDO::PARAM_NULL? See:
+                // http://stackoverflow.com/questions/1391777/how-do-i-insert-null-values-using-pdo
+                $values[ $key ][ 'value' ] = null;
+                $values[ $key ][ 'datatype' ] = \PDO::PARAM_INT;
+            }
         }
         
         $sql = $this->services->db->prepare(sprintf
@@ -98,6 +122,60 @@ class DbUtils extends Core
         ));
 
         foreach ($values as $value)
+            $sql->bindValue($value[ 'bind_param' ], $value[ 'value' ], $value[ 'datatype' ]);
+            
+        return $sql;
+    }
+    
+
+    public function prepareUpdateSql($table, array $set, array $where)
+    {
+        if (count($where) === 0)
+            return -1;
+            
+        $ok = $this->connect();
+        
+        if ($ok < 0)
+            return $ok;
+
+        $this->columnValueStatements($set, '_s', $set_stmts, $set_bind);
+        $this->columnValueStatements($where, '_w', $where_stmts, $where_bind);
+        
+        $sql = $this->services->db->prepare(sprintf
+        (
+            'update %s set %s where (%s)', 
+            $table, 
+            implode(', ', $set_stmts),
+            implode(' and ', $where_stmts)
+        ));
+
+        foreach (array_merge($set_bind, $where_bind) as $value)
+            $sql->bindValue($value[ 'bind_param' ], $value[ 'value' ], $value[ 'datatype' ]);
+            
+        return $sql;
+    }
+    
+
+    public function prepareDeleteSql($table, array $where)
+    {
+        if (count($where) === 0)
+            return -1;
+            
+        $ok = $this->connect();
+        
+        if ($ok < 0)
+            return $ok;
+
+        $this->columnValueStatements($where, '', $stmts, $bind);
+        
+        $sql = $this->services->db->prepare(sprintf
+        (
+            'delete from %s where (%s)', 
+            $table, 
+            implode(' and ', $stmts)
+        ));
+
+        foreach ($bind as $value)
             $sql->bindValue($value[ 'bind_param' ], $value[ 'value' ], $value[ 'datatype' ]);
             
         return $sql;
