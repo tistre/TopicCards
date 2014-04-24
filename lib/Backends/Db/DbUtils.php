@@ -76,6 +76,14 @@ class DbUtils extends Core
 
             if (! isset($value[ 'datatype' ]))
                 $value[ 'datatype' ] = \PDO::PARAM_STR;
+
+            if (strlen($value[ 'value' ]) === 0)
+            {
+                // Ugly PDO hack; why can't I use \PDO::PARAM_NULL? See:
+                // http://stackoverflow.com/questions/1391777/how-do-i-insert-null-values-using-pdo
+                $value[ 'value' ] = null;
+                $value[ 'datatype' ] = \PDO::PARAM_INT;
+            }
                 
             $stmts[ ] = sprintf('%s=%s', $value[ 'column' ], $value[ 'bind_param' ]);
             

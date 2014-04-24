@@ -72,4 +72,26 @@ trait RoleDbAdapter
         
         return 1;
     }
+    
+    
+    public function updateAll($association_id, array $data)
+    {
+        $ok = $this->services->db_utils->connect();
+        
+        if ($ok < 0)
+            return $ok;
+
+        $sql = $this->services->db_utils->prepareDeleteSql
+        (
+            $this->services->topicmap->getUrl() . '_role', 
+            [ [ 'column' => 'role_association', 'value' => $association_id ] ]
+        );
+    
+        $ok = $sql->execute();
+    
+        if ($ok === false)
+            return -1;
+        
+        return $this->insertAll($association_id, $data);
+    }
 }

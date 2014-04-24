@@ -52,7 +52,8 @@ trait ScopedDbAdapter
             $values[ ] =
             [
                 'column' => 'scope_' . $obj_type,
-                'value' => $obj_id
+                'value' => $obj_id,
+                'datatype' => ($obj_type === 'association' ? \PDO::PARAM_STR : \PDO::PARAM_INT)
             ];
         
             $values[ ] =
@@ -70,5 +71,31 @@ trait ScopedDbAdapter
         }
         
         return 1;
+    }
+    
+    
+    protected function updateScopes($obj_type, $obj_id, array $scope)
+    {
+        $ok = $this->services->db_utils->connect();
+        
+        if ($ok < 0)
+            return $ok;
+
+        $sql = $this->services->db_utils->prepareDeleteSql
+        (
+            $this->services->topicmap->getUrl() . '_scope', 
+            [ [
+                'column' => 'scope_' . $obj_type,
+                'value' => $obj_id,
+                'datatype' => ($obj_type === 'association' ? \PDO::PARAM_STR : \PDO::PARAM_INT)
+            ] ]
+        );
+    
+        $ok = $sql->execute();
+    
+        if ($ok === false)
+            return -1;
+        
+        return $this->insertScopes($obj_type, $obj_id, $scope);
     }
 }

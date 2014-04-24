@@ -99,6 +99,8 @@ class Association extends Core implements \Xddb\Interfaces\iAssociation
             
         $this->setAllScoped($data);
         
+        $this->setRoles([ ]);
+        
         foreach ($data[ 'roles' ] as $role_data)
         {
             $role = $this->newRole();

@@ -194,11 +194,15 @@ class Topic extends Core implements \Xddb\Interfaces\iTopic
 
         $this->setSubjectLocators($data[ 'subject_locators' ]);
         
+        $this->setNames([ ]);
+        
         foreach ($data[ 'names' ] as $name_data)
         {
             $name = $this->newName();
             $name->setAll($name_data);
         }
+        
+        $this->setOccurrences([ ]);
         
         foreach ($data[ 'occurrences' ] as $occurrence_data)
         {
