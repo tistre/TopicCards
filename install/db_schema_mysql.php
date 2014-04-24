@@ -1,7 +1,13 @@
 # XDDB database schema for MySQL
 #
+# Run the install/db_schema_mysql.php file through PHP (with your preferred 
+# table prefix as the only argument) for a valid SQL schema:
+#
+# $ php install/db_schema_mysql.php xddb > xddb_schema.sql
+#
 # Make sure to use utf8mb4 for the character set:
-# create database xddb_test character set utf8mb4 collate utf8mb4_bin;
+#
+# mysql> create database xddb_test character set utf8mb4 collate utf8mb4_bin;
 #
 # This requires MySQL >= 5.5 and these my.cnf settings:
 #
@@ -12,6 +18,7 @@
 #
 # When connecting to the database, also make sure to use charset=utf8mb4
 # and run this init command:
+#
 # SET SESSION sql_mode='STRICT_ALL_TABLES';
 #
 
