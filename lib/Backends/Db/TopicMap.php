@@ -5,7 +5,7 @@ namespace Xddb\Backends\Db;
 
 class TopicMap extends Core implements \Xddb\Interfaces\iTopicMap
 {
-    use Reified;
+    use Reified, TopicMapDbAdapter;
      
     protected $url;
     
@@ -34,7 +34,7 @@ class TopicMap extends Core implements \Xddb\Interfaces\iTopicMap
     
     public function getTopics(array $filters)
     {
-        return $this->services->db_utils->selectTopicIds($filters);
+        return $this->selectTopics($filters);
     }
     
     
@@ -48,6 +48,6 @@ class TopicMap extends Core implements \Xddb\Interfaces\iTopicMap
     
     public function getAssociations(array $filters)
     {
-        return $this->services->db_utils->selectAssociationIds($filters);
+        return $this->selectAssociations($filters);
     }
 }
