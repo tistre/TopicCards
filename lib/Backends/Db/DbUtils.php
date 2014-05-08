@@ -36,6 +36,61 @@ class DbUtils extends Core
         return str_replace('T', ' ', substr($date, 0, 19));
     }
     
+
+    protected function prepareBindValue(array $value)
+    {
+        if (! isset($value[ 'datatype' ]))
+            $value[ 'datatype' ] = \PDO::PARAM_STR;
+
+        if (strlen($value[ 'value' ]) === 0)
+        {
+            // Ugly PDO hack; why can't I use \PDO::PARAM_NULL? See:
+            // http://stackoverflow.com/questions/1391777/how-do-i-insert-null-values-using-pdo
+            $value[ 'value' ] = null;
+            $value[ 'datatype' ] = \PDO::PARAM_INT;
+        }
+        
+        return $value;
+    }
+    
+    
+    // XXX  add class name to $sql
+    public function bindValues($sql, array $values)
+    {
+        foreach ($values as $value)
+        {
+            $value = $this->prepareBindValue($value);
+            
+            $sql->bindValue($value[ 'bind_param' ], $value[ 'value' ], $value[ 'datatype' ]);
+        }
+    }
+    
+    
+    protected function columnValueStatements($values, $bind_post, &$stmts, &$bind)
+    {
+        $stmts = [ ];
+        $bind = [ ];
+        
+        foreach ($values as $key => $value)
+        {
+            if (! isset($value[ 'bind_param' ]))
+                $value[ 'bind_param' ] = ':' . $value[ 'column' ];
+                
+            $value[ 'bind_param' ] .= $bind_post;
+
+            $value = $this->prepareBindValue($value);
+                
+            $stmts[ ] = sprintf('%s=%s', $value[ 'column' ], $value[ 'bind_param' ]);
+            
+            $bind[ ] = 
+            [
+                'bind_param' => $value[ 'bind_param' ],
+                'value' => $value[ 'value' ],
+                'datatype' => $value[ 'datatype' ]
+            ];
+        }
+    }
+    
     
     public function prepareSelectSql($table, $what, array $where, $postfix = '')
     {
@@ -55,45 +110,9 @@ class DbUtils extends Core
             $postfix
         ));
 
-        foreach ($bind as $value)
-            $sql->bindValue($value[ 'bind_param' ], $value[ 'value' ], $value[ 'datatype' ]);
+        $this->bindValues($sql, $bind);
             
         return $sql;
-    }
-    
-
-    protected function columnValueStatements($values, $bind_post, &$stmts, &$bind)
-    {
-        $stmts = [ ];
-        $bind = [ ];
-        
-        foreach ($values as $key => $value)
-        {
-            if (! isset($value[ 'bind_param' ]))
-                $value[ 'bind_param' ] = ':' . $value[ 'column' ];
-                
-            $value[ 'bind_param' ] .= $bind_post;
-
-            if (! isset($value[ 'datatype' ]))
-                $value[ 'datatype' ] = \PDO::PARAM_STR;
-
-            if (strlen($value[ 'value' ]) === 0)
-            {
-                // Ugly PDO hack; why can't I use \PDO::PARAM_NULL? See:
-                // http://stackoverflow.com/questions/1391777/how-do-i-insert-null-values-using-pdo
-                $value[ 'value' ] = null;
-                $value[ 'datatype' ] = \PDO::PARAM_INT;
-            }
-                
-            $stmts[ ] = sprintf('%s=%s', $value[ 'column' ], $value[ 'bind_param' ]);
-            
-            $bind[ ] = 
-            [
-                'bind_param' => $value[ 'bind_param' ],
-                'value' => $value[ 'value' ],
-                'datatype' => $value[ 'datatype' ]
-            ];
-        }
     }
     
     
@@ -109,16 +128,7 @@ class DbUtils extends Core
             if (! isset($value[ 'bind_param' ]))
                 $values[ $key ][ 'bind_param' ] = ':' . $value[ 'column' ];
 
-            if (! isset($value[ 'datatype' ]))
-                $values[ $key ][ 'datatype' ] = \PDO::PARAM_STR;
-                
-            if (strlen($value[ 'value' ]) === 0)
-            {
-                // Ugly PDO hack; why can't I use \PDO::PARAM_NULL? See:
-                // http://stackoverflow.com/questions/1391777/how-do-i-insert-null-values-using-pdo
-                $values[ $key ][ 'value' ] = null;
-                $values[ $key ][ 'datatype' ] = \PDO::PARAM_INT;
-            }
+            $values[ $key ] = $this->prepareBindValue($values[ $key ]);
         }
         
         $sql = $this->services->db->prepare(sprintf
@@ -129,8 +139,7 @@ class DbUtils extends Core
             implode(', ', array_column($values, 'bind_param'))
         ));
 
-        foreach ($values as $value)
-            $sql->bindValue($value[ 'bind_param' ], $value[ 'value' ], $value[ 'datatype' ]);
+        $this->bindValues($sql, $values);
             
         return $sql;
     }
@@ -157,9 +166,8 @@ class DbUtils extends Core
             implode(' and ', $where_stmts)
         ));
 
-        foreach (array_merge($set_bind, $where_bind) as $value)
-            $sql->bindValue($value[ 'bind_param' ], $value[ 'value' ], $value[ 'datatype' ]);
-            
+        $this->bindValues($sql, array_merge($set_bind, $where_bind));
+
         return $sql;
     }
     
@@ -183,8 +191,7 @@ class DbUtils extends Core
             implode(' and ', $stmts)
         ));
 
-        foreach ($bind as $value)
-            $sql->bindValue($value[ 'bind_param' ], $value[ 'value' ], $value[ 'datatype' ]);
+        $this->bindValues($sql, $bind);
             
         return $sql;
     }
