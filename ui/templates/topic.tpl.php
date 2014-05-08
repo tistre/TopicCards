@@ -251,17 +251,54 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         ?>
         </table>
       </div>
-      
+
       <div class="row marketing">
         <div class="col-lg-6">
-          <h4>Subheading</h4>
-          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
 
-          <h4>Subheading</h4>
-          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+        <!-- Associations -->
 
-          <h4>Subheading</h4>
-          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        <?php
+        
+        foreach ($tpl[ 'association_type_index' ] as $association_type => $role_types)
+        {
+            foreach ($role_types as $role_type => $association_keys)
+            {
+                ?>
+                
+          <h4>
+            <?=htmlspecialchars($tpl[ 'topic_names' ][ $association_type ])?>
+            (as <?=htmlspecialchars($tpl[ 'topic_names' ][ $role_type ])?>)
+          </h4>
+          
+                <?php
+                
+                foreach ($association_keys as $association_key)
+                {
+                    echo '<p>';
+                    
+                    $association = $tpl[ 'associations' ][ $association_key ];
+                    
+                    foreach ($association[ 'roles' ] as $role)
+                    {
+                        if ($role[ 'player' ] === $tpl[ 'topic' ][ 'id' ])
+                            continue;
+                            
+                        printf
+                        (
+                            '%s: <a href="%s">%s</a>. ',
+                            htmlspecialchars($tpl[ 'topic_names' ][ $role[ 'type' ] ]),
+                            htmlspecialchars($tpl[ 'xddb_base_url' ] . 'topic/' . urlencode($role[ 'player' ])),
+                            htmlspecialchars($tpl[ 'topic_names' ][ $role[ 'player' ] ])
+                        );
+                    }
+                    
+                    echo '</p>';
+                }
+            }
+        }
+        
+        ?>
+
         </div>
 
         <div class="col-lg-6">

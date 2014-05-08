@@ -52,22 +52,45 @@ trait TopicMapDbAdapter
             return $ok;
         
         $prefix = $this->getUrl();
+
+        $sql_str = sprintf('select association_id from %s_association', $prefix);
         
+        $where = [ ];
+        $bind = [ ];
+
         if (! empty($filters[ 'type' ]))
         {
-            $sql = $this->services->db->prepare(sprintf
-            (
-                'select association_id from %s_association'
-                . ' where association_type = :association_type', 
-                $prefix
-            ));
+            $where[ ] = 'association_type = :association_type';
+            
+            $bind[ ] = 
+            [
+                'bind_param' => ':association_type', 
+                'value' => $filters[ 'type' ] 
+            ];
+        }
 
-            $sql->bindValue(':association_type', $filters[ 'type' ], \PDO::PARAM_STR);
-        }
-        else
+        if (! empty($filters[ 'role_player' ]))
         {
-            $sql = $this->services->db->prepare(sprintf('select association_id from %s_association', $prefix));
+            $where[ ] = sprintf
+            (
+                'exists (select role_id from %s_role where role_player = :role_player'
+                . ' and role_association = association_id)',
+                $prefix
+            );
+            
+            $bind[ ] = 
+            [
+                'bind_param' => ':role_player', 
+                'value' => $filters[ 'role_player' ]
+            ];
         }
+
+        if (count($where) > 0)
+            $sql_str .= ' where ' . implode(' and ', $where);
+
+        $sql = $this->services->db->prepare($sql_str);
+        
+        $this->services->db_utils->bindValues($sql, $bind);
         
         $ok = $sql->execute();
         

@@ -117,6 +117,52 @@ foreach ($tpl[ 'topic' ][ 'occurrences' ] as $key => $occurrence)
     $tpl[ 'topic_names' ][ $occurrence_type ] = false;
 }
 
+// Fill associations and associations_type_index, group by type and role
+
+$association_ids = $services->topicmap->getAssociations([ 'role_player' => $topic_id ]);
+
+$tpl[ 'associations' ] = [ ];
+
+foreach ($association_ids as $association_id)
+{
+    $association = $services->topicmap->newAssociation();
+    $association->load($association_id);
+
+    $tpl[ 'associations' ][ ] = $association->getAll();
+}
+
+// Fill association_type_index
+
+$tpl[ 'association_type_index' ] = [ ];
+
+foreach ($tpl[ 'associations' ] as $key => $association)
+{
+    $association_type = $association[ 'type' ];
+    
+    if (! isset($tpl[ 'association_type_index' ][ $association_type ]))
+        $tpl[ 'association_type_index' ][ $association_type ] = [ ];
+    
+    $my_role_type = false;
+    
+    foreach ($association[ 'roles' ] as $role)
+    {
+        $tpl[ 'topic_names' ][ $role[ 'type' ] ] = false;
+        $tpl[ 'topic_names' ][ $role[ 'player' ] ] = false;
+
+        if ($role[ 'player' ] !== $topic_id)
+            continue;
+            
+        $my_role_type = $role[ 'type' ];
+    }
+    
+    if (! isset($tpl[ 'association_type_index' ][ $association_type ][ $my_role_type ]))
+        $tpl[ 'association_type_index' ][ $association_type ][ $my_role_type ] = [ ];
+
+    $tpl[ 'association_type_index' ][ $association_type ][ $my_role_type ][ ] = $key;
+    
+    $tpl[ 'topic_names' ][ $association_type ] = false;    
+}
+
 // Fill topic_names array (names of all related topics needed for display)
 
 $helper_topic = $services->topicmap->newTopic();
@@ -132,6 +178,7 @@ foreach (array_keys($tpl[ 'topic_names' ]) as $helper_topic_id)
         
     $tpl[ 'topic_names' ][ $helper_topic_id ] = $helper_display_name;
 }
+
 
 include XDDB_BASE_DIR . '/ui/templates/topic.tpl.php';
 
