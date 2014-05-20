@@ -71,6 +71,8 @@ $request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(XDDB_BASE_URL));
 
 list(, $topic_id) = explode('/', $request_path);
 
+$tpl[ 'edit_url' ] = sprintf('%sedit_topic/%s', XDDB_BASE_URL, $topic_id);
+
 $topic = $services->topicmap->newTopic();
 $topic->load($topic_id);
 
@@ -181,5 +183,3 @@ foreach (array_keys($tpl[ 'topic_names' ]) as $helper_topic_id)
 
 
 include XDDB_BASE_DIR . '/ui/templates/topic.tpl.php';
-
-?>

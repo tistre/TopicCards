@@ -130,7 +130,12 @@ class Topic extends Core implements \Xddb\Interfaces\iTopic
         if (count($rows) === 0)
             return -1;
             
-        return $this->setAll($rows[ 0 ]);
+        $ok = $this->setAll($rows[ 0 ]);
+        
+        if ($ok >= 0)
+            $this->loaded = true;
+            
+        return $ok;
     }
     
     
@@ -143,10 +148,10 @@ class Topic extends Core implements \Xddb\Interfaces\iTopic
         else
         {
             $ok = $this->updateAll($this->getAll());
-            
-            if ($ok >= 0)
-                $this->setVersion($this->getVersion() + 1);
         }
+            
+        if ($ok >= 0)
+            $this->setVersion($this->getVersion() + 1);
         
         return $ok;
     }

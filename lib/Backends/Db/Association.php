@@ -43,7 +43,12 @@ class Association extends Core implements \Xddb\Interfaces\iAssociation
         if (count($rows) === 0)
             return -1;
             
-        return $this->setAll($rows[ 0 ]);
+        $ok = $this->setAll($rows[ 0 ]);
+        
+        if ($ok >= 0)
+            $this->loaded = true;
+            
+        return $ok;
     }
     
     

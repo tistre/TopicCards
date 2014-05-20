@@ -9,6 +9,7 @@ trait Persistent
     protected $created = false;
     protected $updated = false;
     protected $version = 0;
+    protected $loaded = false;
     
     
     public function getId()
@@ -97,6 +98,12 @@ trait Persistent
     public function load($id)
     {
         return -1;
+    }
+    
+    
+    public function isLoaded()
+    {
+        return $this->loaded;
     }
     
     

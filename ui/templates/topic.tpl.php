@@ -55,7 +55,13 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
       <div class="well well-lg">
         <h1>
+        
+          <!-- Unscoped base name -->
+          
           <?=htmlspecialchars($tpl[ 'topic' ][ 'display_name' ][ 'value' ])?>
+          
+          <!-- Types -->
+          
           <small class="pull-right">
             <?php
           
@@ -250,6 +256,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
         ?>
         </table>
+        
+        <p><a href="<?=htmlspecialchars($tpl[ 'edit_url' ])?>" class="btn btn-default pull-right">Edit</a></p>
+        
       </div>
 
       <div class="row marketing">
