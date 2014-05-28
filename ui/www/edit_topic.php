@@ -27,6 +27,8 @@ $request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(XDDB_BASE_URL));
 
 list(, $topic_id) = explode('/', $request_path);
 
+$tpl[ 'cancel_url' ] = sprintf('%stopic/%s', XDDB_BASE_URL, $topic_id);
+
 $topic = $services->topicmap->newTopic();
 $topic->load($topic_id);
 

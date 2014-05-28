@@ -58,17 +58,16 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
       <?php } ?>
 
       <div class="well well-lg">
-        <form method="post" action="">
+        <form id="xddb_form_edit" method="post" action="">
 
           <div style="padding-bottom: 15px; border-bottom: 1px solid #CCCCCC;">
+
+            <!-- Types -->
 
             <div class="pull-right">
               <table>
           
             <?php
-          
-            if (count($tpl[ 'topic' ][ 'types' ]) === 0)
-                $tpl[ 'topic' ][ 'types' ][ ] = '';
           
             foreach ($tpl[ 'topic' ][ 'types' ] as $type_id)
             {
@@ -77,11 +76,36 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <td>
                     <input type="text" name="types[]" value="<?=htmlspecialchars($type_id)?>" />
                   </td>
+                  <td>
+                    <button class="btn btn-link" type="button" data-xddb_event="remove">
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </td>
                 </tr>
                 <?php
             }
             
             ?>
+
+                <tr id="xddb_new_type" class="hidden">
+                  <td>
+                    <input type="text" name="types[]" value="" />
+                  </td>
+                  <td>
+                    <button class="btn btn-link" type="button" data-xddb_event="remove">
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>
+                    <button id="xddb_button_add_type" class="btn btn-link" type="button">
+                      <span class="glyphicon glyphicon-plus"></span>
+                      Add a type
+                    </button>
+                  </td>
+                </tr>
             
               </table>
             </div>
@@ -129,14 +153,33 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <input type="text" name="other_names[<?=$i?>][scope][]" value="<?=htmlspecialchars($scope)?>" />
                   <?php } ?>
                 </td>
+                <td>
+                  <button class="btn btn-link" type="button" data-xddb_event="remove">
+                    <span class="glyphicon glyphicon-remove"></span>
+                  </button>
+                </td>
               </tr>
           
             <?php } $i++; ?>
 
+              <tr id="xddb_new_name" class="hidden" data-xddb_counter="<?=$i?>">
+                <td><input type="text" name="other_names[XDDB_COUNTER][type]" value="" />:</td>
+                <td><input type="text" name="other_names[XDDB_COUNTER][value]" value="" /></td>
+                <td><input type="text" name="other_names[XDDB_COUNTER][scope][]" value="" /></td>
+                <td>
+                  <button class="btn btn-link" type="button" data-xddb_event="remove">
+                    <span class="glyphicon glyphicon-remove"></span>
+                  </button>
+                </td>
+              </tr>
+
               <tr>
-                <td><input type="text" name="other_names[<?=$i?>][type]" value="" />:</td>
-                <td><input type="text" name="other_names[<?=$i?>][value]" value="" /></td>
-                <td><input type="text" name="other_names[<?=$i?>][scope][]" value="" /></td>
+                <td>
+                  <button id="xddb_button_add_name" class="btn btn-link" type="button">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add a name
+                  </button>
+                </td>
               </tr>
           
             </table>
@@ -147,21 +190,23 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         
           <div>
           
-            <h4>Subject identifiers</h4>
+            <h4>Identifier URLs</h4>
             
             <table>
           
             <?php
-          
-            if (count($tpl[ 'topic' ][ 'subject_identifiers' ]) === 0)
-                $tpl[ 'topic' ][ 'subject_identifiers' ][ ] = '';
           
             foreach ($tpl[ 'topic' ][ 'subject_identifiers' ] as $url)
             {
                 ?>
                 <tr>
                   <td>
-                    <input type="text" name="subject_identifiers[]" value="<?=htmlspecialchars($url)?>" />
+                    <input type="text" name="subject_identifiers[]" value="<?=htmlspecialchars($url)?>" style="width: 400px;" />
+                  </td>
+                  <td>
+                    <button class="btn btn-link" type="button" data-xddb_event="remove">
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
                   </td>
                 </tr>
                 <?php
@@ -169,6 +214,26 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             
             ?>
             
+              <tr id="xddb_new_subject_identifier" class="hidden">
+                <td>
+                  <input type="text" name="subject_identifiers[]" value="" style="width: 400px;" />
+                </td>
+                <td>
+                  <button class="btn btn-link" type="button" data-xddb_event="remove">
+                    <span class="glyphicon glyphicon-remove"></span>
+                  </button>
+                </td>
+              </tr>
+              
+              <tr>
+                <td>
+                  <button id="xddb_button_add_subject_identifier" class="btn btn-link" type="button">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add an identifier URL
+                  </button>
+                </td>
+              </tr>
+              
             </table>
 
           </div>
@@ -177,21 +242,23 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         
           <div>
           
-            <h4>Subject locators</h4>
+            <h4>Resource URLs</h4>
             
             <table>
           
             <?php
-          
-            if (count($tpl[ 'topic' ][ 'subject_locators' ]) === 0)
-                $tpl[ 'topic' ][ 'subject_locators' ][ ] = '';
           
             foreach ($tpl[ 'topic' ][ 'subject_locators' ] as $url)
             {
                 ?>
                 <tr>
                   <td>
-                    <input type="text" name="subject_locators[]" value="<?=htmlspecialchars($url)?>" />
+                    <input type="text" name="subject_locators[]" value="<?=htmlspecialchars($url)?>" style="width: 400px;" />
+                  </td>
+                  <td>
+                    <button class="btn btn-link" type="button" data-xddb_event="remove">
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
                   </td>
                 </tr>
                 <?php
@@ -199,6 +266,26 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             
             ?>
             
+              <tr id="xddb_new_subject_locator" class="hidden">
+                <td>
+                  <input type="text" name="subject_locators[]" value="" style="width: 400px;" />
+                </td>
+                <td>
+                  <button class="btn btn-link" type="button" data-xddb_event="remove">
+                    <span class="glyphicon glyphicon-remove"></span>
+                  </button>
+                </td>
+              </tr>
+                
+              <tr>
+                <td>
+                  <button id="xddb_button_add_subject_locator" class="btn btn-link" type="button">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add a resource URL
+                  </button>
+                </td>
+              </tr>
+
             </table>
 
           </div>
@@ -207,7 +294,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         
           <div>
           
-            <h4>Occurrences</h4>
+            <h4>Properties</h4>
             
             <table>
           
@@ -225,18 +312,37 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <input type="text" name="occurrences[<?=$i?>][scope][]" value="<?=htmlspecialchars($scope)?>" />
                   <?php } ?>
                 </td>
+                <td>
+                  <button class="btn btn-link" type="button" data-xddb_event="remove">
+                    <span class="glyphicon glyphicon-remove"></span>
+                  </button>
+                </td>
               </tr>
           
             <?php } $i++; ?>
 
-              <tr>
-                <td><input type="text" name="occurrences[<?=$i?>][type]" value="" />:</td>
+              <tr id="xddb_new_occurrence" class="hidden" data-xddb_counter="<?=$i?>">
+                <td><input type="text" name="occurrences[XDDB_COUNTER][type]" value="" />:</td>
                 <td>
-                  <input type="text" name="occurrences[<?=$i?>][value]" value="" />
+                  <input type="text" name="occurrences[XDDB_COUNTER][value]" value="" />
                   <br />
-                  <input type="text" name="occurrences[<?=$i?>][datatype]" value="" />
+                  <input type="text" name="occurrences[XDDB_COUNTER][datatype]" value="" />
                 </td>
-                <td><input type="text" name="occurrences[<?=$i?>][scope][]" value="" /></td>
+                <td><input type="text" name="occurrences[XDDB_COUNTER][scope][]" value="" /></td>
+                <td>
+                  <button class="btn btn-link" type="button" data-xddb_event="remove">
+                    <span class="glyphicon glyphicon-remove"></span>
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <button id="xddb_button_add_occurrence" class="btn btn-link" type="button">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add a property
+                  </button>
+                </td>
               </tr>
           
             </table>
@@ -246,7 +352,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
           <!-- Save button -->
           
           <div>
-            <button type="submit" class="btn btn-primary pull-right">Save</button>
+            <p class="pull-right">
+              <a href="<?=htmlspecialchars($tpl[ 'cancel_url' ])?>" class="btn btn-link">Cancel</a>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </p>
           </div>
           
         </form>
@@ -261,6 +370,70 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
     <script src="<?=$tpl[ 'xddb_static_base_url' ]?>jquery.min.js"></script>
     <script src="<?=$tpl[ 'xddb_static_base_url' ]?>bootstrap/js/bootstrap.min.js"></script>
+    
+    <script>
+    // <![CDATA[
+    
+    $(document).ready(function() 
+    {
+        var _private = { };
+        
+        _private.addFormSection = function(selector_to_clone)
+        {
+            var $elem_to_clone, $clone, counter;
+            
+            $elem_to_clone = $(selector_to_clone);            
+            $clone = $elem_to_clone.clone();
+            
+            $clone
+                .attr('id', '')
+                .insertBefore(selector_to_clone)
+                .removeClass('hidden')
+                .find('input').first().focus();
+                
+            counter = $elem_to_clone.data('xddb_counter');
+            
+            if (counter !== undefined)
+            {
+                counter = parseInt(counter, 10);
+                
+                $clone.find('input').each(function(i, item)
+                {
+                    var $item = $(item);
+                    var elem_name = $item.attr('name');
+                    
+                    if ((elem_name === undefined) || (elem_name.length < 1))
+                    {
+                        return;
+                    }
+                    
+                    $item.attr('name', elem_name.replace(/XDDB_COUNTER/, counter));
+                });
+                
+                $elem_to_clone.data('xddb_counter', (counter + 1));
+            }
+        };
+
+        $([ 'type', 'name', 'subject_locator', 'subject_identifier', 'occurrence' ]).each(function(i, item)
+        {
+            var button_selector = '#xddb_button_add_' + item;
+            var selector_to_clone = '#xddb_new_' + item;
+            
+            $(button_selector).on('click', function()
+            {
+                _private.addFormSection(selector_to_clone);
+            });
+        });
+        
+        $('#xddb_form_edit').on('click', 'button[data-xddb_event="remove"]', function(e)
+        {
+            $(e.target).closest('tr').remove();
+        });
+
+    });
+    
+    // ]]>
+    </script>
 
   </body>
 </html>
