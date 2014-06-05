@@ -1,5 +1,5 @@
-xddb
-====
+TopicBank (formerly XDDB)
+=========================
 
 TMDM experiments in PHP
 
