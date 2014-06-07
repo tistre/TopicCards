@@ -1,6 +1,6 @@
 <?php
 
-namespace Xddb\Backends\Db;
+namespace TopicBank\Backends\Db;
 
 
 class DbUtils extends Core

@@ -1,9 +1,9 @@
 <?php
 
-namespace Xddb\Backends\Db;
+namespace TopicBank\Backends\Db;
 
 
-class Name extends Core implements \Xddb\Interfaces\iName
+class Name extends Core implements \TopicBank\Interfaces\iName
 {
     use Reified, Scoped, Typed, NameDbAdapter;
     

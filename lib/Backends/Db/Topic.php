@@ -1,9 +1,9 @@
 <?php
 
-namespace Xddb\Backends\Db;
+namespace TopicBank\Backends\Db;
 
 
-class Topic extends Core implements \Xddb\Interfaces\iTopic
+class Topic extends Core implements \TopicBank\Interfaces\iTopic
 {
     use Persistent, TopicDbAdapter;
     
@@ -14,7 +14,7 @@ class Topic extends Core implements \Xddb\Interfaces\iTopic
     protected $occurrences = [ ];
 
 
-    public function __construct(\Xddb\Interfaces\iServices $services, $data = false)
+    public function __construct(\TopicBank\Interfaces\iServices $services, $data = false)
     {
         parent::__construct($services);
         

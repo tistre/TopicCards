@@ -1,9 +1,9 @@
 <?php
 
-namespace Xddb\Backends\Db;
+namespace TopicBank\Backends\Db;
 
 
-class Occurrence extends Core implements \Xddb\Interfaces\iOccurrence
+class Occurrence extends Core implements \TopicBank\Interfaces\iOccurrence
 {
     use Reified, Scoped, Typed, OccurrenceDbAdapter;
     

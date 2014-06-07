@@ -1,6 +1,6 @@
 <?php
 
-namespace Xddb\Interfaces;
+namespace TopicBank\Interfaces;
 
 
 interface iTopicMap extends iCore, iReified

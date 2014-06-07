@@ -1,9 +1,9 @@
 <?php
 
-namespace Xddb\Backends\Db;
+namespace TopicBank\Backends\Db;
 
 
-class TopicMapSystem extends Core implements \Xddb\Interfaces\iTopicMapSystem
+class TopicMapSystem extends Core implements \TopicBank\Interfaces\iTopicMapSystem
 {
     protected $topicmaps = array();
     

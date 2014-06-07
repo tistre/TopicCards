@@ -1,9 +1,9 @@
 <?php
 
-namespace Xddb\Backends\Db;
+namespace TopicBank\Backends\Db;
 
 
-class Services implements \Xddb\Interfaces\iServices
+class Services implements \TopicBank\Interfaces\iServices
 {
     public $topicmap;
     public $db_utils;

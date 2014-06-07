@@ -1,11 +1,11 @@
 <?php
 
-define('XDDB_BASE_DIR', dirname(dirname(__DIR__)));
-define('XDDB_BASE_URL', '/xddb/');
-define('XDDB_STATIC_BASE_URL', '/xddb_static/');
+define('TOPICBANK_BASE_DIR', dirname(dirname(__DIR__)));
+define('TOPICBANK_BASE_URL', '/topicbank/');
+define('TOPICBANK_STATIC_BASE_URL', '/topicbank_static/');
 
-require_once XDDB_BASE_DIR . '/include/init.php';
-require_once XDDB_BASE_DIR . '/include/config.php';
+require_once TOPICBANK_BASE_DIR . '/include/init.php';
+require_once TOPICBANK_BASE_DIR . '/include/config.php';
 
 
 function getDisplayName($topic)
@@ -51,27 +51,27 @@ function splitTopicNames(array &$topic_data)
 }
 
 
-$services = new \Xddb\Backends\Db\Services();
+$services = new \TopicBank\Backends\Db\Services();
 $services->setDbParams($db_params);
 
-$system = new \Xddb\Backends\Db\TopicMapSystem($services);
+$system = new \TopicBank\Backends\Db\TopicMapSystem($services);
 
 $services->topicmap = $system->newTopicMap();
 $services->topicmap->setUrl('xddb');
 
 $tpl = [ ];
 
-$tpl[ 'xddb_base_url' ] = XDDB_BASE_URL;
-$tpl[ 'xddb_static_base_url' ] = XDDB_STATIC_BASE_URL;
+$tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
+$tpl[ 'topicbank_static_base_url' ] = TOPICBANK_STATIC_BASE_URL;
 
 $tpl[ 'topicmap' ] = [ ];
 $tpl[ 'topicmap' ][ 'display_name' ] = 'My first topic map';
 
-$request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(XDDB_BASE_URL));
+$request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(TOPICBANK_BASE_URL));
 
 list(, $topic_id) = explode('/', $request_path);
 
-$tpl[ 'edit_url' ] = sprintf('%sedit_topic/%s', XDDB_BASE_URL, $topic_id);
+$tpl[ 'edit_url' ] = sprintf('%sedit_topic/%s', TOPICBANK_BASE_URL, $topic_id);
 
 $topic = $services->topicmap->newTopic();
 $topic->load($topic_id);
@@ -182,4 +182,4 @@ foreach (array_keys($tpl[ 'topic_names' ]) as $helper_topic_id)
 }
 
 
-include XDDB_BASE_DIR . '/ui/templates/topic.tpl.php';
+include TOPICBANK_BASE_DIR . '/ui/templates/topic.tpl.php';

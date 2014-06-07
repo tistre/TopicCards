@@ -13,7 +13,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="<?=$tpl[ 'xddb_static_base_url' ]?>bootstrap/assets/ico/favicon.ico" />
+    <link rel="shortcut icon" href="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/assets/ico/favicon.ico" />
 
     <title>
       <?=htmlspecialchars($tpl[ 'topic' ][ 'id' ])?> | 
@@ -21,10 +21,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     </title>
 
     <!-- Bootstrap core CSS -->
-    <link href="<?=$tpl[ 'xddb_static_base_url' ]?>bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- Custom styles for this template -->
-    <link href="<?=$tpl[ 'xddb_static_base_url' ]?>xddb.css" rel="stylesheet" />
+    <link href="<?=$tpl[ 'topicbank_static_base_url' ]?>topicbank.css" rel="stylesheet" />
 
   </head>
 
@@ -58,7 +58,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
       <?php } ?>
 
       <div class="well well-lg">
-        <form id="xddb_form_edit" method="post" action="">
+        <form id="topicbank_form_edit" method="post" action="">
 
           <div style="padding-bottom: 15px; border-bottom: 1px solid #CCCCCC;">
 
@@ -77,7 +77,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <input type="text" name="types[]" value="<?=htmlspecialchars($type_id)?>" />
                   </td>
                   <td>
-                    <button class="btn btn-link" type="button" data-xddb_event="remove">
+                    <button class="btn btn-link" type="button" data-topicbank_event="remove">
                       <span class="glyphicon glyphicon-remove"></span>
                     </button>
                   </td>
@@ -87,12 +87,12 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             
             ?>
 
-                <tr id="xddb_new_type" class="hidden">
+                <tr id="topicbank_new_type" class="hidden">
                   <td>
                     <input type="text" name="types[]" value="" />
                   </td>
                   <td>
-                    <button class="btn btn-link" type="button" data-xddb_event="remove">
+                    <button class="btn btn-link" type="button" data-topicbank_event="remove">
                       <span class="glyphicon glyphicon-remove"></span>
                     </button>
                   </td>
@@ -100,7 +100,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 <tr>
                   <td>
-                    <button id="xddb_button_add_type" class="btn btn-link" type="button">
+                    <button id="topicbank_button_add_type" class="btn btn-link" type="button">
                       <span class="glyphicon glyphicon-plus"></span>
                       Add a type
                     </button>
@@ -154,7 +154,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <?php } ?>
                 </td>
                 <td>
-                  <button class="btn btn-link" type="button" data-xddb_event="remove">
+                  <button class="btn btn-link" type="button" data-topicbank_event="remove">
                     <span class="glyphicon glyphicon-remove"></span>
                   </button>
                 </td>
@@ -162,12 +162,12 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
           
             <?php } $i++; ?>
 
-              <tr id="xddb_new_name" class="hidden" data-xddb_counter="<?=$i?>">
-                <td><input type="text" name="other_names[XDDB_COUNTER][type]" value="" />:</td>
-                <td><input type="text" name="other_names[XDDB_COUNTER][value]" value="" /></td>
-                <td><input type="text" name="other_names[XDDB_COUNTER][scope][]" value="" /></td>
+              <tr id="topicbank_new_name" class="hidden" data-topicbank_counter="<?=$i?>">
+                <td><input type="text" name="other_names[TOPICBANK_COUNTER][type]" value="" />:</td>
+                <td><input type="text" name="other_names[TOPICBANK_COUNTER][value]" value="" /></td>
+                <td><input type="text" name="other_names[TOPICBANK_COUNTER][scope][]" value="" /></td>
                 <td>
-                  <button class="btn btn-link" type="button" data-xddb_event="remove">
+                  <button class="btn btn-link" type="button" data-topicbank_event="remove">
                     <span class="glyphicon glyphicon-remove"></span>
                   </button>
                 </td>
@@ -175,7 +175,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
               <tr>
                 <td>
-                  <button id="xddb_button_add_name" class="btn btn-link" type="button">
+                  <button id="topicbank_button_add_name" class="btn btn-link" type="button">
                     <span class="glyphicon glyphicon-plus"></span>
                     Add a name
                   </button>
@@ -204,7 +204,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <input type="text" name="subject_identifiers[]" value="<?=htmlspecialchars($url)?>" style="width: 400px;" />
                   </td>
                   <td>
-                    <button class="btn btn-link" type="button" data-xddb_event="remove">
+                    <button class="btn btn-link" type="button" data-topicbank_event="remove">
                       <span class="glyphicon glyphicon-remove"></span>
                     </button>
                   </td>
@@ -214,12 +214,12 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             
             ?>
             
-              <tr id="xddb_new_subject_identifier" class="hidden">
+              <tr id="topicbank_new_subject_identifier" class="hidden">
                 <td>
                   <input type="text" name="subject_identifiers[]" value="" style="width: 400px;" />
                 </td>
                 <td>
-                  <button class="btn btn-link" type="button" data-xddb_event="remove">
+                  <button class="btn btn-link" type="button" data-topicbank_event="remove">
                     <span class="glyphicon glyphicon-remove"></span>
                   </button>
                 </td>
@@ -227,7 +227,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               
               <tr>
                 <td>
-                  <button id="xddb_button_add_subject_identifier" class="btn btn-link" type="button">
+                  <button id="topicbank_button_add_subject_identifier" class="btn btn-link" type="button">
                     <span class="glyphicon glyphicon-plus"></span>
                     Add an identifier URL
                   </button>
@@ -256,7 +256,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <input type="text" name="subject_locators[]" value="<?=htmlspecialchars($url)?>" style="width: 400px;" />
                   </td>
                   <td>
-                    <button class="btn btn-link" type="button" data-xddb_event="remove">
+                    <button class="btn btn-link" type="button" data-topicbank_event="remove">
                       <span class="glyphicon glyphicon-remove"></span>
                     </button>
                   </td>
@@ -266,12 +266,12 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             
             ?>
             
-              <tr id="xddb_new_subject_locator" class="hidden">
+              <tr id="topicbank_new_subject_locator" class="hidden">
                 <td>
                   <input type="text" name="subject_locators[]" value="" style="width: 400px;" />
                 </td>
                 <td>
-                  <button class="btn btn-link" type="button" data-xddb_event="remove">
+                  <button class="btn btn-link" type="button" data-topicbank_event="remove">
                     <span class="glyphicon glyphicon-remove"></span>
                   </button>
                 </td>
@@ -279,7 +279,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
               <tr>
                 <td>
-                  <button id="xddb_button_add_subject_locator" class="btn btn-link" type="button">
+                  <button id="topicbank_button_add_subject_locator" class="btn btn-link" type="button">
                     <span class="glyphicon glyphicon-plus"></span>
                     Add a resource URL
                   </button>
@@ -313,7 +313,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <?php } ?>
                 </td>
                 <td>
-                  <button class="btn btn-link" type="button" data-xddb_event="remove">
+                  <button class="btn btn-link" type="button" data-topicbank_event="remove">
                     <span class="glyphicon glyphicon-remove"></span>
                   </button>
                 </td>
@@ -321,16 +321,16 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
           
             <?php } $i++; ?>
 
-              <tr id="xddb_new_occurrence" class="hidden" data-xddb_counter="<?=$i?>">
-                <td><input type="text" name="occurrences[XDDB_COUNTER][type]" value="" />:</td>
+              <tr id="topicbank_new_occurrence" class="hidden" data-topicbank_counter="<?=$i?>">
+                <td><input type="text" name="occurrences[TOPICBANK_COUNTER][type]" value="" />:</td>
                 <td>
-                  <input type="text" name="occurrences[XDDB_COUNTER][value]" value="" />
+                  <input type="text" name="occurrences[TOPICBANK_COUNTER][value]" value="" />
                   <br />
-                  <input type="text" name="occurrences[XDDB_COUNTER][datatype]" value="" />
+                  <input type="text" name="occurrences[TOPICBANK_COUNTER][datatype]" value="" />
                 </td>
-                <td><input type="text" name="occurrences[XDDB_COUNTER][scope][]" value="" /></td>
+                <td><input type="text" name="occurrences[TOPICBANK_COUNTER][scope][]" value="" /></td>
                 <td>
-                  <button class="btn btn-link" type="button" data-xddb_event="remove">
+                  <button class="btn btn-link" type="button" data-topicbank_event="remove">
                     <span class="glyphicon glyphicon-remove"></span>
                   </button>
                 </td>
@@ -338,7 +338,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
               <tr>
                 <td>
-                  <button id="xddb_button_add_occurrence" class="btn btn-link" type="button">
+                  <button id="topicbank_button_add_occurrence" class="btn btn-link" type="button">
                     <span class="glyphicon glyphicon-plus"></span>
                     Add a property
                   </button>
@@ -363,13 +363,13 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
       </div>
 
       <div class="footer">
-        <p>XDDB 0.1 by Tim Strehle</p>
+        <p>TopicBank 0.1 by Tim Strehle</p>
       </div>
 
     </div> <!-- /container -->
 
-    <script src="<?=$tpl[ 'xddb_static_base_url' ]?>jquery.min.js"></script>
-    <script src="<?=$tpl[ 'xddb_static_base_url' ]?>bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?=$tpl[ 'topicbank_static_base_url' ]?>jquery.min.js"></script>
+    <script src="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/js/bootstrap.min.js"></script>
     
     <script>
     // <![CDATA[
@@ -391,7 +391,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 .removeClass('hidden')
                 .find('input').first().focus();
                 
-            counter = $elem_to_clone.data('xddb_counter');
+            counter = $elem_to_clone.data('topicbank_counter');
             
             if (counter !== undefined)
             {
@@ -407,17 +407,17 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                         return;
                     }
                     
-                    $item.attr('name', elem_name.replace(/XDDB_COUNTER/, counter));
+                    $item.attr('name', elem_name.replace(/TOPICBANK_COUNTER/, counter));
                 });
                 
-                $elem_to_clone.data('xddb_counter', (counter + 1));
+                $elem_to_clone.data('topicbank_counter', (counter + 1));
             }
         };
 
         $([ 'type', 'name', 'subject_locator', 'subject_identifier', 'occurrence' ]).each(function(i, item)
         {
-            var button_selector = '#xddb_button_add_' + item;
-            var selector_to_clone = '#xddb_new_' + item;
+            var button_selector = '#topicbank_button_add_' + item;
+            var selector_to_clone = '#topicbank_new_' + item;
             
             $(button_selector).on('click', function()
             {
@@ -425,7 +425,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             });
         });
         
-        $('#xddb_form_edit').on('click', 'button[data-xddb_event="remove"]', function(e)
+        $('#topicbank_form_edit').on('click', 'button[data-topicbank_event="remove"]', function(e)
         {
             $(e.target).closest('tr').remove();
         });

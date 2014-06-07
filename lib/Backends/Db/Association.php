@@ -1,9 +1,9 @@
 <?php
 
-namespace Xddb\Backends\Db;
+namespace TopicBank\Backends\Db;
 
 
-class Association extends Core implements \Xddb\Interfaces\iAssociation
+class Association extends Core implements \TopicBank\Interfaces\iAssociation
 {
     use Persistent, Reified, Scoped, Typed, AssociationDbAdapter;
     

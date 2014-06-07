@@ -13,7 +13,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="<?=$tpl[ 'xddb_static_base_url' ]?>bootstrap/assets/ico/favicon.ico" />
+    <link rel="shortcut icon" href="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/assets/ico/favicon.ico" />
 
     <title>
       <?=htmlspecialchars($tpl[ 'topic' ][ 'display_name' ][ 'value' ])?> | 
@@ -21,10 +21,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     </title>
 
     <!-- Bootstrap core CSS -->
-    <link href="<?=$tpl[ 'xddb_static_base_url' ]?>bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- Custom styles for this template -->
-    <link href="<?=$tpl[ 'xddb_static_base_url' ]?>xddb.css" rel="stylesheet" />
+    <link href="<?=$tpl[ 'topicbank_static_base_url' ]?>topicbank.css" rel="stylesheet" />
 
   </head>
 
@@ -296,7 +296,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                         (
                             '%s: <a href="%s">%s</a>. ',
                             htmlspecialchars($tpl[ 'topic_names' ][ $role[ 'type' ] ]),
-                            htmlspecialchars($tpl[ 'xddb_base_url' ] . 'topic/' . urlencode($role[ 'player' ])),
+                            htmlspecialchars($tpl[ 'topicbank_base_url' ] . 'topic/' . urlencode($role[ 'player' ])),
                             htmlspecialchars($tpl[ 'topic_names' ][ $role[ 'player' ] ])
                         );
                     }
@@ -323,13 +323,13 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
       </div>
 
       <div class="footer">
-        <p>XDDB 0.1 by Tim Strehle</p>
+        <p>TopicBank 0.1 by Tim Strehle</p>
       </div>
 
     </div> <!-- /container -->
 
-    <script src="<?=$tpl[ 'xddb_static_base_url' ]?>jquery.min.js"></script>
-    <script src="<?=$tpl[ 'xddb_static_base_url' ]?>bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?=$tpl[ 'topicbank_static_base_url' ]?>jquery.min.js"></script>
+    <script src="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/js/bootstrap.min.js"></script>
 
   </body>
 </html>

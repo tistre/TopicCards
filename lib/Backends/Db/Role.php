@@ -1,9 +1,9 @@
 <?php
 
-namespace Xddb\Backends\Db;
+namespace TopicBank\Backends\Db;
 
 
-class Role extends Core implements \Xddb\Interfaces\iRole
+class Role extends Core implements \TopicBank\Interfaces\iRole
 {
     use Reified, Typed, RoleDbAdapter;
     

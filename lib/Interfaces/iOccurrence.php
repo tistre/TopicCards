@@ -1,6 +1,6 @@
 <?php
 
-namespace Xddb\Interfaces;
+namespace TopicBank\Interfaces;
 
 
 interface iOccurrence extends iReified, iScoped, iTyped

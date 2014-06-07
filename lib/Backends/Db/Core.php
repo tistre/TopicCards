@@ -1,14 +1,14 @@
 <?php
 
-namespace Xddb\Backends\Db;
+namespace TopicBank\Backends\Db;
 
 
-class Core implements \Xddb\Interfaces\iCore
+class Core implements \TopicBank\Interfaces\iCore
 {
     protected $services;
     
     
-    public function __construct(\Xddb\Interfaces\iServices $services)
+    public function __construct(\TopicBank\Interfaces\iServices $services)
     {
         $this->services = $services;
     }

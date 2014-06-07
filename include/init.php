@@ -16,7 +16,7 @@ spl_autoload_register(function($class)
 {
 
     // project-specific namespace prefix
-    $prefix = 'Xddb\\';
+    $prefix = 'TopicBank\\';
 
     // base directory for the namespace prefix
     $base_dir = dirname(__DIR__) . '/lib/';

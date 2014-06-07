@@ -1,13 +1,13 @@
-# XDDB database schema for MySQL
+# TopicBank database schema for MySQL
 #
 # Run the install/db_schema_mysql.php file through PHP (with your preferred 
 # table prefix as the only argument) for a valid SQL schema:
 #
-# $ php install/db_schema_mysql.php xddb > xddb_schema.sql
+# $ php install/db_schema_mysql.php topicbank > topicbank_schema.sql
 #
 # Make sure to use utf8mb4 for the character set:
 #
-# mysql> create database xddb_test character set utf8mb4 collate utf8mb4_bin;
+# mysql> create database topicbank_test character set utf8mb4 collate utf8mb4_bin;
 #
 # This requires MySQL >= 5.5 and these my.cnf settings:
 #

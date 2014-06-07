@@ -1,9 +1,9 @@
 <?php
 
-namespace Xddb\Backends\Db;
+namespace TopicBank\Backends\Db;
 
 
-class TopicMap extends Core implements \Xddb\Interfaces\iTopicMap
+class TopicMap extends Core implements \TopicBank\Interfaces\iTopicMap
 {
     use Reified, TopicMapDbAdapter;
      
