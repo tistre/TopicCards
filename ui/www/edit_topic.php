@@ -170,11 +170,10 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_base
             $occurrence->setScope($scopes);
     }
 
-    
     // Save
     
     $ok = $topic->save();
-    
+        
     if ($ok >= 0)
     {
         header(sprintf('Location: %stopic/%s', TOPICBANK_BASE_URL, $topic_id));
@@ -199,6 +198,20 @@ foreach ($tpl[ 'topic' ][ 'names' ] as $name)
         $key = 'unscoped_basenames';
 
     $tpl[ 'topic' ][ $key ][ ] = $name;
+}
+
+// Fill associations
+
+$association_ids = $services->topicmap->getAssociations([ 'role_player' => $topic_id ]);
+
+$tpl[ 'associations' ] = [ ];
+
+foreach ($association_ids as $association_id)
+{
+    $association = $services->topicmap->newAssociation();
+    $association->load($association_id);
+
+    $tpl[ 'associations' ][ ] = $association->getAll();
 }
 
 include TOPICBANK_BASE_DIR . '/ui/templates/edit_topic.tpl.php';
