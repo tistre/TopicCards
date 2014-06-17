@@ -1,5 +1,29 @@
 <?php
 
+// http://stackoverflow.com/questions/2040240/php-function-to-generate-v4-uuid/2040279#2040279
+
+function gen_uuid() {
+    return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        // 32 bits for "time_low"
+        mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
+
+        // 16 bits for "time_mid"
+        mt_rand( 0, 0xffff ),
+
+        // 16 bits for "time_hi_and_version",
+        // four most significant bits holds version number 4
+        mt_rand( 0, 0x0fff ) | 0x4000,
+
+        // 16 bits, 8 bits for "clk_seq_hi_res",
+        // 8 bits for "clk_seq_low",
+        // two most significant bits holds zero and one for variant DCE1.1
+        mt_rand( 0, 0x3fff ) | 0x8000,
+
+        // 48 bits for "node"
+        mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
+    );
+}
+
 define('TOPICBANK_BASE_DIR', dirname(dirname(__DIR__)));
 define('TOPICBANK_BASE_URL', '/topicbank/');
 define('TOPICBANK_STATIC_BASE_URL', '/topicbank_static/');
@@ -173,6 +197,70 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_base
     // Save
     
     $ok = $topic->save();
+
+    // Associations
+    
+    // XXX remove all existing associations here? better: read them and delete missing later!
+
+    foreach ($_REQUEST[ 'associations' ] as $assoc_arr)
+    {
+        $assoc_arr[ 'type' ] = trim($assoc_arr[ 'type' ]);
+        
+        if ($assoc_arr[ 'type' ] === '')
+            continue;
+            
+        $association = $services->topicmap->newAssociation();
+        
+        if (strlen($assoc_arr[ 'id' ]) > 0)
+        {
+            $association->load($assoc_arr[ 'id' ]);
+
+            if (! $association->isLoaded())
+                $association->setId($assoc_arr[ 'id' ]);
+        }
+        else
+        {
+            $association->setId(gen_uuid());
+        }
+    
+        $association->setType($assoc_arr[ 'type' ]);
+
+        $scopes = [ ];
+        
+        foreach ($assoc_arr[ 'scope' ] as $scope)
+        {
+            $scope = trim($scope);
+            
+            if ($scope === '')
+                continue;
+            
+            $scopes[ ] = $scope;
+        }
+        
+        if (count($scopes) > 0)
+            $association->setScope($scopes);
+    
+        $association->setRoles([ ]);
+    
+        foreach ($assoc_arr[ 'roles' ] as $role_arr)
+        {
+            $role_arr[ 'type' ] = trim($role_arr[ 'type' ]);
+            $role_arr[ 'player' ] = trim($role_arr[ 'player' ]);
+            
+            if (($role_arr[ 'type' ] === '') || ($role_arr[ 'player' ] === ''))
+                continue;
+                
+            $role = $association->newRole();
+        
+            $role->setType($role_arr[ 'type' ]);
+            $role->setPlayer($role_arr[ 'player' ]);
+        }
+        
+        $ok = $association->save();
+        
+        if ($ok < 0)
+            break;
+    }
         
     if ($ok >= 0)
     {

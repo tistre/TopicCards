@@ -118,7 +118,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <?php 
           
             if (count($tpl[ 'topic' ][ 'unscoped_basenames' ]) === 0) 
-                $tpl[ 'topic' ][ 'unscoped_basenames' ][ ] = ''; 
+                $tpl[ 'topic' ][ 'unscoped_basenames' ][ ] = [ 'value' => '' ]; 
             
             foreach ($tpl[ 'topic' ][ 'unscoped_basenames' ] as $name) 
             { 
@@ -163,10 +163,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
           
             <?php } $i++; ?>
 
-              <tr data-topicbank_template="new_name" class="hidden" data-topicbank_counter="<?=$i?>">
-                <td><input type="text" name="other_names[TOPICBANK_COUNTER][type]" value="" />:</td>
-                <td><input type="text" name="other_names[TOPICBANK_COUNTER][value]" value="" /></td>
-                <td><input type="text" name="other_names[TOPICBANK_COUNTER][scope][]" value="" /></td>
+              <tr data-topicbank_template="new_name" class="hidden" data-topicbank_counter_value="<?=$i?>" data-topicbank_counter_name="TOPICBANK_COUNTER1">
+                <td><input type="text" name="other_names[TOPICBANK_COUNTER1][type]" value="" />:</td>
+                <td><input type="text" name="other_names[TOPICBANK_COUNTER1][value]" value="" /></td>
+                <td><input type="text" name="other_names[TOPICBANK_COUNTER1][scope][]" value="" /></td>
                 <td>
                   <button class="btn btn-link" type="button" data-topicbank_event="remove">
                     <span class="glyphicon glyphicon-remove"></span>
@@ -322,14 +322,14 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
           
             <?php } $i++; ?>
 
-              <tr data-topicbank_template="new_occurrence" class="hidden" data-topicbank_counter="<?=$i?>">
-                <td><input type="text" name="occurrences[TOPICBANK_COUNTER][type]" value="" />:</td>
+              <tr data-topicbank_template="new_occurrence" class="hidden" data-topicbank_counter_value="<?=$i?>" data-topicbank_counter_name="TOPICBANK_COUNTER1">
+                <td><input type="text" name="occurrences[TOPICBANK_COUNTER1][type]" value="" />:</td>
                 <td>
-                  <input type="text" name="occurrences[TOPICBANK_COUNTER][value]" value="" />
+                  <input type="text" name="occurrences[TOPICBANK_COUNTER1][value]" value="" />
                   <br />
-                  <input type="text" name="occurrences[TOPICBANK_COUNTER][datatype]" value="" />
+                  <input type="text" name="occurrences[TOPICBANK_COUNTER1][datatype]" value="" />
                 </td>
-                <td><input type="text" name="occurrences[TOPICBANK_COUNTER][scope][]" value="" /></td>
+                <td><input type="text" name="occurrences[TOPICBANK_COUNTER1][scope][]" value="" /></td>
                 <td>
                   <button class="btn btn-link" type="button" data-topicbank_event="remove">
                     <span class="glyphicon glyphicon-remove"></span>
@@ -373,7 +373,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
           <tr>
             <td>
-              <input type="text" name="association[<?=$association[ 'id' ]?>][type]" value="<?=htmlspecialchars($association[ 'type' ])?>" />
+              <input type="text" name="associations[<?=$i?>][type]" value="<?=htmlspecialchars($association[ 'type' ])?>" />
+              <input type="hidden" name="associations[<?=$i?>][id]" value="<?=htmlspecialchars($association[ 'id' ])?>" />
             </td>
             <td>
             
@@ -382,8 +383,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <?php foreach ($association[ 'roles' ] as $j => $role) { ?>
                 <tr>
                   <td>
-                    <input type="text" name="association[<?=$association[ 'id' ]?>][roles][<?=$j?>][type]" value="<?=htmlspecialchars($role[ 'type' ])?>" />:
-                    <input type="text" name="association[<?=$association[ 'id' ]?>][roles][<?=$j?>][player]" value="<?=htmlspecialchars($role[ 'player' ])?>" />
+                    <input type="text" name="associations[<?=$i?>][roles][<?=$j?>][type]" value="<?=htmlspecialchars($role[ 'type' ])?>" />:
+                    <input type="text" name="associations[<?=$i?>][roles][<?=$j?>][player]" value="<?=htmlspecialchars($role[ 'player' ])?>" />
                   </td>
                   <td>
                     <button class="btn btn-link" type="button" data-topicbank_event="remove">
@@ -391,12 +392,12 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     </button>
                   </td>
                 </tr>
-                <?php } ?>
+                <?php } $j++; ?>
 
-                <tr data-topicbank_template="new_role" class="hidden" data-topicbank_counter="<?=$j?>">
+                <tr data-topicbank_template="new_role" class="hidden" data-topicbank_counter_value="<?=$j?>" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                   <td>
-                    <input type="text" name="association[<?=$association[ 'id' ]?>][roles][TOPICBANK_COUNTER][type]" value="" />:
-                    <input type="text" name="association[<?=$association[ 'id' ]?>][roles][TOPICBANK_COUNTER][player]" value="" />
+                    <input type="text" name="associations[<?=$i?>][roles][TOPICBANK_COUNTER2][type]" value="" />:
+                    <input type="text" name="associations[<?=$i?>][roles][TOPICBANK_COUNTER2][player]" value="" />
                   </td>
                   <td>
                     <button class="btn btn-link" type="button" data-topicbank_event="remove">
@@ -419,7 +420,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             </td>
             <td>
               <?php if (count($association[ 'scope' ]) === 0) $association[ 'scope' ][ ] = ''; foreach ($association[ 'scope' ] as $scope) { ?>
-              <input type="text" name="association[<?=$association[ 'id' ]?>][scope][]" value="<?=htmlspecialchars($scope)?>" />
+              <input type="text" name="associations[<?=$i?>][scope][]" value="<?=htmlspecialchars($scope)?>" />
               <?php } ?>
             </td>
             <td>
@@ -431,18 +432,19 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
       
         <?php } $i++; ?>
 
-          <tr data-topicbank_template="new_association" class="hidden" data-topicbank_counter="<?=$i?>">
+          <tr data-topicbank_template="new_association" class="hidden" data-topicbank_counter_value="<?=$i?>" data-topicbank_counter_name="TOPICBANK_COUNTER1">
             <td>
-              <input type="text" name="association[TOPICBANK_COUNTER][type]" value="" />
+              <input type="text" name="associations[TOPICBANK_COUNTER1][type]" value="" />
+              <input type="hidden" name="associations[TOPICBANK_COUNTER1][id]" value="" />
             </td>
             <td>
             
               <table>
               
-                <tr data-topicbank_template="new_role" class="hidden" data-topicbank_counter="0">
+                <tr data-topicbank_template="new_role" class="hidden" data-topicbank_counter_value="0" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                   <td>
-                    <input type="text" name="association[XXX][roles][TOPICBANK_COUNTER][type]" value="" />:
-                    <input type="text" name="association[XXX][roles][TOPICBANK_COUNTER][player]" value="" />
+                    <input type="text" name="associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][type]" value="" />:
+                    <input type="text" name="associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][player]" value="" />
                   </td>
                   <td>
                     <button class="btn btn-link" type="button" data-topicbank_event="remove">
@@ -464,9 +466,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               
             </td>
             <td>
-              <?php if (count($association[ 'scope' ]) === 0) $association[ 'scope' ][ ] = ''; foreach ($association[ 'scope' ] as $scope) { ?>
-              <input type="text" name="association[TOPICBANK_COUNTER][scope][]" value="<?=htmlspecialchars($scope)?>" />
-              <?php } ?>
+              <input type="text" name="associations[TOPICBANK_COUNTER1][scope][]" value="" />
             </td>
             <td>
               <button class="btn btn-link" type="button" data-topicbank_event="remove">
@@ -510,7 +510,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         
         _private.addFormSection = function($elem_to_clone)
         {
-            var $clone, counter;
+            var $clone, counter_value, counter_name, counter_pattern;
             
             $clone = $elem_to_clone.clone();
             
@@ -520,11 +520,14 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 .removeClass('hidden')
                 .find('input').first().focus();
                 
-            counter = $elem_to_clone.data('topicbank_counter');
+            counter_value = $elem_to_clone.data('topicbank_counter_value');
+            counter_name = $elem_to_clone.data('topicbank_counter_name');
             
-            if (counter !== undefined)
+            counter_pattern = new RegExp(counter_name);
+            
+            if (counter_value !== undefined)
             {
-                counter = parseInt(counter, 10);
+                counter_value = parseInt(counter_value, 10);
                 
                 $clone.find('input').each(function(i, item)
                 {
@@ -536,10 +539,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                         return;
                     }
                     
-                    $item.attr('name', elem_name.replace(/TOPICBANK_COUNTER/, counter));
+                    $item.attr('name', elem_name.replace(counter_pattern, counter_value));
                 });
                 
-                $elem_to_clone.data('topicbank_counter', (counter + 1));
+                $elem_to_clone.data('topicbank_counter_value', (counter_value + 1));
             }
         };
 
@@ -550,7 +553,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             
             $('#topicbank_form_edit').on('click', button_selector, function(e)
             {
-                var $elem_to_clone = $(e.target).closest('tr').siblings(selector_to_clone).first();
+                var $elem_to_clone = $(e.target).closest('tr').siblings(selector_to_clone).last();
                 _private.addFormSection($elem_to_clone);
             });
         });
