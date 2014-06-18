@@ -375,6 +375,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <td>
               <input type="text" name="associations[<?=$i?>][type]" value="<?=htmlspecialchars($association[ 'type' ])?>" />
               <input type="hidden" name="associations[<?=$i?>][id]" value="<?=htmlspecialchars($association[ 'id' ])?>" />
+              <input type="hidden" name="associations[<?=$i?>][delete]" value="0" />
             </td>
             <td>
             
@@ -424,7 +425,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               <?php } ?>
             </td>
             <td>
-              <button class="btn btn-link" type="button" data-topicbank_event="remove">
+              <button class="btn btn-link" type="button" data-topicbank_event="remove" data-topicbank_remove_hide="associations[<?=$i?>][delete]">
                 <span class="glyphicon glyphicon-remove"></span>
               </button>
             </td>
@@ -436,6 +437,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <td>
               <input type="text" name="associations[TOPICBANK_COUNTER1][type]" value="" />
               <input type="hidden" name="associations[TOPICBANK_COUNTER1][id]" value="" />
+              <input type="hidden" name="associations[TOPICBANK_COUNTER1][delete]" value="0" />
             </td>
             <td>
             
@@ -560,7 +562,20 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
         $('#topicbank_form_edit').on('click', 'button[data-topicbank_event="remove"]', function(e)
         {
-            $(e.target).closest('tr').remove();
+            var $button = $(e.target);
+            var $tr = $button.closest('tr');
+            
+            var hidden_field_name = $button.data('topicbank_remove_hide');
+            
+            if ((hidden_field_name !== undefined) && (hidden_field_name.length > 0))
+            {
+                $tr.find('[name="' + hidden_field_name + '"]').val('1');
+                $tr.addClass('hidden');
+            }
+            else
+            {
+                $tr.remove();
+            }
         });
 
     });

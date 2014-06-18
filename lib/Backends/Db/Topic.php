@@ -217,4 +217,13 @@ class Topic extends Core implements \TopicBank\Interfaces\iTopic
         
         return 1;
     }
+    
+    
+    public function delete()
+    {
+        if ($this->getVersion() === 0)
+            return 0;
+        
+        return $this->deleteById($this->getId(), $this->getVersion());
+    }
 }

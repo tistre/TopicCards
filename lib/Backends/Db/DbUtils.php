@@ -5,6 +5,9 @@ namespace TopicBank\Backends\Db;
 
 class DbUtils extends Core
 {
+    protected $transaction_level = 0;
+    
+    
     public function connect()
     {
         if ($this->services->db !== false)
@@ -23,6 +26,51 @@ class DbUtils extends Core
         $this->services->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
         $this->services->db->setAttribute(\PDO::ATTR_ORACLE_NULLS, \PDO::NULL_TO_STRING);
         $this->services->db->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+        
+        return 1;
+    }
+
+
+    public function beginTransaction()
+    {
+	// Wrapping PDO transaction functionality because it
+        // doesn't support nested transactions
+
+        $this->transaction_level++;
+        
+        if ($this->transaction_level > 1)
+            return 0;
+
+        $this->services->db->beginTransaction();
+            
+        return 1;
+    }
+
+
+    public function commit()
+    {
+        if ($this->transaction_level <= 0)
+            return -1;
+            
+        $this->transaction_level--;
+
+        if ($this->transaction_level > 0)
+            return 0;
+            
+        $this->services->db->commit();
+        
+        return 1;
+    }
+    
+    
+    public function rollBack()
+    {
+        if ($this->transaction_level <= 0)
+            return -1;
+
+        $this->services->db->rollBack();
+        
+        $this->transaction_level = 0;
         
         return 1;
     }

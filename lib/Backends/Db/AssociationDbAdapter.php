@@ -54,7 +54,7 @@ trait AssociationDbAdapter
         if ($ok < 0)
             return $ok;
         
-        $this->services->db->beginTransaction();
+        $this->services->db_utils->beginTransaction();
         
         $now = date('c');        
         $data[ 'created' ] = $data[ 'updated' ] = $now;
@@ -103,11 +103,11 @@ trait AssociationDbAdapter
 
         if ($ok < 0)
         {
-            $this->services->db->rollBack();
+            $this->services->db_utils->rollBack();
             return $ok;
         }
 
-        $this->services->db->commit();
+        $this->services->db_utils->commit();
 
         return $ok;
     }
@@ -120,7 +120,7 @@ trait AssociationDbAdapter
         if ($ok < 0)
             return $ok;
         
-        $this->services->db->beginTransaction();
+        $this->services->db_utils->beginTransaction();
         
         $previous_version = $data[ 'version' ];
         
@@ -187,12 +187,39 @@ trait AssociationDbAdapter
 
         if ($ok < 0)
         {
-            $this->services->db->rollBack();
+            $this->services->db_utils->rollBack();
             return $ok;
         }
 
-        $this->services->db->commit();
+        $this->services->db_utils->commit();
 
         return $ok;
+    }
+
+
+    public function deleteById($id, $version)
+    {
+        $ok = $this->services->db_utils->connect();
+        
+        if ($ok < 0)
+            return $ok;
+
+        $prefix = $this->services->topicmap->getUrl();
+
+        $sql = $this->services->db_utils->prepareDeleteSql
+        (
+            $prefix . '_association', 
+            [ 
+                [ 'column' => 'association_id', 'value' => $id ],
+                [ 'column' => 'association_version', 'value' => $version ]
+            ]
+        );
+    
+        $ok = $sql->execute();
+    
+        if ($ok === false)
+            return -1;
+        
+        return 1;
     }
 }

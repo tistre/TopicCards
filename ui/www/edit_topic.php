@@ -62,6 +62,8 @@ $tpl[ 'error_html' ] = '';
 
 if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_basenames' ]))
 {
+    $services->db_utils->beginTransaction();
+
     // When creating a new topic
     
     if (! $topic->isLoaded())
@@ -200,70 +202,91 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_base
 
     // Associations
     
-    // XXX remove all existing associations here? better: read them and delete missing later!
-
-    foreach ($_REQUEST[ 'associations' ] as $assoc_arr)
-    {
-        $assoc_arr[ 'type' ] = trim($assoc_arr[ 'type' ]);
-        
-        if ($assoc_arr[ 'type' ] === '')
-            continue;
-            
-        $association = $services->topicmap->newAssociation();
-        
-        if (strlen($assoc_arr[ 'id' ]) > 0)
-        {
-            $association->load($assoc_arr[ 'id' ]);
-
-            if (! $association->isLoaded())
-                $association->setId($assoc_arr[ 'id' ]);
-        }
-        else
-        {
-            $association->setId(gen_uuid());
-        }
-    
-        $association->setType($assoc_arr[ 'type' ]);
-
-        $scopes = [ ];
-        
-        foreach ($assoc_arr[ 'scope' ] as $scope)
-        {
-            $scope = trim($scope);
-            
-            if ($scope === '')
-                continue;
-            
-            $scopes[ ] = $scope;
-        }
-        
-        if (count($scopes) > 0)
-            $association->setScope($scopes);
-    
-        $association->setRoles([ ]);
-    
-        foreach ($assoc_arr[ 'roles' ] as $role_arr)
-        {
-            $role_arr[ 'type' ] = trim($role_arr[ 'type' ]);
-            $role_arr[ 'player' ] = trim($role_arr[ 'player' ]);
-            
-            if (($role_arr[ 'type' ] === '') || ($role_arr[ 'player' ] === ''))
-                continue;
-                
-            $role = $association->newRole();
-        
-            $role->setType($role_arr[ 'type' ]);
-            $role->setPlayer($role_arr[ 'player' ]);
-        }
-        
-        $ok = $association->save();
-        
-        if ($ok < 0)
-            break;
-    }
-        
     if ($ok >= 0)
     {
+        foreach ($_REQUEST[ 'associations' ] as $assoc_arr)
+        {
+            $assoc_arr[ 'type' ] = trim($assoc_arr[ 'type' ]);
+        
+            if ($assoc_arr[ 'type' ] === '')
+                continue;
+            
+            $association = $services->topicmap->newAssociation();
+        
+            if (strlen($assoc_arr[ 'id' ]) > 0)
+            {
+                $association->load($assoc_arr[ 'id' ]);
+
+                if ($association->isLoaded())
+                {
+                    if ($assoc_arr[ 'delete' ] === '1')
+                    {
+                        $ok = $association->delete();
+        
+                        if ($ok < 0)
+                            break;
+
+                        continue;
+                    }
+                }
+                else
+                {
+                    $association->setId($assoc_arr[ 'id' ]);
+                }
+            }
+            else
+            {
+                $association->setId(gen_uuid());
+            }
+    
+            $association->setType($assoc_arr[ 'type' ]);
+
+            $scopes = [ ];
+        
+            foreach ($assoc_arr[ 'scope' ] as $scope)
+            {
+                $scope = trim($scope);
+            
+                if ($scope === '')
+                    continue;
+            
+                $scopes[ ] = $scope;
+            }
+        
+            if (count($scopes) > 0)
+                $association->setScope($scopes);
+    
+            $association->setRoles([ ]);
+    
+            foreach ($assoc_arr[ 'roles' ] as $role_arr)
+            {
+                $role_arr[ 'type' ] = trim($role_arr[ 'type' ]);
+                $role_arr[ 'player' ] = trim($role_arr[ 'player' ]);
+            
+                if (($role_arr[ 'type' ] === '') || ($role_arr[ 'player' ] === ''))
+                    continue;
+                
+                $role = $association->newRole();
+        
+                $role->setType($role_arr[ 'type' ]);
+                $role->setPlayer($role_arr[ 'player' ]);
+            }
+        
+            $ok = $association->save();
+        
+            if ($ok < 0)
+                break;
+        }
+    }
+
+    if ($ok < 0)
+    {
+        $services->db_utils->rollBack();
+    }
+    else
+    {
+        $services->db_utils->commit();
+        
         header(sprintf('Location: %stopic/%s', TOPICBANK_BASE_URL, $topic_id));
         exit;
     }
