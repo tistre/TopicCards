@@ -50,4 +50,40 @@ class TopicMap extends Core implements \TopicBank\Interfaces\iTopicMap
     {
         return $this->selectAssociations($filters);
     }
+
+
+    public function getTopicTypes(array $filters)
+    {
+        return $this->selectTopicTypes($filters);
+    }
+
+
+    public function getNameTypes(array $filters)
+    {
+        return $this->selectNameTypes($filters);
+    }
+
+
+    public function getOccurrenceTypes(array $filters)
+    {
+        return $this->selectOccurrenceTypes($filters);
+    }
+
+
+    public function getOccurrenceDatatypes(array $filters)
+    {
+        return $this->selectOccurrenceDatatypes($filters);
+    }
+
+
+    public function getAssociationTypes(array $filters)
+    {
+        return $this->selectAssociationTypes($filters);
+    }
+
+
+    public function getRoleTypes(array $filters)
+    {
+        return $this->selectRoleTypes($filters);
+    }
 }

@@ -104,4 +104,82 @@ trait TopicMapDbAdapter
 
         return $result;
     }
+    
+    
+    public function selectTopicTypes(array $filters)
+    {
+        return $this->selectWhat('type', 'type_type', $filters);
+    }
+    
+    
+    public function selectNameTypes(array $filters)
+    {
+        return $this->selectWhat('name', 'name_type', $filters);
+    }
+    
+
+    public function selectOccurrenceTypes(array $filters)
+    {
+        return $this->selectWhat('occurrence', 'occurrence_type', $filters);
+    }
+
+
+    public function selectOccurrenceDatatypes(array $filters)
+    {
+        return $this->selectWhat('occurrence', 'occurrence_datatype', $filters);
+    }
+
+    
+    public function selectAssociationTypes(array $filters)
+    {
+        return $this->selectWhat('association', 'association_type', $filters);
+    }
+    
+    
+    public function selectRoleTypes(array $filters)
+    {
+        return $this->selectWhat('role', 'role_type', $filters);
+    }
+    
+    
+    protected function selectWhat($table, $column, array $filters)
+    {
+        if (! isset($filters[ 'get_mode' ]))
+            $filters[ 'get_mode' ] = 'all';
+            
+        $method = 'selectWhat_' . $filters[ 'get_mode' ];
+        
+        return $this->$method($table, $column, $filters);
+    }
+    
+    
+    protected function selectWhat_recent($table, $column, array $filters)
+    {
+        $ok = $this->services->db_utils->connect();
+        
+        if ($ok < 0)
+            return $ok;
+        
+        $prefix = $this->getUrl();
+        
+        $sql = $this->services->db->prepare(sprintf
+        (
+            'select distinct %s from %s_%s',
+            $column,
+            $prefix,
+            $table
+        ));
+
+        $ok = $sql->execute();
+        
+        if ($ok === false)
+            return -1;
+
+        $result = [ ];
+        
+        foreach ($sql->fetchAll() as $row)
+            $result[ ] = $row[ $column ];
+
+        return $result;
+    }
 }

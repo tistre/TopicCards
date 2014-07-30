@@ -75,7 +75,11 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 ?>
                 <tr>
                   <td>
-                    <input type="text" name="types[]" value="<?=htmlspecialchars($type_id)?>" />
+                    <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="topic_type" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                      <span data-topicbank_element="name"><?=htmlspecialchars($type_id)?></span>:
+                      <span class="caret"></span>
+                    </button>
+                    <input type="hidden" name="types[]" value="<?=htmlspecialchars($type_id)?>" data-topicbank_element="id" />
                   </td>
                   <td>
                     <button class="btn btn-link" type="button" data-topicbank_event="remove">
@@ -90,7 +94,11 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
                 <tr data-topicbank_template="new_type" class="hidden">
                   <td>
-                    <input type="text" name="types[]" value="" />
+                    <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="topic_type" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                      <span data-topicbank_element="name">[Choose type]</span>:
+                      <span class="caret"></span>
+                    </button>
+                    <input type="hidden" name="types[]" value="" data-topicbank_element="id" />
                   </td>
                   <td>
                     <button class="btn btn-link" type="button" data-topicbank_event="remove">
@@ -147,7 +155,13 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <?php $i = -1; foreach ($tpl[ 'topic' ][ 'other_names' ] as $i => $name) { ?>
 
               <tr>
-                <td><input type="text" name="other_names[<?=$i?>][type]" value="<?=htmlspecialchars($name[ 'type' ])?>" />:</td>
+                <td>
+                  <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="name_type" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                    <span data-topicbank_element="name"><?=htmlspecialchars($name[ 'type' ])?></span>:
+                    <span class="caret"></span>
+                  </button>
+                  <input type="hidden" name="other_names[<?=$i?>][type]" value="<?=htmlspecialchars($name[ 'type' ])?>" data-topicbank_element="id" />
+                </td>
                 <td><input type="text" name="other_names[<?=$i?>][value]" value="<?=htmlspecialchars($name[ 'value' ])?>" /></td>
                 <td>
                   <?php if (count($name[ 'scope' ]) === 0) $name[ 'scope' ][ ] = ''; foreach ($name[ 'scope' ] as $scope) { ?>
@@ -164,7 +178,13 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <?php } $i++; ?>
 
               <tr data-topicbank_template="new_name" class="hidden" data-topicbank_counter_value="<?=$i?>" data-topicbank_counter_name="TOPICBANK_COUNTER1">
-                <td><input type="text" name="other_names[TOPICBANK_COUNTER1][type]" value="" />:</td>
+                <td>
+                  <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="name_type" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                    <span data-topicbank_element="name">[Choose type]</span>:
+                    <span class="caret"></span>
+                  </button>
+                  <input type="hidden" name="other_names[TOPICBANK_COUNTER1][type]" value="" data-topicbank_element="id" />
+                </td>
                 <td><input type="text" name="other_names[TOPICBANK_COUNTER1][value]" value="" /></td>
                 <td><input type="text" name="other_names[TOPICBANK_COUNTER1][scope][]" value="" /></td>
                 <td>
@@ -302,11 +322,21 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <?php $i = -1; foreach ($tpl[ 'topic' ][ 'occurrences' ] as $i => $occurrence) { ?>
 
               <tr>
-                <td><input type="text" name="occurrences[<?=$i?>][type]" value="<?=htmlspecialchars($occurrence[ 'type' ])?>" />:</td>
+                <td>
+                  <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="occurrence_type" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                    <span data-topicbank_element="name"><?=htmlspecialchars($occurrence[ 'type' ])?></span>:
+                    <span class="caret"></span>
+                  </button>
+                  <input type="hidden" name="occurrences[<?=$i?>][type]" value="<?=htmlspecialchars($occurrence[ 'type' ])?>" data-topicbank_element="id" />
+                </td>
                 <td>
                   <input type="text" name="occurrences[<?=$i?>][value]" value="<?=htmlspecialchars($occurrence[ 'value' ])?>" />
                   <br />
-                  <input type="text" name="occurrences[<?=$i?>][datatype]" value="<?=htmlspecialchars($occurrence[ 'datatype' ])?>" />
+                  <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="occurrence_datatype" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                    <span data-topicbank_element="name"><?=htmlspecialchars($occurrence[ 'datatype' ])?></span>:
+                    <span class="caret"></span>
+                  </button>
+                  <input type="hidden" name="occurrences[<?=$i?>][datatype]" value="<?=htmlspecialchars($occurrence[ 'datatype' ])?>" data-topicbank_element="id" />
                 </td>
                 <td>
                   <?php if (count($occurrence[ 'scope' ]) === 0) $occurrence[ 'scope' ][ ] = ''; foreach ($occurrence[ 'scope' ] as $scope) { ?>
@@ -323,11 +353,21 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <?php } $i++; ?>
 
               <tr data-topicbank_template="new_occurrence" class="hidden" data-topicbank_counter_value="<?=$i?>" data-topicbank_counter_name="TOPICBANK_COUNTER1">
-                <td><input type="text" name="occurrences[TOPICBANK_COUNTER1][type]" value="" />:</td>
+                <td>
+                  <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="occurrence_type" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                    <span data-topicbank_element="name">[Choose property]</span>:
+                    <span class="caret"></span>
+                  </button>
+                  <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][type]" value="" data-topicbank_element="id" />
+                </td>
                 <td>
                   <input type="text" name="occurrences[TOPICBANK_COUNTER1][value]" value="" />
                   <br />
-                  <input type="text" name="occurrences[TOPICBANK_COUNTER1][datatype]" value="" />
+                  <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="occurrence_datatype" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                    <span data-topicbank_element="name">[Choose datatype]</span>:
+                    <span class="caret"></span>
+                  </button>
+                  <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][datatype]" value="" data-topicbank_element="id" />
                 </td>
                 <td><input type="text" name="occurrences[TOPICBANK_COUNTER1][scope][]" value="" /></td>
                 <td>
@@ -373,7 +413,12 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
           <tr>
             <td>
-              <input type="text" name="associations[<?=$i?>][type]" value="<?=htmlspecialchars($association[ 'type' ])?>" />
+              <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="association_type" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                <span data-topicbank_element="name"><?=htmlspecialchars($association[ 'type' ])?></span>:
+                <span class="caret"></span>
+              </button>
+              <input type="hidden" name="associations[<?=$i?>][type]" value="<?=htmlspecialchars($association[ 'type' ])?>" data-topicbank_element="id" />
+              
               <input type="hidden" name="associations[<?=$i?>][id]" value="<?=htmlspecialchars($association[ 'id' ])?>" />
               <input type="hidden" name="associations[<?=$i?>][delete]" value="0" />
             </td>
@@ -384,7 +429,13 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <?php foreach ($association[ 'roles' ] as $j => $role) { ?>
                 <tr>
                   <td>
-                    <input type="text" name="associations[<?=$i?>][roles][<?=$j?>][type]" value="<?=htmlspecialchars($role[ 'type' ])?>" />:
+                    <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="role_type" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                      <span data-topicbank_element="name"><?=htmlspecialchars($role[ 'type' ])?></span>:
+                      <span class="caret"></span>
+                    </button>
+                    <input type="hidden" name="associations[<?=$i?>][roles][<?=$j?>][type]" value="<?=htmlspecialchars($role[ 'type' ])?>" data-topicbank_element="id" />
+                  </td>
+                  <td>
                     <input type="text" name="associations[<?=$i?>][roles][<?=$j?>][player]" value="<?=htmlspecialchars($role[ 'player' ])?>" />
                   </td>
                   <td>
@@ -397,7 +448,13 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
                 <tr data-topicbank_template="new_role" class="hidden" data-topicbank_counter_value="<?=$j?>" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                   <td>
-                    <input type="text" name="associations[<?=$i?>][roles][TOPICBANK_COUNTER2][type]" value="" />:
+                    <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="role_type" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                      <span data-topicbank_element="name">[Choose role type]</span>:
+                      <span class="caret"></span>
+                    </button>
+                    <input type="hidden" name="associations[<?=$i?>][roles][TOPICBANK_COUNTER2][type]" value="" data-topicbank_element="id" />
+                  </td>
+                  <td>
                     <input type="text" name="associations[<?=$i?>][roles][TOPICBANK_COUNTER2][player]" value="" />
                   </td>
                   <td>
@@ -435,7 +492,12 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
           <tr data-topicbank_template="new_association" class="hidden" data-topicbank_counter_value="<?=$i?>" data-topicbank_counter_name="TOPICBANK_COUNTER1">
             <td>
-              <input type="text" name="associations[TOPICBANK_COUNTER1][type]" value="" />
+              <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="association_type" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                <span data-topicbank_element="name">[Choose association type]</span>:
+                <span class="caret"></span>
+              </button>
+              <input type="hidden" name="associations[TOPICBANK_COUNTER1][type]" value="" data-topicbank_element="id" />
+              
               <input type="hidden" name="associations[TOPICBANK_COUNTER1][id]" value="" />
               <input type="hidden" name="associations[TOPICBANK_COUNTER1][delete]" value="0" />
             </td>
@@ -445,7 +507,13 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               
                 <tr data-topicbank_template="new_role" class="hidden" data-topicbank_counter_value="0" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                   <td>
-                    <input type="text" name="associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][type]" value="" />:
+                    <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="role_type" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                      <span data-topicbank_element="name">[Choose role type]</span>:
+                      <span class="caret"></span>
+                    </button>
+                    <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][type]" value="" data-topicbank_element="id" />
+                  </td>
+                  <td>
                     <input type="text" name="associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][player]" value="" />
                   </td>
                   <td>
@@ -498,13 +566,31 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         <p>TopicBank 0.1 by Tim Strehle</p>
       </div>
 
-    </div> <!-- /container -->
+      <!-- "Choose topic" dialog, initially hidden -->
 
+      <div class="modal" id="choose_topic_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="container modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h4 class="modal-title" id="myModalLabel">Choose a property</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    </div> <!-- /container -->
+    
     <script src="<?=$tpl[ 'topicbank_static_base_url' ]?>jquery.min.js"></script>
     <script src="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/js/bootstrap.min.js"></script>
     
     <script>
     // <![CDATA[
+    
+    var topicbank_base_url = '<?=$tpl[ 'topicbank_base_url' ]?>';
+    var topicbank_static_base_url = '<?=$tpl[ 'topicbank_static_base_url' ]?>';
     
     $(document).ready(function() 
     {
@@ -576,6 +662,45 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             {
                 $tr.remove();
             }
+        });
+
+        $('#topicbank_form_edit').on('click', 'button[data-topicbank_event="show_choose_topic_dialog"]', function(e)
+        {
+            var $choose_topic_dialog, $dialog_body, what;
+
+            $choose_topic_dialog = $('#choose_topic_dialog');
+            $dialog_body = $choose_topic_dialog.find('div.modal-body');
+            
+            _private.choose_topic_dialog_opener = e.target;
+            
+            what = $(e.target).data('topicbank_what');
+            
+            $dialog_body.empty().load(topicbank_base_url + 'choose_topic_dialog?what=' + encodeURIComponent(what));
+        });
+
+        $('#choose_topic_dialog').on('click', 'button[data-topicbank_element="topic"]', function(e)
+        {
+            var $target, $target_id, $target_name, $source, $source_id, $source_name;
+            
+            if (_private.choose_topic_dialog_opener === undefined)
+            {
+                return;
+            }
+            
+            $source = $(e.target);
+            
+            $source_id = $source.find('span[data-topicbank_element="id"]');
+            $source_name = $source.find('span[data-topicbank_element="name"]');
+            
+            $target = $(_private.choose_topic_dialog_opener).closest('td');
+            
+            $target_id = $target.find('input[data-topicbank_element="id"]');
+            $target_name = $target.find('span[data-topicbank_element="name"]');
+            
+            $target_id.val($source_id.text());
+            $target_name.html($source_name.html());
+            
+            $('#choose_topic_dialog').modal('hide');
         });
 
     });
