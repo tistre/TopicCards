@@ -86,6 +86,26 @@ class Topic extends Core implements \TopicBank\Interfaces\iTopic
         return 1;
     }
     
+
+    public function getLabel()
+    {
+        $result = $this->getId();
+
+        foreach ($this->getNames([ ]) as $name)
+        {
+            if ($name->getType() !== 'basename')
+                continue;
+    
+            if (count($name->getScope()) > 0)
+                continue;
+    
+            $result = $name->getValue();
+            break;
+        }
+    
+        return $result;
+    }
+
     
     public function newOccurrence()
     {   

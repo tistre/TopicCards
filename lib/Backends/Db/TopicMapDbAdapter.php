@@ -142,6 +142,12 @@ trait TopicMapDbAdapter
     }
     
     
+    public function selectRolePlayers(array $filters)
+    {
+        return $this->selectWhat('topic', 'topic_id', $filters);
+    }
+    
+    
     protected function selectWhat($table, $column, array $filters)
     {
         if (! isset($filters[ 'get_mode' ]))
@@ -176,9 +182,17 @@ trait TopicMapDbAdapter
             return -1;
 
         $result = [ ];
-        
+
         foreach ($sql->fetchAll() as $row)
-            $result[ ] = $row[ $column ];
+        {            
+            $id = $row[ $column ];
+
+            $result[ ] = 
+            [
+                'id' => $id,
+                'label' => $this->getTopicLabel($id)
+            ];
+        }                
 
         return $result;
     }

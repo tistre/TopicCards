@@ -38,6 +38,22 @@ class TopicMap extends Core implements \TopicBank\Interfaces\iTopicMap
     }
     
     
+    public function getTopicLabel($id)
+    {
+        if (strlen($id) === 0)
+            return false;
+            
+        $topic = $this->newTopic();
+        
+        $ok = $topic->load($id);
+        
+        if ($ok < 0)
+            return false;
+        
+        return $topic->getLabel();
+    }
+    
+    
     public function newAssociation()
     {
         $association = new Association($this->services);
@@ -85,5 +101,11 @@ class TopicMap extends Core implements \TopicBank\Interfaces\iTopicMap
     public function getRoleTypes(array $filters)
     {
         return $this->selectRoleTypes($filters);
+    }
+
+
+    public function getRolePlayers(array $filters)
+    {
+        return $this->selectRolePlayers($filters);
     }
 }

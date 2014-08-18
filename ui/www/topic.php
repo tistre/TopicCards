@@ -8,26 +8,6 @@ require_once TOPICBANK_BASE_DIR . '/include/init.php';
 require_once TOPICBANK_BASE_DIR . '/include/config.php';
 
 
-function getDisplayName($topic)
-{
-    $result = $topic->getId();
-
-    foreach ($topic->getNames([ ]) as $name)
-    {
-        if ($name->getType() !== 'basename')
-            continue;
-    
-        if (count($name->getScope()) > 0)
-            continue;
-    
-        $result = $name->getValue();
-        break;
-    }
-    
-    return $result;
-}
-
-
 function splitTopicNames(array &$topic_data)
 {
     $topic_data[ 'display_name' ] = false;
@@ -167,19 +147,8 @@ foreach ($tpl[ 'associations' ] as $key => $association)
 
 // Fill topic_names array (names of all related topics needed for display)
 
-$helper_topic = $services->topicmap->newTopic();
-
 foreach (array_keys($tpl[ 'topic_names' ]) as $helper_topic_id)
-{
-    $helper_topic->load($helper_topic_id);
-    
-    $helper_display_name = getDisplayName($helper_topic);
-    
-    if (strlen($helper_display_name) === 0)
-        $helper_display_name = $helper_topic_id;
-        
-    $tpl[ 'topic_names' ][ $helper_topic_id ] = $helper_display_name;
-}
+    $tpl[ 'topic_names' ][ $helper_topic_id ] = $services->topicmap->getTopicLabel($helper_topic_id);
 
 
 include TOPICBANK_BASE_DIR . '/ui/templates/topic.tpl.php';

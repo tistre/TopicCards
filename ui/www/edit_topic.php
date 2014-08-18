@@ -294,7 +294,18 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_base
     $tpl[ 'error_html' ] = htmlspecialchars(sprintf('Could not save topic. Error code: %s', $ok));
 }
 
+$tpl[ 'topic_names' ] = [ ];
+
 $tpl[ 'topic' ] = $topic->getAll();
+
+foreach ($tpl[ 'topic' ][ 'types' ] as $helper_topic_id)
+    $tpl[ 'topic_names' ][ $helper_topic_id ] = false;
+    
+foreach ($tpl[ 'topic' ][ 'occurrences' ] as $occurrence_arr)
+{
+    $tpl[ 'topic_names' ][ $occurrence_arr[ 'type' ] ] = false;
+    $tpl[ 'topic_names' ][ $occurrence_arr[ 'datatype' ] ] = false;
+}
 
 // Fill "unscoped_basenames"
 
@@ -309,6 +320,8 @@ foreach ($tpl[ 'topic' ][ 'names' ] as $name)
         $key = 'unscoped_basenames';
 
     $tpl[ 'topic' ][ $key ][ ] = $name;
+    
+    $tpl[ 'topic_names' ][ $name[ 'type' ] ] = false;
 }
 
 // Fill associations
@@ -322,7 +335,22 @@ foreach ($association_ids as $association_id)
     $association = $services->topicmap->newAssociation();
     $association->load($association_id);
 
-    $tpl[ 'associations' ][ ] = $association->getAll();
+    $association_arr = $association->getAll();
+    
+    $tpl[ 'associations' ][ ] = $association_arr;
+    
+    $tpl[ 'topic_names' ][ $association_arr[ 'type' ] ] = false;
+    
+    foreach ($association_arr[ 'roles' ] as $role_arr)
+    {
+        $tpl[ 'topic_names' ][ $role_arr[ 'type' ] ] = false;
+        $tpl[ 'topic_names' ][ $role_arr[ 'player' ] ] = false;
+    }
 }
+
+// Fill topic_names array (names of all related topics needed for display)
+
+foreach (array_keys($tpl[ 'topic_names' ]) as $helper_topic_id)
+    $tpl[ 'topic_names' ][ $helper_topic_id ] = $services->topicmap->getTopicLabel($helper_topic_id);
 
 include TOPICBANK_BASE_DIR . '/ui/templates/edit_topic.tpl.php';
