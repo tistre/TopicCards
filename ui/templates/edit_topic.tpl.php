@@ -39,6 +39,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
+              <li><a href="<?=$tpl[ 'topicbank_base_url' ]?>edit_new_topic"><span class="glyphicon glyphicon-plus"></span> Create a new topic</a></li>
               <li><a href="#">Logged in as …</a></li>
               <li><a href="#">Log out</a></li>
             </ul>
@@ -713,6 +714,45 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             $target_name.html($source_name.html());
             
             $('#choose_topic_dialog').modal('hide');
+        });
+
+        $('#choose_topic_dialog').on('click', 'button[data-topicbank_element="create_topic"]', function(e)
+        {
+            var new_name, new_type, $new_name_input, $new_type_input, $target, $target_id, $target_name;
+            
+            if (_private.choose_topic_dialog_opener === undefined)
+            {
+                return;
+            }
+            
+            $new_name_input = $('#choose_topic_dialog').find('input[data-topicbank_element="name"]');
+            new_name = $new_name_input.val();
+            
+            $new_type_input = $('#choose_topic_dialog').find('select[data-topicbank_element="type"]');            
+            new_type = $new_type_input.val();
+
+            $.ajax(
+            {
+                url: topicbank_base_url + 'ajax_create_topic',
+                cache: false,
+                data:
+                {
+                    name: new_name,
+                    type: new_type
+                },
+                dataType: 'json'
+            }).done(function(data)
+            {
+                $target = $(_private.choose_topic_dialog_opener).closest('td');
+            
+                $target_id = $target.find('input[data-topicbank_element="id"]');
+                $target_name = $target.find('span[data-topicbank_element="name"]');
+            
+                $target_id.val(data.id);
+                $target_name.html(data.name);
+            
+                $('#choose_topic_dialog').modal('hide');
+            });
         });
 
     });

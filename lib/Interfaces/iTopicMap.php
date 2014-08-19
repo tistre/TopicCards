@@ -7,6 +7,7 @@ interface iTopicMap extends iCore, iReified
 {    
     public function setUrl($url);
     public function getUrl();
+    public function createId();
     public function newTopic();
     public function getTopics(array $filters);
     public function getTopicLabel($id);

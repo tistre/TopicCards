@@ -39,6 +39,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
+              <li><a href="<?=$tpl[ 'topicbank_base_url' ]?>edit_new_topic"><span class="glyphicon glyphicon-plus"></span> Create a new topic</a></li>
               <li><a href="#">Logged in as …</a></li>
               <li><a href="#">Log out</a></li>
             </ul>

@@ -17,5 +17,12 @@
   </div>
   <div class="col-md-4">
     <h4>Create new</h4>
+    <form>
+      <select size="1" name="name" data-topicbank_element="type">
+        <option value="">(No type)</option>
+      </select>
+      <input type="text" name="name" data-topicbank_element="name" />
+      <button data-topicbank_element="create_topic" class="btn btn-default" type="button">Create</button>
+    </form>
   </div>
 </div>
