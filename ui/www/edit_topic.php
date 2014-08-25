@@ -238,6 +238,9 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_base
             {
                 $role_arr[ 'type' ] = trim($role_arr[ 'type' ]);
                 $role_arr[ 'player' ] = trim($role_arr[ 'player' ]);
+                
+                if ($role_arr[ 'player' ] === '{this_topic}')
+                    $role_arr[ 'player' ] = $topic_id;
             
                 if (($role_arr[ 'type' ] === '') || ($role_arr[ 'player' ] === ''))
                     continue;
@@ -313,15 +316,25 @@ foreach ($association_ids as $association_id)
 
     $association_arr = $association->getAll();
     
-    $tpl[ 'associations' ][ ] = $association_arr;
-    
     $tpl[ 'topic_names' ][ $association_arr[ 'type' ] ] = false;
     
-    foreach ($association_arr[ 'roles' ] as $role_arr)
+    foreach ($association_arr[ 'roles' ] as $key => $role_arr)
     {
         $tpl[ 'topic_names' ][ $role_arr[ 'type' ] ] = false;
         $tpl[ 'topic_names' ][ $role_arr[ 'player' ] ] = false;
+        
+        $association_arr[ 'roles' ][ $key ][ 'this_topic' ] = ($role_arr[ 'player' ] === $topic_id);
     }
+
+    usort($association_arr[ 'roles' ], function($a, $b)
+    {
+        $a = $a[ 'this_topic' ];
+        $b = $b[ 'this_topic' ];
+        
+        return ($a === true ? 0 : 1);
+    });
+    
+    $tpl[ 'associations' ][ ] = $association_arr;    
 }
 
 // Fill topic_names array (names of all related topics needed for display)

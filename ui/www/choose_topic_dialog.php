@@ -85,4 +85,6 @@ elseif ($what === 'role_player')
     $tpl[ 'recent' ] = $services->topicmap->getRolePlayers([ 'get_mode' => 'recent' ]);
 }
 
+$tpl[ 'topic_types' ] = $services->topicmap->getTopicTypes([ 'get_mode' => 'recent' ]);
+
 include TOPICBANK_BASE_DIR . '/ui/templates/choose_topic_dialog.tpl.php';

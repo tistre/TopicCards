@@ -20,6 +20,9 @@
     <form>
       <select size="1" name="name" data-topicbank_element="type">
         <option value="">(No type)</option>
+        <?php foreach ($tpl[ 'topic_types' ] as $topic_arr) { ?>
+        <option value="<?=htmlspecialchars($topic_arr[ 'id' ])?>"><?=htmlspecialchars($topic_arr[ 'label' ])?></option>
+        <?php } ?>
       </select>
       <input type="text" name="name" data-topicbank_element="name" />
       <button data-topicbank_element="create_topic" class="btn btn-default" type="button">Create</button>

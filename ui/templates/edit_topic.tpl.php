@@ -426,7 +426,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <td>
             
               <table>
-              
+
                 <?php foreach ($association[ 'roles' ] as $j => $role) { ?>
                 <tr>
                   <td>
@@ -437,16 +437,22 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <input type="hidden" name="associations[<?=$i?>][roles][<?=$j?>][type]" value="<?=htmlspecialchars($role[ 'type' ])?>" data-topicbank_element="id" />
                   </td>
                   <td>
+                    <?php if ($role[ 'this_topic' ]) { ?>
+                    (This topic)
+                    <?php } else { ?>
                     <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="role_player" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
                       <span data-topicbank_element="name"><?=htmlspecialchars($tpl[ 'topic_names' ][ $role[ 'player' ] ])?></span>:
                       <span class="caret"></span>
                     </button>
+                    <?php } ?>
                     <input type="hidden" name="associations[<?=$i?>][roles][<?=$j?>][player]" value="<?=htmlspecialchars($role[ 'player' ])?>" data-topicbank_element="id" />
                   </td>
                   <td>
+                    <?php if (! $role[ 'this_topic' ]) { ?>
                     <button class="btn btn-link" type="button" data-topicbank_event="remove">
                       <span class="glyphicon glyphicon-remove"></span>
                     </button>
+                    <?php } ?>
                   </td>
                 </tr>
                 <?php } $j++; ?>
@@ -514,7 +520,23 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             
               <table>
               
-                <tr data-topicbank_template="new_role" class="hidden" data-topicbank_counter_value="0" data-topicbank_counter_name="TOPICBANK_COUNTER2">
+                <tr>
+                  <td>
+                    <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="role_type" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
+                      <span data-topicbank_element="name">[Choose role type]</span>:
+                      <span class="caret"></span>
+                    </button>
+                    <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][0][type]" value="" data-topicbank_element="id" />
+                  </td>
+                  <td>
+                    (This topic)
+                    <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][0][player]" value="{this_topic}" data-topicbank_element="id" />
+                  </td>
+                  <td>
+                  </td>
+                </tr>
+
+                <tr data-topicbank_template="new_role" class="hidden" data-topicbank_counter_value="1" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                   <td>
                     <button class="btn btn-link" data-topicbank_event="show_choose_topic_dialog" data-topicbank_what="role_type" type="button" data-toggle="modal" data-target="#choose_topic_dialog">
                       <span data-topicbank_element="name">[Choose role type]</span>:
