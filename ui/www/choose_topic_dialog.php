@@ -40,6 +40,15 @@ elseif ($what === 'name_type')
     $tpl[ 'recent' ] = $services->topicmap->getNameTypes([ 'get_mode' => 'recent' ]);
 }
 
+// Name scopes
+
+elseif ($what === 'name_scope')
+{
+    // Most recently used
+    
+    $tpl[ 'recent' ] = $services->topicmap->getNameScopes([ 'get_mode' => 'recent' ]);
+}
+
 // Occurrence types
 
 elseif ($what === 'occurrence_type')
@@ -58,6 +67,15 @@ elseif ($what === 'occurrence_datatype')
     $tpl[ 'recent' ] = $services->topicmap->getOccurrenceDatatypes([ 'get_mode' => 'recent' ]);
 }
 
+// Occurrence scopes
+
+elseif ($what === 'occurrence_scope')
+{
+    // Most recently used
+    
+    $tpl[ 'recent' ] = $services->topicmap->getOccurrenceScopes([ 'get_mode' => 'recent' ]);
+}
+
 // Association types
 
 elseif ($what === 'association_type')
@@ -65,6 +83,15 @@ elseif ($what === 'association_type')
     // Most recently used
     
     $tpl[ 'recent' ] = $services->topicmap->getAssociationTypes([ 'get_mode' => 'recent' ]);
+}
+
+// Association scopes
+
+elseif ($what === 'association_scope')
+{
+    // Most recently used
+    
+    $tpl[ 'recent' ] = $services->topicmap->getAssociationScopes([ 'get_mode' => 'recent' ]);
 }
 
 // Role types

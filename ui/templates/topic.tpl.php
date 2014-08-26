@@ -102,7 +102,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 if (count($name[ 'scope' ]) > 0)
                 {
-                    echo ' (';
+                    echo ' <i>(';
                     
                     foreach ($name[ 'scope' ] as $j => $scope)
                     {
@@ -112,7 +112,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                         echo htmlspecialchars($tpl[ 'topic_names' ][ $scope ]);
                     }
                     
-                    echo ')';
+                    echo ')</i>';
                 }
             }
         
@@ -279,9 +279,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <?=htmlspecialchars($tpl[ 'topic_names' ][ $association_type ])?>
             (as <?=htmlspecialchars($tpl[ 'topic_names' ][ $role_type ])?>)
           </h4>
-          
+
                 <?php
-                
+                          
                 foreach ($association_keys as $association_key)
                 {
                     echo '<p>';
@@ -300,6 +300,21 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                             htmlspecialchars($tpl[ 'topicbank_base_url' ] . 'topic/' . urlencode($role[ 'player' ])),
                             htmlspecialchars($tpl[ 'topic_names' ][ $role[ 'player' ] ])
                         );
+                    }
+
+                    if (count($association[ 'scope' ]) > 0)
+                    {
+                        echo '<i>(';
+                
+                        foreach ($association[ 'scope' ] as $j => $scope)
+                        {
+                            if ($j > 0)
+                                echo ', ';
+                        
+                            echo htmlspecialchars($tpl[ 'topic_names' ][ $scope ]);
+                        }
+                
+                        echo ')</i>';
                     }
                     
                     echo '</p>';

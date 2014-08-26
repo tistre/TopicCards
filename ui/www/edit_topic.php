@@ -229,8 +229,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_base
                 $scopes[ ] = $scope;
             }
         
-            if (count($scopes) > 0)
-                $association->setScope($scopes);
+            $association->setScope($scopes);
     
             $association->setRoles([ ]);
     
@@ -284,6 +283,9 @@ foreach ($tpl[ 'topic' ][ 'occurrences' ] as $occurrence_arr)
 {
     $tpl[ 'topic_names' ][ $occurrence_arr[ 'type' ] ] = false;
     $tpl[ 'topic_names' ][ $occurrence_arr[ 'datatype' ] ] = false;
+    
+    foreach ($occurrence_arr[ 'scope' ] as $scope)
+        $tpl[ 'topic_names' ][ $scope ] = false;        
 }
 
 // Fill "unscoped_basenames"
@@ -301,6 +303,9 @@ foreach ($tpl[ 'topic' ][ 'names' ] as $name)
     $tpl[ 'topic' ][ $key ][ ] = $name;
     
     $tpl[ 'topic_names' ][ $name[ 'type' ] ] = false;
+    
+    foreach ($name[ 'scope' ] as $scope)
+        $tpl[ 'topic_names' ][ $scope ] = false;    
 }
 
 // Fill associations
@@ -318,6 +323,9 @@ foreach ($association_ids as $association_id)
     
     $tpl[ 'topic_names' ][ $association_arr[ 'type' ] ] = false;
     
+    foreach ($association_arr[ 'scope' ] as $scope)
+        $tpl[ 'topic_names' ][ $scope ] = false;
+
     foreach ($association_arr[ 'roles' ] as $key => $role_arr)
     {
         $tpl[ 'topic_names' ][ $role_arr[ 'type' ] ] = false;

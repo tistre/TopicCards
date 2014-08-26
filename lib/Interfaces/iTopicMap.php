@@ -15,9 +15,12 @@ interface iTopicMap extends iCore, iReified
     public function getAssociations(array $filters);
     public function getTopicTypes(array $filters);
     public function getNameTypes(array $filters);
+    public function getNameScopes(array $filters);
     public function getOccurrenceTypes(array $filters);
     public function getOccurrenceDatatypes(array $filters);
+    public function getOccurrenceScopes(array $filters);
     public function getAssociationTypes(array $filters);
+    public function getAssociationScopes(array $filters);
     public function getRoleTypes(array $filters);
     public function getRolePlayers(array $filters);
 }

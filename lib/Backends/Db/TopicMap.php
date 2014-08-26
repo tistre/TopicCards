@@ -109,6 +109,12 @@ class TopicMap extends Core implements \TopicBank\Interfaces\iTopicMap
     }
 
 
+    public function getNameScopes(array $filters)
+    {
+        return $this->selectNameScopes($filters);
+    }
+
+
     public function getOccurrenceTypes(array $filters)
     {
         return $this->selectOccurrenceTypes($filters);
@@ -121,9 +127,21 @@ class TopicMap extends Core implements \TopicBank\Interfaces\iTopicMap
     }
 
 
+    public function getOccurrenceScopes(array $filters)
+    {
+        return $this->selectOccurrenceScopes($filters);
+    }
+
+
     public function getAssociationTypes(array $filters)
     {
         return $this->selectAssociationTypes($filters);
+    }
+
+
+    public function getAssociationScopes(array $filters)
+    {
+        return $this->selectAssociationScopes($filters);
     }
 
 

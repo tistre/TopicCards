@@ -143,6 +143,9 @@ foreach ($tpl[ 'associations' ] as $key => $association)
     $tpl[ 'association_type_index' ][ $association_type ][ $my_role_type ][ ] = $key;
     
     $tpl[ 'topic_names' ][ $association_type ] = false;    
+    
+    foreach ($association[ 'scope' ] as $scope)
+        $tpl[ 'topic_names' ][ $scope ] = false;    
 }
 
 // Fill topic_names array (names of all related topics needed for display)

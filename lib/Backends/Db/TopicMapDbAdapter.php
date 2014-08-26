@@ -118,6 +118,13 @@ trait TopicMapDbAdapter
     }
     
 
+    public function selectNameScopes(array $filters)
+    {
+        // XXX selects all scopes, not just name scopes
+        return $this->selectWhat('scope', 'scope_scope', $filters);
+    }
+    
+    
     public function selectOccurrenceTypes(array $filters)
     {
         return $this->selectWhat('occurrence', 'occurrence_type', $filters);
@@ -130,9 +137,23 @@ trait TopicMapDbAdapter
     }
 
     
+    public function selectOccurrenceScopes(array $filters)
+    {
+        // XXX selects all scopes, not just occurrence scopes
+        return $this->selectWhat('scope', 'scope_scope', $filters);
+    }
+    
+    
     public function selectAssociationTypes(array $filters)
     {
         return $this->selectWhat('association', 'association_type', $filters);
+    }
+    
+    
+    public function selectAssociationScopes(array $filters)
+    {
+        // XXX selects all scopes, not just association scopes
+        return $this->selectWhat('scope', 'scope_scope', $filters);
     }
     
     
