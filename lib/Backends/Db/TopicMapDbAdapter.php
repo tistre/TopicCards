@@ -14,7 +14,21 @@ trait TopicMapDbAdapter
         
         $prefix = $this->getUrl();
         
-        if (! empty($filters[ 'type' ]))
+        if ((! empty($filters[ 'name_like' ])) && (! empty($filters[ 'type' ])))
+        {
+            $sql = $this->services->db->prepare(sprintf
+            (
+                'select distinct name_topic as topic_id from %s_name, %s_type'
+                . ' where lower(name_value) like lower(:name_value)'
+                . ' and type_type = :type_type'
+                . ' and type_topic = name_topic', 
+                $prefix, $prefix
+            ));
+
+            $sql->bindValue(':name_value', $filters[ 'name_like' ], \PDO::PARAM_STR);
+            $sql->bindValue(':type_type', $filters[ 'type' ], \PDO::PARAM_STR);
+        }
+        elseif (! empty($filters[ 'type' ]))
         {
             $sql = $this->services->db->prepare(sprintf
             (
@@ -24,6 +38,17 @@ trait TopicMapDbAdapter
             ));
 
             $sql->bindValue(':type_type', $filters[ 'type' ], \PDO::PARAM_STR);
+        }
+        elseif (! empty($filters[ 'name_like' ]))
+        {
+            $sql = $this->services->db->prepare(sprintf
+            (
+                'select distinct name_topic as topic_id from %s_name'
+                . ' where lower(name_value) like lower(:name_value)', 
+                $prefix
+            ));
+
+            $sql->bindValue(':name_value', $filters[ 'name_like' ], \PDO::PARAM_STR);
         }
         else
         {
@@ -205,15 +230,7 @@ trait TopicMapDbAdapter
         $result = [ ];
 
         foreach ($sql->fetchAll() as $row)
-        {            
-            $id = $row[ $column ];
-
-            $result[ ] = 
-            [
-                'id' => $id,
-                'label' => $this->getTopicLabel($id)
-            ];
-        }                
+            $result[ ] = $row[ $column ];
 
         return $result;
     }

@@ -176,7 +176,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                   <table>
               
-                  <?php foreach ($name[ 'scope' ] as $j => $scope) { ?>
+                  <?php $j = -1; foreach ($name[ 'scope' ] as $j => $scope) { ?>
                     <tr>
                       <td>
                         <?php button_choose_topic([ 'what' => 'association_scope', 'label' => $tpl[ 'topic_names' ][ $scope ] ]); ?>
@@ -857,19 +857,43 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             $('#choose_topic_dialog').modal('hide');
         });
 
-        $('#choose_topic_dialog').on('click', 'button[data-topicbank_element="create_topic"]', function(e)
+        $('#choose_topic_dialog').on('submit', '#topicbank_choose_topic_dialog_searchform', function(e)
+        {
+            var search_name, search_type, $search_name_input, $search_type_input, $search_results;
+            
+            e.preventDefault();
+            
+            if (_private.choose_topic_dialog_opener === undefined)
+            {
+                return false;
+            }
+            
+            $search_name_input = $('#choose_topic_dialog').find('input[data-topicbank_element="search_name"]');
+            search_name = $search_name_input.val();
+            
+            $search_type_input = $('#choose_topic_dialog').find('select[data-topicbank_element="search_type"]');            
+            search_type = $search_type_input.val();
+            
+            $search_results = $('#choose_topic_dialog').find('ul[data-topicbank_element="search_results"]');
+
+            $search_results.empty().load(topicbank_base_url + 'search_topic?name=' + encodeURIComponent(search_name) + '&type=' + encodeURIComponent(search_type));
+            
+            return false;
+        });
+
+        $('#choose_topic_dialog').on('submit', '#topicbank_choose_topic_dialog_createform', function(e)
         {
             var new_name, new_type, $new_name_input, $new_type_input, $target, $target_id, $target_name;
             
             if (_private.choose_topic_dialog_opener === undefined)
             {
-                return;
+                return false;
             }
             
-            $new_name_input = $('#choose_topic_dialog').find('input[data-topicbank_element="name"]');
+            $new_name_input = $('#choose_topic_dialog').find('input[data-topicbank_element="create_name"]');
             new_name = $new_name_input.val();
             
-            $new_type_input = $('#choose_topic_dialog').find('select[data-topicbank_element="type"]');            
+            $new_type_input = $('#choose_topic_dialog').find('select[data-topicbank_element="create_type"]');            
             new_type = $new_type_input.val();
 
             $.ajax(
@@ -894,6 +918,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             
                 $('#choose_topic_dialog').modal('hide');
             });
+            
+            return false;
         });
 
     });

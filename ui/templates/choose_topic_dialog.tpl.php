@@ -14,18 +14,30 @@
   </div>
   <div class="col-md-4">
     <h4>Search</h4>
+    <form id="topicbank_choose_topic_dialog_searchform">
+      <select size="1" name="search_type" data-topicbank_element="search_type">
+        <option value="">(Any type)</option>
+        <?php foreach ($tpl[ 'topic_types' ] as $topic_arr) { ?>
+        <option value="<?=htmlspecialchars($topic_arr[ 'id' ])?>"><?=htmlspecialchars($topic_arr[ 'label' ])?></option>
+        <?php } ?>
+      </select>
+      <input type="text" name="search_name" data-topicbank_element="search_name" />
+      <button class="btn btn-default" type="submit">Search</button>
+    </form>
+    <ul class="nav nav-pills nav-stacked" data-topicbank_element="search_results">
+    </ul>
   </div>
   <div class="col-md-4">
     <h4>Create new</h4>
-    <form>
-      <select size="1" name="name" data-topicbank_element="type">
+    <form id="topicbank_choose_topic_dialog_createform">
+      <select size="1" name="create_type" data-topicbank_element="create_type">
         <option value="">(No type)</option>
         <?php foreach ($tpl[ 'topic_types' ] as $topic_arr) { ?>
         <option value="<?=htmlspecialchars($topic_arr[ 'id' ])?>"><?=htmlspecialchars($topic_arr[ 'label' ])?></option>
         <?php } ?>
       </select>
-      <input type="text" name="name" data-topicbank_element="name" />
-      <button data-topicbank_element="create_topic" class="btn btn-default" type="button">Create</button>
+      <input type="text" name="create_name" data-topicbank_element="create_name" />
+      <button class="btn btn-default" type="submit">Create</button>
     </form>
   </div>
 </div>
