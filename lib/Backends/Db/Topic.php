@@ -2,8 +2,10 @@
 
 namespace TopicBank\Backends\Db;
 
+use \TopicBank\Interfaces\iTopic;
 
-class Topic extends Core implements \TopicBank\Interfaces\iTopic
+
+class Topic extends Core implements iTopic
 {
     use Persistent, TopicDbAdapter;
     
@@ -12,6 +14,7 @@ class Topic extends Core implements \TopicBank\Interfaces\iTopic
     protected $types = [ ];
     protected $names = [ ];
     protected $occurrences = [ ];
+    protected $isreifier = 0;
 
 
     public function __construct(\TopicBank\Interfaces\iServices $services, $data = false)
@@ -138,8 +141,21 @@ class Topic extends Core implements \TopicBank\Interfaces\iTopic
         $this->occurrences = $occurrences;
         return 1;
     }
+
+
+    public function getIsReifier()
+    {
+        return $this->isreifier;
+    }
     
+
+    public function setIsReifier($isreifier)
+    {
+        $this->isreifier = intval($isreifier);
+        return 1;
+    }
     
+        
     public function load($id)
     {
         $rows = $this->selectAll([ 'id' => $id ]);
@@ -185,7 +201,8 @@ class Topic extends Core implements \TopicBank\Interfaces\iTopic
             'subject_identifiers' => $this->getSubjectIdentifiers(), 
             'subject_locators' => $this->getSubjectLocators(), 
             'names' => [ ], 
-            'occurrences' => [ ]
+            'occurrences' => [ ],
+            'isreifier' => $this->getIsReifier()
         ];
         
         foreach ($this->names as $name)
@@ -208,7 +225,8 @@ class Topic extends Core implements \TopicBank\Interfaces\iTopic
             'subject_identifiers' => [ ], 
             'subject_locators' => [ ], 
             'names' => [ ], 
-            'occurrences' => [ ]
+            'occurrences' => [ ],
+            'isreifier' => 0
         ], $data);
         
         $this->setAllPersistent($data);
@@ -234,6 +252,8 @@ class Topic extends Core implements \TopicBank\Interfaces\iTopic
             $occurrence = $this->newOccurrence();
             $occurrence->setAll($occurrence_data);
         }
+        
+        $this->setIsReifier($data[ 'isreifier' ]);
         
         return 1;
     }

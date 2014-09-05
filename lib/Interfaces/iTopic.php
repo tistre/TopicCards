@@ -5,6 +5,12 @@ namespace TopicBank\Interfaces;
 
 interface iTopic extends iPersistent
 {
+    const REIFIES_NONE = 0;
+    const REIFIES_NAME = 1;
+    const REIFIES_OCCURRENCE = 2;
+    const REIFIES_ASSOCIATION = 3;
+    const REIFIES_ROLE = 4;
+    
     public function getSubjectIdentifiers();
     public function setSubjectIdentifiers(array $strings);
     public function getSubjectLocators();
@@ -17,4 +23,6 @@ interface iTopic extends iPersistent
     public function newOccurrence();
     public function getOccurrences(array $filters);
     public function setOccurrences(array $occurrences);
+    public function getIsReifier();
+    public function setIsReifier($is_reifier);
 }

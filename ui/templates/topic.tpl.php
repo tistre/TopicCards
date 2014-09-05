@@ -1,5 +1,29 @@
 <?php
 
+
+function printReifierSummary(array $reifier, array $tpl)
+{    
+    foreach ($reifier[ 'occurrence_type_index' ] as $occurrence_type => $keys)
+    {
+        echo htmlspecialchars($tpl[ 'topic_names' ][ $occurrence_type ]) . ': ';
+    
+        $first = true;
+        
+        foreach ($keys as $key)
+        {
+            $occurrence = $reifier[ 'topic' ][ 'occurrences' ][ $key ];
+            
+            if (! $first)
+                echo ' / ';
+                
+            echo htmlspecialchars($occurrence[ 'value' ]);
+
+            $first = false;
+        }
+    }
+}
+
+
 header('Content-Type: application/xhtml+xml; charset=UTF-8');
 
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
@@ -113,6 +137,20 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     }
                     
                     echo ')</i>';
+                }
+                
+                if (is_array($name[ 'reifier' ]))
+                {
+                    printf
+                    (
+                        '  (<a href="%stopic/%s"><span class="glyphicon glyphicon-paperclip"></span></a> ', 
+                        $tpl[ 'topicbank_base_url' ], 
+                        htmlspecialchars(urlencode($name[ 'reifier' ][ 'topic' ][ 'id' ]))
+                    );
+                    
+                    printReifierSummary($name[ 'reifier' ], $tpl);
+
+                    echo ')';
                 }
             }
         

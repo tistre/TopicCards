@@ -66,6 +66,12 @@ class TopicMap extends Core implements \TopicBank\Interfaces\iTopicMap
         return $this->selectTopics($filters);
     }
     
+
+    public function getTopicBySubjectIdentifier($uri)
+    {
+        return $this->selectTopicBySubjectIdentifier($uri);
+    }
+    
     
     public function getTopicLabel($id)
     {

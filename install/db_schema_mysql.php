@@ -31,6 +31,7 @@ create table <?=$prefix?>_topic
     topic_id varchar(64) not null, 
     topic_version integer default 1 not null, 
     topic_updated timestamp not null,
+    topic_isreifier tinyint default 0 not null,
     primary key <?=$prefix?>_topic_id (topic_id)
 )
 engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;

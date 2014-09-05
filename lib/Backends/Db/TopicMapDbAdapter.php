@@ -67,7 +67,37 @@ trait TopicMapDbAdapter
 
         return $result;
     }
+    
+    
+    public function selectTopicBySubjectIdentifier($uri)
+    {
+        $ok = $this->services->db_utils->connect();
         
+        if ($ok < 0)
+            return false;
+        
+        $sql = $this->services->db->prepare(sprintf
+        (
+            'select subject_topic as topic_id from %s_subject'
+            . ' where subject_value = :subject_value'
+            // XXX "limit" MySQL specific? Does PDO have a better way?
+            . ' limit 1', 
+            $this->getUrl()
+        ));
+
+        $sql->bindValue(':subject_value', $uri, \PDO::PARAM_STR);
+
+        $ok = $sql->execute();
+        
+        if ($ok === false)
+            return false;
+
+        foreach ($sql->fetchAll() as $row)
+            return $row[ 'topic_id' ];
+
+        return false;
+    }
+    
     
     public function selectAssociations(array $filters)
     {

@@ -33,7 +33,7 @@ class DbUtils extends Core
 
     public function beginTransaction()
     {
-	// Wrapping PDO transaction functionality because it
+      	// Wrapping PDO transaction functionality because it
         // doesn't support nested transactions
 
         $this->transaction_level++;
