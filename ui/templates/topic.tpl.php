@@ -3,22 +3,29 @@
 
 function printReifierSummary(array $reifier, array $tpl)
 {    
+    $first_type = true;
+
     foreach ($reifier[ 'occurrence_type_index' ] as $occurrence_type => $keys)
     {
+        if (! $first_type)
+            echo ' ';
+
+        $first_type = false;
+            
         echo htmlspecialchars($tpl[ 'topic_names' ][ $occurrence_type ]) . ': ';
     
-        $first = true;
+        $first_value = true;
         
         foreach ($keys as $key)
         {
             $occurrence = $reifier[ 'topic' ][ 'occurrences' ][ $key ];
             
-            if (! $first)
+            if (! $first_value)
                 echo ' / ';
+
+            $first_value = false;
                 
             echo htmlspecialchars($occurrence[ 'value' ]);
-
-            $first = false;
         }
     }
 }
@@ -284,6 +291,20 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                     echo ')</i>';
                 }
+
+                if (is_array($occurrence[ 'reifier' ]))
+                {
+                    printf
+                    (
+                        '  (<a href="%stopic/%s"><span class="glyphicon glyphicon-paperclip"></span></a> ', 
+                        $tpl[ 'topicbank_base_url' ], 
+                        htmlspecialchars(urlencode($occurrence[ 'reifier' ][ 'topic' ][ 'id' ]))
+                    );
+                    
+                    printReifierSummary($occurrence[ 'reifier' ], $tpl);
+
+                    echo ')';
+                }
                 
                 $first = false;
             }
@@ -328,9 +349,6 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     
                     foreach ($association[ 'roles' ] as $role)
                     {
-                        if ($role[ 'player' ] === $tpl[ 'topic' ][ 'id' ])
-                            continue;
-                            
                         printf
                         (
                             '%s: <a href="%s">%s</a>. ',
@@ -338,11 +356,29 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                             htmlspecialchars($tpl[ 'topicbank_base_url' ] . 'topic/' . urlencode($role[ 'player' ])),
                             htmlspecialchars($tpl[ 'topic_names' ][ $role[ 'player' ] ])
                         );
+
+                        if (is_array($role[ 'reifier' ]))
+                        {
+                            printf
+                            (
+                                '  (<a href="%stopic/%s"><span class="glyphicon glyphicon-paperclip"></span></a> ', 
+                                $tpl[ 'topicbank_base_url' ], 
+                                htmlspecialchars(urlencode($role[ 'reifier' ][ 'topic' ][ 'id' ]))
+                            );
+                    
+                            printReifierSummary($role[ 'reifier' ], $tpl);
+
+                            echo ') ';
+                        }
                     }
+
+                    $br = false;
 
                     if (count($association[ 'scope' ]) > 0)
                     {
-                        echo '<i>(';
+                        echo '<br /><i>(';
+                        
+                        $br = true;
                 
                         foreach ($association[ 'scope' ] as $j => $scope)
                         {
@@ -353,6 +389,23 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                         }
                 
                         echo ')</i>';
+                    }
+
+                    if (is_array($association[ 'reifier' ]))
+                    {
+                        if (! $br)
+                            echo '<br />';
+                            
+                        printf
+                        (
+                            '  (<a href="%stopic/%s"><span class="glyphicon glyphicon-paperclip"></span></a> ', 
+                            $tpl[ 'topicbank_base_url' ], 
+                            htmlspecialchars(urlencode($association[ 'reifier' ][ 'topic' ][ 'id' ]))
+                        );
+                    
+                        printReifierSummary($association[ 'reifier' ], $tpl);
+
+                        echo ')';
                     }
                     
                     echo '</p>';

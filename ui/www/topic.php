@@ -41,12 +41,18 @@ function getTopicVars($services, $topic_id, &$result, &$topic_names)
 
     splitTopicNames($result[ 'topic' ]);
 
-    foreach ($result[ 'topic' ][ 'occurrences' ] as $occurrence)
+    foreach ($result[ 'topic' ][ 'occurrences' ] as $key => $occurrence)
     {
         $topic_names[ $occurrence[ 'type' ] ] = false;
     
         foreach ($occurrence[ 'scope' ] as $occurrence_scope_id)
             $topic_names[ $occurrence_scope_id ] = false;
+
+        if (strlen($occurrence[ 'reifier' ]) > 0)
+        {
+            getTopicVars($services, $occurrence[ 'reifier' ], $reifier_vars, $topic_names);
+            $result[ 'topic' ][ 'occurrences' ][ $key ][ 'reifier' ] = $reifier_vars;
+        }
     }
 
     // Fill occurrence_type_index
@@ -86,14 +92,26 @@ function getTopicVars($services, $topic_id, &$result, &$topic_names)
     foreach ($result[ 'associations' ] as $key => $association)
     {
         $association_type = $association[ 'type' ];
+
+        if (strlen($association[ 'reifier' ]) > 0)
+        {
+            getTopicVars($services, $association[ 'reifier' ], $reifier_vars, $topic_names);
+            $result[ 'associations' ][ $key ][ 'reifier' ] = $reifier_vars;
+        }
     
         if (! isset($result[ 'association_type_index' ][ $association_type ]))
             $result[ 'association_type_index' ][ $association_type ] = [ ];
     
         $my_role_type = false;
     
-        foreach ($association[ 'roles' ] as $role)
+        foreach ($association[ 'roles' ] as $subkey => $role)
         {
+            if (strlen($role[ 'reifier' ]) > 0)
+            {
+                getTopicVars($services, $role[ 'reifier' ], $reifier_vars, $topic_names);
+                $result[ 'associations' ][ $key ][ 'roles' ][ $subkey ][ 'reifier' ] = $reifier_vars;
+            }
+
             $topic_names[ $role[ 'type' ] ] = false;
             $topic_names[ $role[ 'player' ] ] = false;
 
