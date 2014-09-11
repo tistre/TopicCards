@@ -55,6 +55,21 @@ function getTopicVars($services, $topic_id, &$result, &$topic_names)
         }
     }
 
+    // Prepend local IDs with topic details URL
+
+    foreach ($result[ 'topic' ][ 'subject_identifiers' ] as $i => $subject_identifier)
+    {
+        if (strpos($subject_identifier, '/') !== false)
+            continue;
+        
+        $result[ 'topic' ][ 'subject_identifiers' ][ $i ] = sprintf
+        (
+            '%stopic/%s', 
+            TOPICBANK_BASE_URL, 
+            $subject_identifier
+        );
+    }
+    
     // Fill occurrence_type_index
 
     $result[ 'occurrence_type_index' ] = [ ];
@@ -177,7 +192,12 @@ $tpl[ 'topicmap' ][ 'display_name' ] = 'My first topic map';
 
 $request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(TOPICBANK_BASE_URL));
 
-list(, $topic_id) = explode('/', $request_path);
+list(, $topic_identifier_or_id) = explode('/', $request_path);
+
+$topic_id = $services->topicmap->getTopicBySubjectIdentifier($topic_identifier_or_id);
+
+if (strlen($topic_id) === 0)
+    $topic_id = $topic_identifier_or_id;
 
 $tpl[ 'edit_url' ] = sprintf('%sedit_topic/%s', TOPICBANK_BASE_URL, $topic_id);
 

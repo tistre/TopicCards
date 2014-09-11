@@ -25,7 +25,12 @@ $tpl[ 'topicmap' ][ 'display_name' ] = 'My first topic map';
 
 $request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(TOPICBANK_BASE_URL));
 
-list(, $topic_id) = explode('/', $request_path);
+list(, $topic_identifier_or_id) = explode('/', $request_path);
+
+$topic_id = $services->topicmap->getTopicBySubjectIdentifier($topic_identifier_or_id);
+
+if (strlen($topic_id) === 0)
+    $topic_id = $topic_identifier_or_id;
 
 $tpl[ 'cancel_url' ] = sprintf('%stopic/%s', TOPICBANK_BASE_URL, $topic_id);
 
