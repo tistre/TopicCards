@@ -74,6 +74,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_base
         
         $name->setType($name_arr[ 'type' ]);
         $name->setValue($name_arr[ 'value' ]);
+        $name->setReifier($name_arr[ 'reifier' ]);
         
         $scopes = [ ];
         
@@ -155,6 +156,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_base
         $occurrence->setType($occ_arr[ 'type' ]);
         $occurrence->setValue($occ_arr[ 'value' ]);
         $occurrence->setDatatype($occ_arr[ 'datatype' ]);
+        $occurrence->setReifier($occ_arr[ 'reifier' ]);
         
         $scopes = [ ];
         
@@ -216,6 +218,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_base
             }
     
             $association->setType($assoc_arr[ 'type' ]);
+            $association->setReifier($assoc_arr[ 'reifier' ]);
 
             $scopes = [ ];
         
@@ -248,6 +251,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_base
         
                 $role->setType($role_arr[ 'type' ]);
                 $role->setPlayer($role_arr[ 'player' ]);
+                $role->setReifier($role_arr[ 'reifier' ]);
             }
         
             $ok = $association->save();

@@ -171,7 +171,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <?php button_choose_topic([ 'what' => 'name_type', 'label' => $tpl[ 'topic_names' ][ $name[ 'type' ] ] ]); ?>
                   <input type="hidden" name="other_names[<?=$i?>][type]" value="<?=htmlspecialchars($name[ 'type' ])?>" data-topicbank_element="id" />
                 </td>
-                <td><input type="text" name="other_names[<?=$i?>][value]" value="<?=htmlspecialchars($name[ 'value' ])?>" /></td>
+                <td>
+                  <input type="text" name="other_names[<?=$i?>][value]" value="<?=htmlspecialchars($name[ 'value' ])?>" />
+                  <input type="hidden" name="other_names[<?=$i?>][reifier]" value="<?=htmlspecialchars($name[ 'reifier' ])?>" />
+                </td>
                 <td>
                 
                   <table>
@@ -216,7 +219,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <?php button_choose_topic([ 'what' => 'name_type', 'label' => '[Choose type]' ]); ?>
                   <input type="hidden" name="other_names[TOPICBANK_COUNTER1][type]" value="" data-topicbank_element="id" />
                 </td>
-                <td><input type="text" name="other_names[TOPICBANK_COUNTER1][value]" value="" /></td>
+                <td>
+                  <input type="text" name="other_names[TOPICBANK_COUNTER1][value]" value="" />
+                  <input type="hidden" name="other_names[TOPICBANK_COUNTER1][reifier]" value="" />
+                </td>
                 <td>
                 
                   <table>
@@ -368,6 +374,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 <td>
                   <input type="text" name="occurrences[<?=$i?>][value]" value="<?=htmlspecialchars($occurrence[ 'value' ])?>" />
+                  <input type="hidden" name="occurrences[<?=$i?>][reifier]" value="<?=htmlspecialchars($occurrence[ 'reifier' ])?>" />
                   <br />
                   <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => $tpl[ 'topic_names' ][ $occurrence[ 'datatype' ] ] ]); ?>
                   <input type="hidden" name="occurrences[<?=$i?>][datatype]" value="<?=htmlspecialchars($occurrence[ 'datatype' ])?>" data-topicbank_element="id" />
@@ -427,6 +434,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 <td>
                   <input type="text" name="occurrences[TOPICBANK_COUNTER1][value]" value="" />
+                  <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][reifier]" value="" />
                   <br />
                   <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => '[Choose datatype]' ]); ?>
                   <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][datatype]" value="" data-topicbank_element="id" />
@@ -504,7 +512,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               <input type="hidden" name="associations[<?=$i?>][type]" value="<?=htmlspecialchars($association[ 'type' ])?>" data-topicbank_element="id" />
               
               <input type="hidden" name="associations[<?=$i?>][id]" value="<?=htmlspecialchars($association[ 'id' ])?>" />
+              <input type="hidden" name="associations[<?=$i?>][reifier]" value="<?=htmlspecialchars($association[ 'reifier' ])?>" />
               <input type="hidden" name="associations[<?=$i?>][delete]" value="0" />
+              
             </td>
             
             <!-- Association roles -->
@@ -526,6 +536,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <?php button_choose_topic([ 'what' => 'role_player', 'label' => $tpl[ 'topic_names' ][ $role[ 'player' ] ] ]); ?>
                     <?php } ?>
                     <input type="hidden" name="associations[<?=$i?>][roles][<?=$j?>][player]" value="<?=htmlspecialchars($role[ 'player' ])?>" data-topicbank_element="id" />
+                    <input type="hidden" name="associations[<?=$i?>][roles][<?=$j?>][reifier]" value="<?=htmlspecialchars($role[ 'reifier' ])?>" />
                   </td>
                   <td>
                     <?php if (! $role[ 'this_topic' ]) button_remove(); ?>
@@ -541,6 +552,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <td>
                     <?php button_choose_topic([ 'what' => 'role_player', 'label' => '[Choose role player]' ]); ?>
                     <input type="hidden" name="associations[<?=$i?>][roles][TOPICBANK_COUNTER2][player]" value="" data-topicbank_element="id" />
+                    <input type="hidden" name="associations[<?=$i?>][roles][TOPICBANK_COUNTER2][reifier]" value="" />
                   </td>
                   <td><?php button_remove(); ?></td>
                 </tr>
@@ -615,6 +627,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               <input type="hidden" name="associations[TOPICBANK_COUNTER1][type]" value="" data-topicbank_element="id" />
               
               <input type="hidden" name="associations[TOPICBANK_COUNTER1][id]" value="" />
+              <input type="hidden" name="associations[TOPICBANK_COUNTER1][reifier]" value="" />
               <input type="hidden" name="associations[TOPICBANK_COUNTER1][delete]" value="0" />
             </td>
             
@@ -632,6 +645,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <td>
                     (This topic)
                     <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][0][player]" value="{this_topic}" data-topicbank_element="id" />
+                    <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][0][reifier]" value="" />
                   </td>
                   <td>
                   </td>
@@ -645,6 +659,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <td>
                     <?php button_choose_topic([ 'what' => 'role_player', 'label' => '[Choose role player]' ]); ?>
                     <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][player]" value="" data-topicbank_element="id" />
+                    <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][reifier]" value="" />
                   </td>
                   <td><?php button_remove(); ?></td>
                 </tr>
