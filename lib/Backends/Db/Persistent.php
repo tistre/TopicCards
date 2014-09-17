@@ -5,26 +5,12 @@ namespace TopicBank\Backends\Db;
 
 trait Persistent
 {
-    protected $id = false;
     protected $created = false;
     protected $updated = false;
     protected $version = 0;
     protected $loaded = false;
     
     
-    public function getId()
-    {
-        return $this->id;
-    }
-    
-    
-    public function setId($id)
-    {
-        $this->id = $id;
-        return 1;
-    }
-
-
     public function getCreated()
     {
         return $this->created;
@@ -68,7 +54,6 @@ trait Persistent
     {   
         return
         [
-            'id' => $this->getId(), 
             'created' => $this->getCreated(), 
             'updated' => $this->getUpdated(), 
             'version' => $this->getVersion()
@@ -80,13 +65,11 @@ trait Persistent
     {
         $data = array_merge(
         [
-            'id' => false, 
             'created' => false,
             'updated' => false,
             'version' => 0
         ], $data);
         
-        $this->setId($data[ 'id' ]);
         $this->setCreated($data[ 'created' ]);
         $this->setUpdated($data[ 'updated' ]);
         $this->setVersion($data[ 'version' ]);

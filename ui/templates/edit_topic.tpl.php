@@ -25,6 +25,19 @@ function button_choose_topic(array $params)
 }
 
 
+function button_reify(array $params)
+{
+    ?>
+    
+    <button class="btn btn-link" data-topicbank_event="show_reify_dialog" data-topicbank_reifies_type="<?=htmlspecialchars($params[ 'reifies_type' ])?>" data-topicbank_reifies_id="<?=(isset($params[ 'reifies_id' ]) ? htmlspecialchars($params[ 'reifies_id' ]) : '')?>" type="button" data-toggle="modal" data-target="#reify_dialog">
+      <span class="glyphicon glyphicon-paperclip"></span>
+      <span class="caret"></span>
+    </button>
+
+    <?php
+}
+
+
 header('Content-Type: application/xhtml+xml; charset=UTF-8');
 
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
@@ -113,7 +126,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
                 <tr data-topicbank_template="new_type" class="hidden">
                   <td>
-                    <?php button_choose_topic([ 'what' => 'topic_type', 'label' => 'Choose type' ]); ?>
+                    <?php button_choose_topic([ 'what' => 'topic_type', 'label' => 'Type' ]); ?>
                     <input type="hidden" name="types[]" value="" data-topicbank_element="id" />
                   </td>
                   <td><?php button_remove(); ?></td>
@@ -123,7 +136,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <td>
                     <button data-topicbank_event="new_type" class="btn btn-link" type="button">
                       <span class="glyphicon glyphicon-plus"></span>
-                      Add a type
+                      Type
                     </button>
                   </td>
                 </tr>
@@ -173,7 +186,6 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 </td>
                 <td>
                   <input type="text" name="other_names[<?=$i?>][value]" value="<?=htmlspecialchars($name[ 'value' ])?>" />
-                  <input type="hidden" name="other_names[<?=$i?>][reifier]" value="<?=htmlspecialchars($name[ 'reifier' ])?>" />
                 </td>
                 <td>
                 
@@ -191,7 +203,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               
                     <tr data-topicbank_template="new_name_scope" class="hidden" data-topicbank_counter_value="<?=$j?>" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                       <td>
-                        <?php button_choose_topic([ 'what' => 'name_scope', 'label' => '[Choose scope]' ]); ?>
+                        <?php button_choose_topic([ 'what' => 'name_scope', 'label' => '[Scope]' ]); ?>
                         <input type="hidden" name="other_names[<?=$i?>][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                       </td>
                       <td><?php button_remove(); ?></td>
@@ -201,13 +213,17 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                       <td>
                         <button data-topicbank_event="new_name_scope" class="btn btn-link" type="button">
                           <span class="glyphicon glyphicon-plus"></span>
-                          Add a scope
+                          Scope
                         </button>
                       </td>
                     </tr>
               
                   </table>
                   
+                </td>
+                <td>
+                  <?php button_reify([ 'reifies_type' => 'name', 'reifies_id' => $name[ 'id' ] ]); ?>
+                  <input type="hidden" name="other_names[<?=$i?>][reifier]" value="<?=htmlspecialchars($name[ 'reifier' ])?>" />
                 </td>
                 <td><?php button_remove(); ?></td>
               </tr>
@@ -216,12 +232,11 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
               <tr data-topicbank_template="new_name" class="hidden" data-topicbank_counter_value="<?=$i?>" data-topicbank_counter_name="TOPICBANK_COUNTER1">
                 <td>
-                  <?php button_choose_topic([ 'what' => 'name_type', 'label' => '[Choose type]' ]); ?>
+                  <?php button_choose_topic([ 'what' => 'name_type', 'label' => '[Type]' ]); ?>
                   <input type="hidden" name="other_names[TOPICBANK_COUNTER1][type]" value="" data-topicbank_element="id" />
                 </td>
                 <td>
                   <input type="text" name="other_names[TOPICBANK_COUNTER1][value]" value="" />
-                  <input type="hidden" name="other_names[TOPICBANK_COUNTER1][reifier]" value="" />
                 </td>
                 <td>
                 
@@ -229,7 +244,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   
                     <tr data-topicbank_template="new_name_scope" class="hidden" data-topicbank_counter_value="0" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                       <td>
-                        <?php button_choose_topic([ 'what' => 'name_scope', 'label' => '[Choose scope]' ]); ?>
+                        <?php button_choose_topic([ 'what' => 'name_scope', 'label' => '[Scope]' ]); ?>
                         <input type="hidden" name="other_names[TOPICBANK_COUNTER1][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                       </td>
                       <td><?php button_remove(); ?></td>
@@ -239,13 +254,17 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                       <td>
                         <button data-topicbank_event="new_name_scope" class="btn btn-link" type="button">
                           <span class="glyphicon glyphicon-plus"></span>
-                          Add a scope
+                          Scope
                         </button>
                       </td>
                     </tr>
               
                   </table>                
                 
+                </td>
+                <td>
+                  <?php button_reify([ 'reifies_type' => 'name' ]); ?>
+                  <input type="hidden" name="other_names[TOPICBANK_COUNTER1][reifier]" value="" />
                 </td>
                 <td><?php button_remove(); ?></td>
               </tr>
@@ -254,7 +273,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <td>
                   <button data-topicbank_event="new_name" class="btn btn-link" type="button">
                     <span class="glyphicon glyphicon-plus"></span>
-                    Add a name
+                    Name
                   </button>
                 </td>
               </tr>
@@ -298,7 +317,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <td>
                   <button data-topicbank_event="new_subject_identifier" class="btn btn-link" type="button">
                     <span class="glyphicon glyphicon-plus"></span>
-                    Add an identifier URL
+                    Identifier URL
                   </button>
                 </td>
               </tr>
@@ -342,7 +361,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <td>
                   <button data-topicbank_event="new_subject_locator" class="btn btn-link" type="button">
                     <span class="glyphicon glyphicon-plus"></span>
-                    Add a resource URL
+                    Resource URL
                   </button>
                 </td>
               </tr>
@@ -374,7 +393,6 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 <td>
                   <input type="text" name="occurrences[<?=$i?>][value]" value="<?=htmlspecialchars($occurrence[ 'value' ])?>" />
-                  <input type="hidden" name="occurrences[<?=$i?>][reifier]" value="<?=htmlspecialchars($occurrence[ 'reifier' ])?>" />
                   <br />
                   <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => $tpl[ 'topic_names' ][ $occurrence[ 'datatype' ] ] ]); ?>
                   <input type="hidden" name="occurrences[<?=$i?>][datatype]" value="<?=htmlspecialchars($occurrence[ 'datatype' ])?>" data-topicbank_element="id" />
@@ -398,7 +416,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               
                     <tr data-topicbank_template="new_occurrence_scope" class="hidden" data-topicbank_counter_value="<?=$j?>" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                       <td>
-                        <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => '[Choose scope]' ]); ?>
+                        <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => '[Scope]' ]); ?>
                         <input type="hidden" name="occurrences[<?=$i?>][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                       </td>
                       <td><?php button_remove(); ?></td>
@@ -408,13 +426,17 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                       <td>
                         <button data-topicbank_event="new_occurrence_scope" class="btn btn-link" type="button">
                           <span class="glyphicon glyphicon-plus"></span>
-                          Add a scope
+                          Scope
                         </button>
                       </td>
                     </tr>
               
                   </table>
                 
+                </td>
+                <td>
+                  <?php button_reify([ 'reifies_type' => 'occurrence', 'reifies_id' => $occurrence[ 'id' ] ]); ?>
+                  <input type="hidden" name="occurrences[<?=$i?>][reifier]" value="<?=htmlspecialchars($occurrence[ 'reifier' ])?>" />
                 </td>
                 <td><?php button_remove(); ?></td>
               </tr>
@@ -426,7 +448,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <!-- New occurrence type -->
                 
                 <td>
-                  <?php button_choose_topic([ 'what' => 'occurrence_type', 'label' => '[Choose property]' ]); ?>
+                  <?php button_choose_topic([ 'what' => 'occurrence_type', 'label' => '[Property]' ]); ?>
                   <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][type]" value="" data-topicbank_element="id" />
                 </td>
 
@@ -434,9 +456,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 <td>
                   <input type="text" name="occurrences[TOPICBANK_COUNTER1][value]" value="" />
-                  <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][reifier]" value="" />
                   <br />
-                  <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => '[Choose datatype]' ]); ?>
+                  <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => '[Datatype]' ]); ?>
                   <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][datatype]" value="" data-topicbank_element="id" />
                 </td>
                 
@@ -448,7 +469,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   
                     <tr data-topicbank_template="new_occurrence_scope" class="hidden" data-topicbank_counter_value="0" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                       <td>
-                        <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => '[Choose scope]' ]); ?>
+                        <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => '[Scope]' ]); ?>
                         <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                       </td>
                       <td><?php button_remove(); ?></td>
@@ -458,13 +479,17 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                       <td>
                         <button data-topicbank_event="new_occurrence_scope" class="btn btn-link" type="button">
                           <span class="glyphicon glyphicon-plus"></span>
-                          Add a scope
+                          Scope
                         </button>
                       </td>
                     </tr>
               
                   </table>
                   
+                </td>
+                <td>
+                  <?php button_reify([ 'reifies_type' => 'occurrence' ]); ?>
+                  <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][reifier]" value="" />
                 </td>
                 <td><?php button_remove(); ?></td>
               </tr>
@@ -473,7 +498,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <td>
                   <button data-topicbank_event="new_occurrence" class="btn btn-link" type="button">
                     <span class="glyphicon glyphicon-plus"></span>
-                    Add a property
+                    Property
                   </button>
                 </td>
               </tr>
@@ -512,7 +537,6 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               <input type="hidden" name="associations[<?=$i?>][type]" value="<?=htmlspecialchars($association[ 'type' ])?>" data-topicbank_element="id" />
               
               <input type="hidden" name="associations[<?=$i?>][id]" value="<?=htmlspecialchars($association[ 'id' ])?>" />
-              <input type="hidden" name="associations[<?=$i?>][reifier]" value="<?=htmlspecialchars($association[ 'reifier' ])?>" />
               <input type="hidden" name="associations[<?=$i?>][delete]" value="0" />
               
             </td>
@@ -536,6 +560,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <?php button_choose_topic([ 'what' => 'role_player', 'label' => $tpl[ 'topic_names' ][ $role[ 'player' ] ] ]); ?>
                     <?php } ?>
                     <input type="hidden" name="associations[<?=$i?>][roles][<?=$j?>][player]" value="<?=htmlspecialchars($role[ 'player' ])?>" data-topicbank_element="id" />
+                  </td>
+                  <td>
+                    <?php button_reify([ 'reifies_type' => 'role', 'reifies_id' => $role[ 'id' ] ]); ?>
                     <input type="hidden" name="associations[<?=$i?>][roles][<?=$j?>][reifier]" value="<?=htmlspecialchars($role[ 'reifier' ])?>" />
                   </td>
                   <td>
@@ -546,12 +573,15 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
                 <tr data-topicbank_template="new_role" class="hidden" data-topicbank_counter_value="<?=$j?>" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                   <td>
-                    <?php button_choose_topic([ 'what' => 'role_type', 'label' => '[Choose role type]' ]); ?>
+                    <?php button_choose_topic([ 'what' => 'role_type', 'label' => '[Role type]' ]); ?>
                     <input type="hidden" name="associations[<?=$i?>][roles][TOPICBANK_COUNTER2][type]" value="" data-topicbank_element="id" />
                   </td>
                   <td>
-                    <?php button_choose_topic([ 'what' => 'role_player', 'label' => '[Choose role player]' ]); ?>
+                    <?php button_choose_topic([ 'what' => 'role_player', 'label' => '[Role player]' ]); ?>
                     <input type="hidden" name="associations[<?=$i?>][roles][TOPICBANK_COUNTER2][player]" value="" data-topicbank_element="id" />
+                  </td>
+                  <td>
+                    <?php button_reify([ 'reifies_type' => 'role' ]); ?>
                     <input type="hidden" name="associations[<?=$i?>][roles][TOPICBANK_COUNTER2][reifier]" value="" />
                   </td>
                   <td><?php button_remove(); ?></td>
@@ -561,7 +591,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <td>
                     <button data-topicbank_event="new_role" class="btn btn-link" type="button">
                       <span class="glyphicon glyphicon-plus"></span>
-                      Add a role
+                      Role
                     </button>
                   </td>
                 </tr>
@@ -587,7 +617,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               
                 <tr data-topicbank_template="new_association_scope" class="hidden" data-topicbank_counter_value="<?=$j?>" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                   <td>
-                    <?php button_choose_topic([ 'what' => 'association_scope', 'label' => '[Choose scope]' ]); ?>
+                    <?php button_choose_topic([ 'what' => 'association_scope', 'label' => '[Scope]' ]); ?>
                     <input type="hidden" name="associations[<?=$i?>][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                   </td>
                   <td><?php button_remove(); ?></td>
@@ -597,7 +627,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <td>
                     <button data-topicbank_event="new_association_scope" class="btn btn-link" type="button">
                       <span class="glyphicon glyphicon-plus"></span>
-                      Add a scope
+                      Scope
                     </button>
                   </td>
                 </tr>
@@ -605,6 +635,13 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               </table>
             </td>
             
+            <!-- Association reifier -->
+            
+            <td>
+              <?php button_reify([ 'reifies_type' => 'association', 'reifies_id' => $association[ 'id' ] ]); ?>
+              <input type="hidden" name="associations[<?=$i?>][reifier]" value="<?=htmlspecialchars($association[ 'reifier' ])?>" />
+            </td>
+
             <!-- Remove association -->
             
             <td>
@@ -623,11 +660,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <!-- New association type -->
             
             <td>
-              <?php button_choose_topic([ 'what' => 'association_type', 'label' => '[Choose association type]' ]); ?>
+              <?php button_choose_topic([ 'what' => 'association_type', 'label' => '[Association type]' ]); ?>
               <input type="hidden" name="associations[TOPICBANK_COUNTER1][type]" value="" data-topicbank_element="id" />
               
               <input type="hidden" name="associations[TOPICBANK_COUNTER1][id]" value="" />
-              <input type="hidden" name="associations[TOPICBANK_COUNTER1][reifier]" value="" />
               <input type="hidden" name="associations[TOPICBANK_COUNTER1][delete]" value="0" />
             </td>
             
@@ -639,12 +675,15 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               
                 <tr>
                   <td>
-                    <?php button_choose_topic([ 'what' => 'role_type', 'label' => '[Choose role type]' ]); ?>
+                    <?php button_choose_topic([ 'what' => 'role_type', 'label' => '[Role type]' ]); ?>
                     <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][0][type]" value="" data-topicbank_element="id" />
                   </td>
                   <td>
                     (This topic)
                     <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][0][player]" value="{this_topic}" data-topicbank_element="id" />
+                  </td>
+                  <td>
+                    <?php button_reify([ 'reifies_type' => 'role' ]); ?>
                     <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][0][reifier]" value="" />
                   </td>
                   <td>
@@ -653,12 +692,15 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
                 <tr data-topicbank_template="new_role" class="hidden" data-topicbank_counter_value="1" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                   <td>
-                    <?php button_choose_topic([ 'what' => 'role_type', 'label' => '[Choose role type]' ]); ?>
+                    <?php button_choose_topic([ 'what' => 'role_type', 'label' => '[Role type]' ]); ?>
                     <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][type]" value="" data-topicbank_element="id" />
                   </td>
                   <td>
-                    <?php button_choose_topic([ 'what' => 'role_player', 'label' => '[Choose role player]' ]); ?>
+                    <?php button_choose_topic([ 'what' => 'role_player', 'label' => '[Role player]' ]); ?>
                     <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][player]" value="" data-topicbank_element="id" />
+                  </td>
+                  <td>
+                    <?php button_reify([ 'reifies_type' => 'role' ]); ?>
                     <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][reifier]" value="" />
                   </td>
                   <td><?php button_remove(); ?></td>
@@ -668,7 +710,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <td>
                     <button data-topicbank_event="new_role" class="btn btn-link" type="button">
                       <span class="glyphicon glyphicon-plus"></span>
-                      Add a role
+                      Role
                     </button>
                   </td>
                 </tr>
@@ -684,7 +726,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               
                 <tr data-topicbank_template="new_association_scope" class="hidden" data-topicbank_counter_value="0" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                   <td>
-                    <?php button_choose_topic([ 'what' => 'association_scope', 'label' => '[Choose scope]' ]); ?>
+                    <?php button_choose_topic([ 'what' => 'association_scope', 'label' => '[Scope]' ]); ?>
                     <input type="hidden" name="associations[TOPICBANK_COUNTER1][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                   </td>
                   <td><?php button_remove(); ?></td>
@@ -694,7 +736,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <td>
                     <button data-topicbank_event="new_association_scope" class="btn btn-link" type="button">
                       <span class="glyphicon glyphicon-plus"></span>
-                      Add a scope
+                      Scope
                     </button>
                   </td>
                 </tr>
@@ -702,6 +744,13 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               </table>            
             </td>
             
+            <!-- New association reifier -->
+
+            <td>
+              <?php button_reify([ 'reifies_type' => 'association' ]); ?>            
+              <input type="hidden" name="associations[TOPICBANK_COUNTER1][reifier]" value="" />
+            </td>
+
             <!-- Remove new association -->
             
             <td><?php button_remove(); ?></td>
@@ -712,7 +761,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <td>
               <button data-topicbank_event="new_association" class="btn btn-link" type="button">
                 <span class="glyphicon glyphicon-plus"></span>
-                Add an association
+                Association
               </button>
             </td>
           </tr>
@@ -736,7 +785,22 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h4 class="modal-title" id="myModalLabel">Choose a property</h4>
+              <h4 class="modal-title" id="myModalLabel">Choose a topic</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <!-- "Reify" dialog, initially hidden -->
+
+      <div class="modal" id="reify_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="container modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h4 class="modal-title" id="myModalLabel">More properties</h4>
             </div>
             <div class="modal-body">
             </div>
@@ -935,6 +999,18 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             });
             
             return false;
+        });
+
+        $('#topicbank_form_edit').on('click', 'button[data-topicbank_event="show_reify_dialog"]', function(e)
+        {
+            var $reify_dialog, $dialog_body, data;
+
+            $reify_dialog = $('#reify_dialog');
+            $dialog_body = $reify_dialog.find('div.modal-body');
+            
+            data = $(e.target).data();
+            
+console.log(data);
         });
 
     });

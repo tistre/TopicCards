@@ -7,7 +7,7 @@ use \TopicBank\Interfaces\iTopic;
 
 class Topic extends Core implements iTopic
 {
-    use Persistent, TopicDbAdapter;
+    use Id, Persistent, TopicDbAdapter;
     
     protected $subject_identifiers = [ ];
     protected $subject_locators = [ ];
@@ -211,6 +211,7 @@ class Topic extends Core implements iTopic
         foreach ($this->occurrences as $occurrence)
             $result[ 'occurrences' ][ ] = $occurrence->getAll();
         
+        $result = array_merge($result, $this->getAllId());
         $result = array_merge($result, $this->getAllPersistent());
                 
         return $result;
@@ -229,6 +230,8 @@ class Topic extends Core implements iTopic
             'isreifier' => 0
         ], $data);
         
+        $this->setAllId($data);
+
         $this->setAllPersistent($data);
         
         $this->setTypes($data[ 'types' ]);

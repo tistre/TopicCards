@@ -5,7 +5,7 @@ namespace TopicBank\Backends\Db;
 
 class Name extends Core implements \TopicBank\Interfaces\iName
 {
-    use Reified, Scoped, Typed, NameDbAdapter;
+    use Id, Reified, Scoped, Typed, NameDbAdapter;
     
     protected $value = false;
     
@@ -30,6 +30,8 @@ class Name extends Core implements \TopicBank\Interfaces\iName
             'value' => $this->getValue()
         ];
 
+        $result = array_merge($result, $this->getAllId());
+
         $result = array_merge($result, $this->getAllTyped());
 
         $result = array_merge($result, $this->getAllReified());
@@ -49,6 +51,9 @@ class Name extends Core implements \TopicBank\Interfaces\iName
         
         $ok = $this->setValue($data[ 'value' ]);
         
+        if ($ok >= 0)
+            $ok = $this->setAllId($data);
+            
         if ($ok >= 0)
             $ok = $this->setAllTyped($data);
             

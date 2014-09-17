@@ -5,7 +5,7 @@ namespace TopicBank\Backends\Db;
 
 class Occurrence extends Core implements \TopicBank\Interfaces\iOccurrence
 {
-    use Reified, Scoped, Typed, OccurrenceDbAdapter;
+    use Id, Reified, Scoped, Typed, OccurrenceDbAdapter;
     
     protected $value = false;
     protected $datatype = false;
@@ -45,6 +45,8 @@ class Occurrence extends Core implements \TopicBank\Interfaces\iOccurrence
             'datatype' => $this->getDatatype()
         ];
 
+        $result = array_merge($result, $this->getAllId());
+
         $result = array_merge($result, $this->getAllTyped());
 
         $result = array_merge($result, $this->getAllReified());
@@ -66,6 +68,9 @@ class Occurrence extends Core implements \TopicBank\Interfaces\iOccurrence
         $ok = $this->setValue($data[ 'value' ]);
         $ok = $this->setDatatype($data[ 'datatype' ]);
         
+        if ($ok >= 0)
+            $ok = $this->setAllId($data);
+            
         if ($ok >= 0)
             $ok = $this->setAllTyped($data);
             

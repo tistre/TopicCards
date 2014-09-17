@@ -5,7 +5,7 @@ namespace TopicBank\Backends\Db;
 
 class Role extends Core implements \TopicBank\Interfaces\iRole
 {
-    use Reified, Typed, RoleDbAdapter;
+    use Id, Reified, Typed, RoleDbAdapter;
     
     protected $player = false;
     
@@ -30,6 +30,8 @@ class Role extends Core implements \TopicBank\Interfaces\iRole
             'player' => $this->getPlayer()
         ];
         
+        $result = array_merge($result, $this->getAllId());
+
         $result = array_merge($result, $this->getAllTyped());
 
         $result = array_merge($result, $this->getAllReified());
@@ -47,6 +49,9 @@ class Role extends Core implements \TopicBank\Interfaces\iRole
         
         $ok = $this->setPlayer($data[ 'player' ]);
         
+        if ($ok >= 0)
+            $ok = $this->setAllId($data);
+            
         if ($ok >= 0)
             $ok = $this->setAllTyped($data);
             

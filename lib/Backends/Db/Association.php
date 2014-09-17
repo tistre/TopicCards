@@ -5,7 +5,7 @@ namespace TopicBank\Backends\Db;
 
 class Association extends Core implements \TopicBank\Interfaces\iAssociation
 {
-    use Persistent, Reified, Scoped, Typed, AssociationDbAdapter;
+    use Id, Persistent, Reified, Scoped, Typed, AssociationDbAdapter;
     
     protected $roles = [ ];
     
@@ -77,6 +77,8 @@ class Association extends Core implements \TopicBank\Interfaces\iAssociation
         foreach ($this->getRoles() as $role)
             $result[ 'roles' ][ ] = $role->getAll();
             
+        $result = array_merge($result, $this->getAllId());
+
         $result = array_merge($result, $this->getAllPersistent());
 
         $result = array_merge($result, $this->getAllTyped());
@@ -95,6 +97,8 @@ class Association extends Core implements \TopicBank\Interfaces\iAssociation
         [
             'roles' => [ ]
         ], $data);
+        
+        $this->setAllId($data);
         
         $this->setAllPersistent($data);
         
