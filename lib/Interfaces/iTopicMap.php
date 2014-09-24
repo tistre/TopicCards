@@ -10,6 +10,7 @@ interface iTopicMap extends iCore, iReified
     public function createId();
     public function newTopic();
     public function getTopics(array $filters);
+    // XXX rename to ...TopicIdBy...?
     public function getTopicBySubjectIdentifier($uri);
     public function getTopicLabel($id);
     public function newAssociation();

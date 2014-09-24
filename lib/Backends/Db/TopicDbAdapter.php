@@ -2,6 +2,8 @@
 
 namespace TopicBank\Backends\Db;
 
+use \TopicBank\Interfaces\iTopic;
+
 
 trait TopicDbAdapter
 {
@@ -126,6 +128,141 @@ trait TopicDbAdapter
     }
 
 
+    public function selectReifiedObjectInfo($reifier_topic_id, $reifies_what)
+    {
+        $result = false;
+        
+        $map =
+        [
+            iTopic::REIFIES_NAME => 'Name',
+            iTopic::REIFIES_OCCURRENCE => 'Occurrence',
+            iTopic::REIFIES_ASSOCIATION => 'Association',
+            iTopic::REIFIES_ROLE => 'Role'
+        ];
+        
+        if (! isset($map[ $reifies_what ]))
+            return false;
+        
+        $method = 'selectReifiedObjectInfo_' . $map[ $reifies_what ];
+        
+        return $this->$method($reifier_topic_id);
+    }
+    
+    
+    protected function selectReifiedObjectInfo_Name($reifier_topic_id)
+    {
+        $name = new Name($this->services);
+
+        $rows = $name->selectAll([ 'reifier' => $reifier_topic_id ]);
+    
+        if (count($rows) === 0)
+            return false;
+
+        $topic = new Topic($this->services);
+        $ok = $topic->load($rows[ 0 ][ 'topic' ]);
+        
+        if ($ok < 0)
+            return false;
+
+        foreach ($topic->getNames([ 'reifier' => $reifier_topic_id ]) as $name)
+        {
+            if ($name->getId() !== $rows[ 0 ][ 'id' ])
+                continue;
+                
+            return
+            [
+                'topic' => $topic,
+                'name' => $name
+            ];
+        }
+        
+        return false;
+    }
+    
+    
+    protected function selectReifiedObjectInfo_Occurrence($reifier_topic_id)
+    {
+        $occurrence = new Occurrence($this->services);
+
+        $rows = $occurrence->selectAll([ 'reifier' => $reifier_topic_id ]);
+    
+        if (count($rows) === 0)
+            return false;
+
+        $topic = new Topic($this->services);
+        $ok = $topic->load($rows[ 0 ][ 'topic' ]);
+        
+        if ($ok < 0)
+            return false;
+
+        foreach ($topic->getOccurrences([ ]) as $occurrence)
+        {
+            if ($occurrence->getId() !== $rows[ 0 ][ 'id' ])
+                continue;
+                
+            return
+            [
+                'topic' => $topic,
+                'occurrence' => $occurrence
+            ];
+        }
+        
+        return false;
+    }
+    
+    
+    protected function selectReifiedObjectInfo_Association($reifier_topic_id)
+    {
+        $association = new Association($this->services);
+
+        $rows = $association->selectAll([ 'reifier' => $reifier_topic_id ]);
+    
+        if (count($rows) === 0)
+            return false;
+
+        $ok = $association->load($rows[ 0 ][ 'id' ]);
+        
+        if ($ok < 0)
+            return false;
+
+        return
+        [
+            'association' => $association,
+        ];
+    }
+    
+    
+    protected function selectReifiedObjectInfo_Role($reifier_topic_id)
+    {
+        $role = new Role($this->services);
+
+        $rows = $role->selectAll([ 'reifier' => $reifier_topic_id ]);
+    
+        if (count($rows) === 0)
+            return false;
+
+        $association = new Association($this->services);
+        $ok = $association->load($rows[ 0 ][ 'association' ]);
+        
+        if ($ok < 0)
+            return false;
+
+        foreach ($association->getRoles() as $role)
+        {
+            if ($role->getId() !== $rows[ 0 ][ 'id' ])
+                continue;
+                
+            return
+            [
+                'association' => $association,
+                'role' => $role
+            ];
+        }
+        
+        return false;
+    }
+    
+    
     public function insertAll(array $data)
     {
         $ok = $this->services->db_utils->connect();

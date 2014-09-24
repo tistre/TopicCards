@@ -155,6 +155,12 @@ class Topic extends Core implements iTopic
         return 1;
     }
     
+    
+    public function getReifiedObject()
+    {
+        return $this->selectReifiedObjectInfo($this->id, $this->isreifier);
+    }
+    
         
     public function load($id)
     {

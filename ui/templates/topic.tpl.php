@@ -87,10 +87,16 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
       <div class="well well-lg">
         <h1>
-        
+
           <!-- Unscoped base name -->
           
           <?=htmlspecialchars($tpl[ 'topic' ][ 'display_name' ][ 'value' ])?>
+          
+          <!-- Topic reifies ... -->
+          
+          <?php if (strlen($tpl[ 'topic' ][ 'reifies_summary_html' ]) > 0) { ?>
+          <small><?=$tpl[ 'topic' ][ 'reifies_summary_html' ]?></small>
+          <?php } ?>
           
           <!-- Types -->
           

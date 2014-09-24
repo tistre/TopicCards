@@ -11,17 +11,32 @@ trait RoleDbAdapter
         
         if ($ok < 0)
             return $ok;
+
+        if (isset($filters[ 'association' ]))
+        {
+            $where = 'role_association = :association_id';
+        }
+        elseif (isset($filters[ 'reifier' ]))
+        {
+            $where = 'role_reifier = :reifier_id';
+        }
         
         $prefix = $this->services->topicmap->getUrl();
         
         $sql = $this->services->db->prepare(sprintf
         (
-            'select * from %s_role'
-            . ' where role_association = :association_id', 
+            'select * from %s_role where ' . $where,
             $prefix
         ));
 
-        $sql->bindValue(':association_id', $filters[ 'association' ], \PDO::PARAM_STR);
+        if (isset($filters[ 'association' ]))
+        {
+            $sql->bindValue(':association_id', $filters[ 'association' ], \PDO::PARAM_STR);
+        }
+        elseif (isset($filters[ 'reifier' ]))
+        {
+            $sql->bindValue(':reifier_id', $filters[ 'reifier' ], \PDO::PARAM_STR);
+        }
         
         $ok = $sql->execute();
         

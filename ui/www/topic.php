@@ -1,5 +1,7 @@
 <?php
 
+use TopicBank\Interfaces\iTopic;
+
 define('TOPICBANK_BASE_DIR', dirname(dirname(__DIR__)));
 define('TOPICBANK_BASE_URL', '/topicbank/');
 define('TOPICBANK_STATIC_BASE_URL', '/topicbank_static/');
@@ -147,6 +149,10 @@ function getTopicVars($services, $topic_id, &$result, &$topic_names)
             $topic_names[ $scope ] = false;    
     }
     
+    // Topic is a reifier?
+
+    addReifiesSummary($topic, $result[ 'topic' ]);
+    
     return $result;
 }
 
@@ -173,6 +179,60 @@ function splitTopicNames(array &$topic_data)
     return 0;
 }
 
+
+function addReifiesSummary(iTopic $topic, array &$topic_data)
+{
+    global $services;
+    
+    $topic_data[ 'reifies_summary_html' ] = '';
+
+    $objects = $topic->getReifiedObject();
+    
+    if ($objects === false)
+        return;
+    
+    if ($topic_data[ 'isreifier' ] === iTopic::REIFIES_NAME)
+    {
+        $topic_data[ 'reifies_summary_html' ] = sprintf
+        (
+            'Name “%s” of <a href="%stopic/%s">%s</a>',
+            htmlspecialchars($objects[ 'name' ]->getValue()),
+            TOPICBANK_BASE_URL,
+            htmlspecialchars(urlencode($objects[ 'topic' ]->getId())),
+            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'topic' ]->getId()))
+        );
+    }
+    elseif ($topic_data[ 'isreifier' ] === iTopic::REIFIES_OCCURRENCE)
+    {
+        $topic_data[ 'reifies_summary_html' ] = sprintf
+        (
+            'Property “%s: %s” of <a href="%stopic/%s">%s</a>',
+            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'occurrence' ]->getType())),
+            htmlspecialchars($objects[ 'occurrence' ]->getValue()),
+            TOPICBANK_BASE_URL,
+            htmlspecialchars(urlencode($objects[ 'topic' ]->getId())),
+            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'topic' ]->getId()))
+        );
+    }
+    elseif ($topic_data[ 'isreifier' ] === iTopic::REIFIES_ASSOCIATION)
+    {
+        $topic_data[ 'reifies_summary_html' ] = sprintf
+        (
+            '<a href="#">A “%s” association</a>',
+            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'association' ]->getType()))
+        );
+    }
+    elseif ($topic_data[ 'isreifier' ] === iTopic::REIFIES_ROLE)
+    {
+        $topic_data[ 'reifies_summary_html' ] = sprintf
+        (
+            'Role “%s: %s” in <a href="#">a “%s” association</a>',
+            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'role' ]->getType())),
+            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'role' ]->getPlayer())),
+            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'association' ]->getType()))
+        );
+    }
+}
 
 $services = new \TopicBank\Backends\Db\Services();
 $services->setDbParams($db_params);

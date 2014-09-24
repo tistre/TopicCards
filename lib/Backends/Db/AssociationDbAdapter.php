@@ -13,15 +13,31 @@ trait AssociationDbAdapter
             return $ok;
         
         $prefix = $this->services->topicmap->getUrl();
+
+        if (isset($filters[ 'id' ]))
+        {
+            $where = 'association_id = :association_id';
+        }
+        elseif (isset($filters[ 'reifier' ]))
+        {
+            $where = 'association_reifier = :reifier_id';
+        }
         
         $sql = $this->services->db->prepare(sprintf
         (
             'select * from %s_association'
-            . ' where association_id = :association_id', 
+            . ' where ' . $where, 
             $prefix
         ));
 
-        $sql->bindValue(':association_id', $filters[ 'id' ], \PDO::PARAM_STR);
+        if (isset($filters[ 'id' ]))
+        {
+            $sql->bindValue(':association_id', $filters[ 'id' ], \PDO::PARAM_STR);
+        }
+        elseif (isset($filters[ 'reifier' ]))
+        {
+            $sql->bindValue(':reifier_id', $filters[ 'reifier' ], \PDO::PARAM_STR);
+        }
         
         $ok = $sql->execute();
         

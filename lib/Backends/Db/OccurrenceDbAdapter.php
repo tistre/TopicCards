@@ -11,17 +11,33 @@ trait OccurrenceDbAdapter
         
         if ($ok < 0)
             return $ok;
+
+        if (isset($filters[ 'topic' ]))
+        {
+            $where = 'occurrence_topic = :topic_id';
+        }
+        elseif (isset($filters[ 'reifier' ]))
+        {
+            $where = 'occurrence_reifier = :reifier_id';
+        }
         
         $prefix = $this->services->topicmap->getUrl();
         
         $sql = $this->services->db->prepare(sprintf
         (
             'select * from %s_occurrence'
-            . ' where occurrence_topic = :topic_id', 
+            . ' where ' . $where, 
             $prefix
         ));
 
-        $sql->bindValue(':topic_id', $filters[ 'topic' ], \PDO::PARAM_STR);
+        if (isset($filters[ 'topic' ]))
+        {
+            $sql->bindValue(':topic_id', $filters[ 'topic' ], \PDO::PARAM_STR);
+        }
+        elseif (isset($filters[ 'reifier' ]))
+        {
+            $sql->bindValue(':reifier_id', $filters[ 'reifier' ], \PDO::PARAM_STR);
+        }
         
         $ok = $sql->execute();
         
