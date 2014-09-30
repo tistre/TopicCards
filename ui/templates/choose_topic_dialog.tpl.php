@@ -8,6 +8,7 @@
           <span data-topicbank_element="name"><?=htmlspecialchars($topic_arr[ 'label' ])?></span>
           <span data-topicbank_element="id" class="hidden"><?=htmlspecialchars($topic_arr[ 'id' ])?></span>
         </button>
+        <small><?=htmlspecialchars($topic_arr[ 'type' ])?></small>
       </li>
       <?php } ?>
     </ul>
