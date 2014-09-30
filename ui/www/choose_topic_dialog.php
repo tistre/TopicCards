@@ -120,10 +120,19 @@ $tpl[ 'recent' ] = [ ];
 
 foreach ($recent as $id)
 {
+    $topic = $services->topicmap->newTopic();
+    $topic->load($id);
+    
+    $types = [ ];
+    
+    foreach ($topic->getTypes() as $type)
+        $types[ ] = $services->topicmap->getTopicLabel($type);
+
     $tpl[ 'recent' ][ ] = 
     [
         'id' => $id,
-        'label' => $services->topicmap->getTopicLabel($id)
+        'label' => $services->topicmap->getTopicLabel($id),
+        'type' => implode(', ', $types)
     ];
 }
 
