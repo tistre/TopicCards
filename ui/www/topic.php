@@ -216,20 +216,37 @@ function addReifiesSummary(iTopic $topic, array &$topic_data)
     }
     elseif ($topic_data[ 'isreifier' ] === iTopic::REIFIES_ASSOCIATION)
     {
+        $players = [ ];
+        
+        foreach ($objects[ 'association' ]->getRoles() as $role)
+            $players[ ] = $services->topicmap->getTopicLabel($role->getPlayer());
+            
         $topic_data[ 'reifies_summary_html' ] = sprintf
         (
-            '<a href="#">A “%s” association</a>',
-            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'association' ]->getType()))
+            '<a href="#">A “%s” association</a> between %s',
+            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'association' ]->getType())),
+            htmlspecialchars(implode(' and ', $players))
         );
     }
     elseif ($topic_data[ 'isreifier' ] === iTopic::REIFIES_ROLE)
     {
+        $other_players = [ ];
+        
+        foreach ($objects[ 'association' ]->getRoles() as $role)
+        {
+            if ($role->getPlayer() === $objects[ 'role' ]->getPlayer())
+                continue;
+                
+            $other_players[ ] = $services->topicmap->getTopicLabel($role->getPlayer());
+        }
+            
         $topic_data[ 'reifies_summary_html' ] = sprintf
         (
-            'Role “%s: %s” in <a href="#">a “%s” association</a>',
+            'Role “%s: %s” in <a href="#">a “%s” association</a> with %s',
             htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'role' ]->getType())),
             htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'role' ]->getPlayer())),
-            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'association' ]->getType()))
+            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'association' ]->getType())),
+            htmlspecialchars(implode(' and ', $other_players))
         );
     }
 }
