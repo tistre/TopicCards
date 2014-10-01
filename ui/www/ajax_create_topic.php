@@ -1,19 +1,6 @@
 <?php
 
-define('TOPICBANK_BASE_DIR', dirname(dirname(__DIR__)));
-define('TOPICBANK_BASE_URL', '/topicbank/');
-define('TOPICBANK_STATIC_BASE_URL', '/topicbank_static/');
-
-require_once TOPICBANK_BASE_DIR . '/include/init.php';
-require_once TOPICBANK_BASE_DIR . '/include/config.php';
-
-$services = new \TopicBank\Backends\Db\Services();
-$services->setDbParams($db_params);
-
-$system = new \TopicBank\Backends\Db\TopicMapSystem($services);
-
-$services->topicmap = $system->newTopicMap();
-$services->topicmap->setUrl('xddb');
+require_once dirname(dirname(__DIR__)) . '/include/config.php';
 
 $topic = $services->topicmap->newTopic();
 
