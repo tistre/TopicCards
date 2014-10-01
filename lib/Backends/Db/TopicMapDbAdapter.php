@@ -228,6 +228,11 @@ trait TopicMapDbAdapter
     {
         if (! isset($filters[ 'get_mode' ]))
             $filters[ 'get_mode' ] = 'all';
+
+        // XXX "recent" not implemented yet
+        
+        if ($filters[ 'get_mode' ] === 'recent')
+            $filters[ 'get_mode' ] = 'all';
             
         $method = 'selectWhat_' . $filters[ 'get_mode' ];
         
@@ -235,7 +240,7 @@ trait TopicMapDbAdapter
     }
     
     
-    protected function selectWhat_recent($table, $column, array $filters)
+    protected function selectWhat_all($table, $column, array $filters)
     {
         $ok = $this->services->db_utils->connect();
         

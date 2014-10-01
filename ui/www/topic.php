@@ -99,7 +99,14 @@ function getTopicVars($services, $topic_id, &$result, &$topic_names)
         $association = $services->topicmap->newAssociation();
         $association->load($association_id);
 
-        $result[ 'associations' ][ ] = $association->getAll();
+        $association_arr = $association->getAll();
+        
+        foreach ($association_arr[ 'roles' ] as $key => $role)
+            $association_arr[ 'roles' ][ $key ][ 'type_label' ] = $services->topicmap->getTopicLabel($role[ 'type' ]);
+        
+        TopicBank\Utils\StringUtils::usortByKey($association_arr[ 'roles' ], 'type_label');
+
+        $result[ 'associations' ][ ] = $association_arr;
     }
 
     // Fill association_type_index

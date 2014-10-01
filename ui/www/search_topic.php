@@ -36,4 +36,7 @@ foreach ($results as $id)
     ];
 }
 
+TopicBank\Utils\StringUtils::usortByKey($tpl[ 'results' ], 'label');
+
+
 include TOPICBANK_BASE_DIR . '/ui/templates/search_topic.tpl.php';
