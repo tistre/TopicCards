@@ -21,7 +21,7 @@ trait RoleDbAdapter
             $where = 'role_reifier = :reifier_id';
         }
         
-        $prefix = $this->services->topicmap->getUrl();
+        $prefix = $this->topicmap->getUrl();
         
         $sql = $this->services->db->prepare(sprintf
         (
@@ -77,7 +77,7 @@ trait RoleDbAdapter
                 ];
             }
         
-            $sql = $this->services->db_utils->prepareInsertSql($this->services->topicmap->getUrl() . '_role', $values);
+            $sql = $this->services->db_utils->prepareInsertSql($this->topicmap->getUrl() . '_role', $values);
         
             $ok = $sql->execute();
         
@@ -98,7 +98,7 @@ trait RoleDbAdapter
 
         $sql = $this->services->db_utils->prepareDeleteSql
         (
-            $this->services->topicmap->getUrl() . '_role', 
+            $this->topicmap->getUrl() . '_role', 
             [ [ 'column' => 'role_association', 'value' => $association_id ] ]
         );
     

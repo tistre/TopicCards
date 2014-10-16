@@ -21,7 +21,7 @@ trait NameDbAdapter
             $where = 'name_reifier = :reifier_id';
         }
         
-        $prefix = $this->services->topicmap->getUrl();
+        $prefix = $this->topicmap->getUrl();
         
         $sql = $this->services->db->prepare(sprintf
         (
@@ -84,7 +84,7 @@ trait NameDbAdapter
                 ];
             }
         
-            $sql = $this->services->db_utils->prepareInsertSql($this->services->topicmap->getUrl() . '_name', $values);
+            $sql = $this->services->db_utils->prepareInsertSql($this->topicmap->getUrl() . '_name', $values);
         
             $ok = $sql->execute();
         
@@ -112,7 +112,7 @@ trait NameDbAdapter
 
         $sql = $this->services->db_utils->prepareDeleteSql
         (
-            $this->services->topicmap->getUrl() . '_name', 
+            $this->topicmap->getUrl() . '_name', 
             [ 
                 [ 'column' => 'name_topic', 'value' => $topic_id ]
             ]

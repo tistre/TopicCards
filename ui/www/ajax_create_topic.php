@@ -2,9 +2,9 @@
 
 require_once dirname(dirname(__DIR__)) . '/include/config.php';
 
-$topic = $services->topicmap->newTopic();
+$topic = $topicmap->newTopic();
 
-$topic->setId($services->topicmap->createId());
+$topic->setId($topicmap->createId());
 
 $name = $topic->newName();
 $name->setType('basename');

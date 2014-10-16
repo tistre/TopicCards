@@ -14,14 +14,14 @@ $request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(TOPICBANK_BASE_URL));
 
 list(, $topic_identifier_or_id) = explode('/', $request_path);
 
-$topic_id = $services->topicmap->getTopicBySubjectIdentifier($topic_identifier_or_id);
+$topic_id = $topicmap->getTopicBySubjectIdentifier($topic_identifier_or_id);
 
 if (strlen($topic_id) === 0)
     $topic_id = $topic_identifier_or_id;
 
 $tpl[ 'cancel_url' ] = sprintf('%stopic/%s', TOPICBANK_BASE_URL, $topic_id);
 
-$topic = $services->topicmap->newTopic();
+$topic = $topicmap->newTopic();
 $topic->load($topic_id);
 
 // Update
@@ -181,7 +181,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_base
             if ($assoc_arr[ 'type' ] === '')
                 continue;
             
-            $association = $services->topicmap->newAssociation();
+            $association = $topicmap->newAssociation();
         
             if (strlen($assoc_arr[ 'id' ]) > 0)
             {
@@ -206,7 +206,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_base
             }
             else
             {
-                $association->setId($services->topicmap->createId());
+                $association->setId($topicmap->createId());
             }
     
             $association->setType($assoc_arr[ 'type' ]);
@@ -306,13 +306,13 @@ foreach ($tpl[ 'topic' ][ 'names' ] as $name)
 
 // Fill associations
 
-$association_ids = $services->topicmap->getAssociations([ 'role_player' => $topic_id ]);
+$association_ids = $topicmap->getAssociations([ 'role_player' => $topic_id ]);
 
 $tpl[ 'associations' ] = [ ];
 
 foreach ($association_ids as $association_id)
 {
-    $association = $services->topicmap->newAssociation();
+    $association = $topicmap->newAssociation();
     $association->load($association_id);
 
     $association_arr = $association->getAll();
@@ -344,6 +344,6 @@ foreach ($association_ids as $association_id)
 // Fill topic_names array (names of all related topics needed for display)
 
 foreach (array_keys($tpl[ 'topic_names' ]) as $helper_topic_id)
-    $tpl[ 'topic_names' ][ $helper_topic_id ] = $services->topicmap->getTopicLabel($helper_topic_id);
+    $tpl[ 'topic_names' ][ $helper_topic_id ] = $topicmap->getTopicLabel($helper_topic_id);
 
 include TOPICBANK_BASE_DIR . '/ui/templates/edit_topic.tpl.php';

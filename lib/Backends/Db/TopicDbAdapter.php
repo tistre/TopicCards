@@ -14,7 +14,7 @@ trait TopicDbAdapter
         if ($ok < 0)
             return $ok;
         
-        $prefix = $this->services->topicmap->getUrl();
+        $prefix = $this->topicmap->getUrl();
         
         $sql = $this->services->db->prepare(sprintf
         (
@@ -32,8 +32,8 @@ trait TopicDbAdapter
 
         $result = [ ];
         
-        $name = new Name($this->services);
-        $occurrence = new Occurrence($this->services);
+        $name = new Name($this->services, $this->topicmap);
+        $occurrence = new Occurrence($this->services, $this->topicmap);
         
         foreach ($sql->fetchAll() as $row)
         {
@@ -63,7 +63,7 @@ trait TopicDbAdapter
         if ($ok < 0)
             return $ok;
         
-        $prefix = $this->services->topicmap->getUrl();
+        $prefix = $this->topicmap->getUrl();
 
         $sql = $this->services->db->prepare(sprintf
         (
@@ -104,7 +104,7 @@ trait TopicDbAdapter
         if ($ok < 0)
             return $ok;
         
-        $prefix = $this->services->topicmap->getUrl();
+        $prefix = $this->topicmap->getUrl();
         
         $sql = $this->services->db->prepare(sprintf
         (
@@ -151,14 +151,14 @@ trait TopicDbAdapter
     
     protected function selectReifiedObjectInfo_Name($reifier_topic_id)
     {
-        $name = new Name($this->services);
+        $name = new Name($this->services, $this->topicmap);
 
         $rows = $name->selectAll([ 'reifier' => $reifier_topic_id ]);
     
         if (count($rows) === 0)
             return false;
 
-        $topic = new Topic($this->services);
+        $topic = new Topic($this->services, $this->topicmap);
         $ok = $topic->load($rows[ 0 ][ 'topic' ]);
         
         if ($ok < 0)
@@ -182,14 +182,14 @@ trait TopicDbAdapter
     
     protected function selectReifiedObjectInfo_Occurrence($reifier_topic_id)
     {
-        $occurrence = new Occurrence($this->services);
+        $occurrence = new Occurrence($this->services, $this->topicmap);
 
         $rows = $occurrence->selectAll([ 'reifier' => $reifier_topic_id ]);
     
         if (count($rows) === 0)
             return false;
 
-        $topic = new Topic($this->services);
+        $topic = new Topic($this->services, $this->topicmap);
         $ok = $topic->load($rows[ 0 ][ 'topic' ]);
         
         if ($ok < 0)
@@ -213,7 +213,7 @@ trait TopicDbAdapter
     
     protected function selectReifiedObjectInfo_Association($reifier_topic_id)
     {
-        $association = new Association($this->services);
+        $association = new Association($this->services, $this->topicmap);
 
         $rows = $association->selectAll([ 'reifier' => $reifier_topic_id ]);
     
@@ -234,14 +234,14 @@ trait TopicDbAdapter
     
     protected function selectReifiedObjectInfo_Role($reifier_topic_id)
     {
-        $role = new Role($this->services);
+        $role = new Role($this->services, $this->topicmap);
 
         $rows = $role->selectAll([ 'reifier' => $reifier_topic_id ]);
     
         if (count($rows) === 0)
             return false;
 
-        $association = new Association($this->services);
+        $association = new Association($this->services, $this->topicmap);
         $ok = $association->load($rows[ 0 ][ 'association' ]);
         
         if ($ok < 0)
@@ -302,7 +302,7 @@ trait TopicDbAdapter
             ];
         }
         
-        $sql = $this->services->db_utils->prepareInsertSql($this->services->topicmap->getUrl() . '_topic', $values);
+        $sql = $this->services->db_utils->prepareInsertSql($this->topicmap->getUrl() . '_topic', $values);
         
         $ok = $sql->execute();
         
@@ -319,13 +319,13 @@ trait TopicDbAdapter
         
         if ($ok >= 0)
         {
-            $name = new Name($this->services);
+            $name = new Name($this->services, $this->topicmap);
             $ok = $name->insertAll($data[ 'id' ], $data[ 'names' ]);
         }
 
         if ($ok >= 0)
         {
-            $occurrence = new Occurrence($this->services);
+            $occurrence = new Occurrence($this->services, $this->topicmap);
             $ok = $occurrence->insertAll($data[ 'id' ], $data[ 'occurrences' ]);
         }
 
@@ -364,7 +364,7 @@ trait TopicDbAdapter
                 'value' => $type
             ];
         
-            $sql = $this->services->db_utils->prepareInsertSql($this->services->topicmap->getUrl() . '_type', $values);
+            $sql = $this->services->db_utils->prepareInsertSql($this->topicmap->getUrl() . '_type', $values);
         
             $ok = $sql->execute();
         
@@ -418,7 +418,7 @@ trait TopicDbAdapter
                 'datatype' => \PDO::PARAM_INT
             ];
         
-            $sql = $this->services->db_utils->prepareInsertSql($this->services->topicmap->getUrl() . '_subject', $values);
+            $sql = $this->services->db_utils->prepareInsertSql($this->topicmap->getUrl() . '_subject', $values);
         
             $ok = $sql->execute();
         
@@ -471,7 +471,7 @@ trait TopicDbAdapter
         
         $sql = $this->services->db_utils->prepareUpdateSql
         (
-            $this->services->topicmap->getUrl() . '_topic', 
+            $this->topicmap->getUrl() . '_topic', 
             $values,
             [
                 [
@@ -504,13 +504,13 @@ trait TopicDbAdapter
         
         if ($ok >= 0)
         {
-            $name = new Name($this->services);
+            $name = new Name($this->services, $this->topicmap);
             $ok = $name->updateAll($data[ 'id' ], $data[ 'names' ]);
         }
 
         if ($ok >= 0)
         {
-            $occurrence = new Occurrence($this->services);
+            $occurrence = new Occurrence($this->services, $this->topicmap);
             $ok = $occurrence->updateAll($data[ 'id' ], $data[ 'occurrences' ]);
         }
 
@@ -535,7 +535,7 @@ trait TopicDbAdapter
 
         $sql = $this->services->db_utils->prepareDeleteSql
         (
-            $this->services->topicmap->getUrl() . '_type', 
+            $this->topicmap->getUrl() . '_type', 
             [ [ 'column' => 'type_topic', 'value' => $topic_id ] ]
         );
     
@@ -569,7 +569,7 @@ trait TopicDbAdapter
 
         $sql = $this->services->db_utils->prepareDeleteSql
         (
-            $this->services->topicmap->getUrl() . '_subject', 
+            $this->topicmap->getUrl() . '_subject', 
             [ 
                 [ 'column' => 'subject_topic', 'value' => $topic_id ],
                 [ 'column' => 'subject_islocator', 'value' => intval($islocator), 'datatype' => \PDO::PARAM_INT ]
@@ -592,7 +592,7 @@ trait TopicDbAdapter
         if ($ok < 0)
             return $ok;
 
-        $prefix = $this->services->topicmap->getUrl();
+        $prefix = $this->topicmap->getUrl();
 
         $sql = $this->services->db_utils->prepareDeleteSql
         (

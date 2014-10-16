@@ -5,14 +5,17 @@ use TopicBank\Interfaces\iTopic;
 require_once dirname(dirname(__DIR__)) . '/include/config.php';
 
 
-function getTopicVars($services, $topic_id, &$result, &$topic_names)
+function getTopicVars($topic_id, &$result, &$topic_names)
 {
+    global $services;
+    global $topicmap;
+    
     $result = [ ];
     
     if (! is_array($topic_names))
         $topic_names = [ ];
     
-    $topic = $services->topicmap->newTopic();
+    $topic = $topicmap->newTopic();
     $topic->load($topic_id);
     
     $result[ 'topic' ] = $topic->getAll();
@@ -31,7 +34,7 @@ function getTopicVars($services, $topic_id, &$result, &$topic_names)
             
         if (strlen($name[ 'reifier' ]) > 0)
         {
-            getTopicVars($services, $name[ 'reifier' ], $reifier_vars, $topic_names);
+            getTopicVars($name[ 'reifier' ], $reifier_vars, $topic_names);
             $result[ 'topic' ][ 'names' ][ $key ][ 'reifier' ] = $reifier_vars;
         }
     }
@@ -47,7 +50,7 @@ function getTopicVars($services, $topic_id, &$result, &$topic_names)
 
         if (strlen($occurrence[ 'reifier' ]) > 0)
         {
-            getTopicVars($services, $occurrence[ 'reifier' ], $reifier_vars, $topic_names);
+            getTopicVars($occurrence[ 'reifier' ], $reifier_vars, $topic_names);
             $result[ 'topic' ][ 'occurrences' ][ $key ][ 'reifier' ] = $reifier_vars;
         }
     }
@@ -85,19 +88,19 @@ function getTopicVars($services, $topic_id, &$result, &$topic_names)
 
     // Fill associations and associations_type_index, group by type and role
 
-    $association_ids = $services->topicmap->getAssociations([ 'role_player' => $topic_id ]);
+    $association_ids = $topicmap->getAssociations([ 'role_player' => $topic_id ]);
 
     $result[ 'associations' ] = [ ];
 
     foreach ($association_ids as $association_id)
     {
-        $association = $services->topicmap->newAssociation();
+        $association = $topicmap->newAssociation();
         $association->load($association_id);
 
         $association_arr = $association->getAll();
         
         foreach ($association_arr[ 'roles' ] as $key => $role)
-            $association_arr[ 'roles' ][ $key ][ 'type_label' ] = $services->topicmap->getTopicLabel($role[ 'type' ]);
+            $association_arr[ 'roles' ][ $key ][ 'type_label' ] = $topicmap->getTopicLabel($role[ 'type' ]);
         
         TopicBank\Utils\StringUtils::usortByKey($association_arr[ 'roles' ], 'type_label');
 
@@ -114,7 +117,7 @@ function getTopicVars($services, $topic_id, &$result, &$topic_names)
 
         if (strlen($association[ 'reifier' ]) > 0)
         {
-            getTopicVars($services, $association[ 'reifier' ], $reifier_vars, $topic_names);
+            getTopicVars($association[ 'reifier' ], $reifier_vars, $topic_names);
             $result[ 'associations' ][ $key ][ 'reifier' ] = $reifier_vars;
         }
     
@@ -127,7 +130,7 @@ function getTopicVars($services, $topic_id, &$result, &$topic_names)
         {
             if (strlen($role[ 'reifier' ]) > 0)
             {
-                getTopicVars($services, $role[ 'reifier' ], $reifier_vars, $topic_names);
+                getTopicVars($role[ 'reifier' ], $reifier_vars, $topic_names);
                 $result[ 'associations' ][ $key ][ 'roles' ][ $subkey ][ 'reifier' ] = $reifier_vars;
             }
 
@@ -185,6 +188,7 @@ function splitTopicNames(array &$topic_data)
 function addReifiesSummary(iTopic $topic, array &$topic_data)
 {
     global $services;
+    global $topicmap;
     
     $topic_data[ 'reifies_summary_html' ] = '';
 
@@ -201,7 +205,7 @@ function addReifiesSummary(iTopic $topic, array &$topic_data)
             htmlspecialchars($objects[ 'name' ]->getValue()),
             TOPICBANK_BASE_URL,
             htmlspecialchars(urlencode($objects[ 'topic' ]->getId())),
-            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'topic' ]->getId()))
+            htmlspecialchars($topicmap->getTopicLabel($objects[ 'topic' ]->getId()))
         );
     }
     elseif ($topic_data[ 'isreifier' ] === iTopic::REIFIES_OCCURRENCE)
@@ -209,11 +213,11 @@ function addReifiesSummary(iTopic $topic, array &$topic_data)
         $topic_data[ 'reifies_summary_html' ] = sprintf
         (
             'Property “%s: %s” of <a href="%stopic/%s">%s</a>',
-            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'occurrence' ]->getType())),
+            htmlspecialchars($topicmap->getTopicLabel($objects[ 'occurrence' ]->getType())),
             htmlspecialchars($objects[ 'occurrence' ]->getValue()),
             TOPICBANK_BASE_URL,
             htmlspecialchars(urlencode($objects[ 'topic' ]->getId())),
-            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'topic' ]->getId()))
+            htmlspecialchars($topicmap->getTopicLabel($objects[ 'topic' ]->getId()))
         );
     }
     elseif ($topic_data[ 'isreifier' ] === iTopic::REIFIES_ASSOCIATION)
@@ -221,12 +225,12 @@ function addReifiesSummary(iTopic $topic, array &$topic_data)
         $players = [ ];
         
         foreach ($objects[ 'association' ]->getRoles() as $role)
-            $players[ ] = $services->topicmap->getTopicLabel($role->getPlayer());
+            $players[ ] = $topicmap->getTopicLabel($role->getPlayer());
             
         $topic_data[ 'reifies_summary_html' ] = sprintf
         (
             '<a href="#">A “%s” association</a> between %s',
-            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'association' ]->getType())),
+            htmlspecialchars($topicmap->getTopicLabel($objects[ 'association' ]->getType())),
             htmlspecialchars(implode(' and ', $players))
         );
     }
@@ -239,15 +243,15 @@ function addReifiesSummary(iTopic $topic, array &$topic_data)
             if ($role->getPlayer() === $objects[ 'role' ]->getPlayer())
                 continue;
                 
-            $other_players[ ] = $services->topicmap->getTopicLabel($role->getPlayer());
+            $other_players[ ] = $topicmap->getTopicLabel($role->getPlayer());
         }
             
         $topic_data[ 'reifies_summary_html' ] = sprintf
         (
             'Role “%s: %s” in <a href="#">a “%s” association</a> with %s',
-            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'role' ]->getType())),
-            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'role' ]->getPlayer())),
-            htmlspecialchars($services->topicmap->getTopicLabel($objects[ 'association' ]->getType())),
+            htmlspecialchars($topicmap->getTopicLabel($objects[ 'role' ]->getType())),
+            htmlspecialchars($topicmap->getTopicLabel($objects[ 'role' ]->getPlayer())),
+            htmlspecialchars($topicmap->getTopicLabel($objects[ 'association' ]->getType())),
             htmlspecialchars(implode(' and ', $other_players))
         );
     }
@@ -266,21 +270,33 @@ $request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(TOPICBANK_BASE_URL));
 
 list(, $topic_identifier_or_id) = explode('/', $request_path);
 
-$topic_id = $services->topicmap->getTopicBySubjectIdentifier($topic_identifier_or_id);
+$topic_id = $topicmap->getTopicBySubjectIdentifier($topic_identifier_or_id);
 
 if (strlen($topic_id) === 0)
     $topic_id = $topic_identifier_or_id;
 
 $tpl[ 'edit_url' ] = sprintf('%sedit_topic/%s', TOPICBANK_BASE_URL, $topic_id);
 
-getTopicVars($services, $topic_id, $topic_vars, $tpl[ 'topic_names' ]);
+getTopicVars($topic_id, $topic_vars, $tpl[ 'topic_names' ]);
 
 $tpl = array_merge($tpl, $topic_vars);
 
 // Fill topic_names array (names of all related topics needed for display)
 
 foreach (array_keys($tpl[ 'topic_names' ]) as $helper_topic_id)
-    $tpl[ 'topic_names' ][ $helper_topic_id ] = $services->topicmap->getTopicLabel($helper_topic_id);
+    $tpl[ 'topic_names' ][ $helper_topic_id ] = $topicmap->getTopicLabel($helper_topic_id);
 
 
 include TOPICBANK_BASE_DIR . '/ui/templates/topic.tpl.php';
+
+// Add to "recent" list
+// XXX work in progress
+
+if ($services->getTopicMapSystem()->hasTopicMap('config'))
+{
+    $recent_entry = $services->getTopicMapSystem()->getTopicMap('config')->newTopic();
+
+    $recent_entry->setId($recent_entry->getTopicMap()->createId());
+
+    $recent_entry->save();
+}

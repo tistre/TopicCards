@@ -3,9 +3,16 @@
 namespace TopicBank\Backends\Db;
 
 
-class DbUtils extends Core
+class DbUtils
 {
     protected $transaction_level = 0;
+    protected $services;
+    
+    
+    public function __construct(\TopicBank\Interfaces\iServices $services)
+    {
+        $this->services = $services;
+    }
     
     
     public function connect()

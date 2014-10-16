@@ -5,9 +5,10 @@ namespace TopicBank\Backends\Db;
 
 class Services implements \TopicBank\Interfaces\iServices
 {
-    public $topicmap;
     public $db_utils;
     public $db = false;
+    
+    protected $tm_system;
     
     protected $db_params = [ ];
     
@@ -15,6 +16,13 @@ class Services implements \TopicBank\Interfaces\iServices
     public function __construct()
     {
         $this->db_utils = new DbUtils($this);
+        $this->tm_system = new TopicMapSystem($this);
+    }
+    
+
+    public function getTopicMapSystem()
+    {
+        return $this->tm_system;
     }
     
     

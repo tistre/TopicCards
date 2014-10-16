@@ -23,7 +23,7 @@ trait ScopedDbAdapter
             ];
         }
         
-        $prefix = $this->services->topicmap->getUrl();
+        $prefix = $this->topicmap->getUrl();
 
         $sql = $this->services->db_utils->prepareSelectSql($prefix . '_scope', 'scope_scope', $where);
         
@@ -62,7 +62,7 @@ trait ScopedDbAdapter
                 'value' => $topic_id
             ];
         
-            $sql = $this->services->db_utils->prepareInsertSql($this->services->topicmap->getUrl() . '_scope', $values);
+            $sql = $this->services->db_utils->prepareInsertSql($this->topicmap->getUrl() . '_scope', $values);
         
             $ok = $sql->execute();
         
@@ -83,7 +83,7 @@ trait ScopedDbAdapter
 
         $sql = $this->services->db_utils->prepareDeleteSql
         (
-            $this->services->topicmap->getUrl() . '_scope', 
+            $this->topicmap->getUrl() . '_scope', 
             [ [
                 'column' => 'scope_' . $obj_type,
                 'value' => $obj_id,

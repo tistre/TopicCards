@@ -3,17 +3,23 @@
 namespace TopicBank\Interfaces;
 
 
-interface iTopicMap extends iCore, iReified
+interface iTopicMap
 {    
+    public function __construct(iServices $services);
+    public function getServices();
+
     public function setUrl($url);
     public function getUrl();
+    
     public function createId();
+    
     public function newTopic();
+    public function newAssociation();
+
     public function getTopics(array $filters);
     // XXX rename to ...TopicIdBy...?
     public function getTopicBySubjectIdentifier($uri);
     public function getTopicLabel($id);
-    public function newAssociation();
     public function getAssociations(array $filters);
     public function getTopicTypes(array $filters);
     public function getNameTypes(array $filters);

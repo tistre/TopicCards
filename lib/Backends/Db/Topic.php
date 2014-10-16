@@ -17,17 +17,6 @@ class Topic extends Core implements iTopic
     protected $isreifier = 0;
 
 
-    public function __construct(\TopicBank\Interfaces\iServices $services, $data = false)
-    {
-        parent::__construct($services);
-        
-        if (! is_array($data))
-            $data = array();
-            
-        $this->setAll($data);        
-    }
-    
-    
     public function getSubjectIdentifiers()
     {
         return $this->subject_identifiers;
@@ -69,7 +58,7 @@ class Topic extends Core implements iTopic
 
     public function newName()
     {   
-        $name = new Name($this->services);
+        $name = new Name($this->services, $this->topicmap);
         
         $this->names[ ] = $name;
         
@@ -112,7 +101,7 @@ class Topic extends Core implements iTopic
     
     public function newOccurrence()
     {   
-        $occurrence = new Occurrence($this->services);
+        $occurrence = new Occurrence($this->services, $this->topicmap);
         
         $this->occurrences[ ] = $occurrence;
         

@@ -12,7 +12,7 @@ class Association extends Core implements \TopicBank\Interfaces\iAssociation
     
     public function newRole()
     {   
-        $role = new Role($this->services);
+        $role = new Role($this->services, $this->topicmap);
         
         $this->roles[ ] = $role;
         

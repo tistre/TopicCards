@@ -26,7 +26,7 @@ if (strlen($fulltext_query) > 0)
 if (isset($_REQUEST[ 'type' ]))
     $filter[ 'type' ] = $_REQUEST[ 'type' ];
     
-$topic_ids = $services->topicmap->getTopics($filter);
+$topic_ids = $topicmap->getTopics($filter);
 
 
 $tpl[ 'fulltext_query' ] = $fulltext_query;
@@ -35,18 +35,18 @@ $tpl[ 'topics' ] = [ ];
 
 foreach ($topic_ids as $id)
 {
-    $topic = $services->topicmap->newTopic();
+    $topic = $topicmap->newTopic();
     $topic->load($id);
     
     $types = [ ];
     
     foreach ($topic->getTypes() as $type)
-        $types[ ] = $services->topicmap->getTopicLabel($type);
+        $types[ ] = $topicmap->getTopicLabel($type);
 
     $tpl[ 'topics' ][ ] = 
     [
         'id' => $id,
-        'label' => $services->topicmap->getTopicLabel($id),
+        'label' => $topicmap->getTopicLabel($id),
         'type' => implode(', ', $types),
         'url' => sprintf('%stopic/%s', TOPICBANK_BASE_URL, $id)
     ];
@@ -56,12 +56,12 @@ TopicBank\Utils\StringUtils::usortByKey($tpl[ 'topics' ], 'label');
 
 $tpl[ 'topic_types' ] = [ ];
 
-foreach ($services->topicmap->getTopicTypes([ 'get_mode' => 'all' ]) as $id)
+foreach ($topicmap->getTopicTypes([ 'get_mode' => 'all' ]) as $id)
 {
     $tpl[ 'topic_types' ][ ] = 
     [
         'id' => $id,
-        'label' => $services->topicmap->getTopicLabel($id),
+        'label' => $topicmap->getTopicLabel($id),
         'selected' => ($id === $filter[ 'type' ])
     ];
 }

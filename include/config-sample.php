@@ -17,7 +17,8 @@ require_once TOPICBANK_BASE_DIR . '/include/init.php';
 $services = new \TopicBank\Backends\Db\Services();
 $services->setDbParams($db_params);
 
-$system = new \TopicBank\Backends\Db\TopicMapSystem($services);
+$topicmap = $services->getTopicMapSystem()->newTopicMap('default');
+$topicmap->setUrl('topicbank');
 
-$services->topicmap = $system->newTopicMap();
-$services->topicmap->setUrl('topicbank');
+$config_topicmap = $services->getTopicMapSystem()->newTopicMap('config');
+$config_topicmap->setUrl('topicbank_config');

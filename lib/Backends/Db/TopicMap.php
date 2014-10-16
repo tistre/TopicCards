@@ -3,12 +3,25 @@
 namespace TopicBank\Backends\Db;
 
 
-class TopicMap extends Core implements \TopicBank\Interfaces\iTopicMap
+class TopicMap implements \TopicBank\Interfaces\iTopicMap
 {
-    use Reified, TopicMapDbAdapter;
+    use TopicMapDbAdapter;
      
     protected $url;
+    protected $services;
     
+
+    public function __construct(\TopicBank\Interfaces\iServices $services)
+    {
+        $this->services = $services;
+    }
+    
+    
+    public function getServices()
+    {
+        return $this->services;
+    }
+        
     
     public function setUrl($url)
     {
@@ -55,7 +68,7 @@ class TopicMap extends Core implements \TopicBank\Interfaces\iTopicMap
     
     public function newTopic()
     {   
-        $topic = new Topic($this->services);
+        $topic = new Topic($this->services, $this);
         
         return $topic;
     }
@@ -91,7 +104,7 @@ class TopicMap extends Core implements \TopicBank\Interfaces\iTopicMap
     
     public function newAssociation()
     {
-        $association = new Association($this->services);
+        $association = new Association($this->services, $this);
         
         return $association;
     }

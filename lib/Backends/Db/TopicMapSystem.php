@@ -3,28 +3,51 @@
 namespace TopicBank\Backends\Db;
 
 
-class TopicMapSystem extends Core implements \TopicBank\Interfaces\iTopicMapSystem
+class TopicMapSystem implements \TopicBank\Interfaces\iTopicMapSystem
 {
     protected $topicmaps = array();
+    protected $services;
     
     
-    public function newTopicMap()
+    public function __construct(\TopicBank\Interfaces\iServices $services)
+    {
+        $this->services = $services;
+    }
+    
+    
+    public function getServices()
+    {
+        return $this->services;
+    }
+    
+
+    public function newTopicMap($key)
     {
         $topicmap = new TopicMap($this->services);
         
-        $this->topicmaps[ ] = $topicmap;
+        $this->topicmaps[ $key ] = $topicmap;
         
         return $topicmap;
     }
     
-    
-    public function getTopicMaps()
+
+    public function getTopicMap($key)
     {
-        $result = array();
-        
-        foreach ($this->topicmaps as $topicmap)
-            $result[ ] = $topicmap->getUrl();
+        if (! $this->hasTopicMap($key))
+            return false;
             
-        return $result;
+        return $this->topicmaps[ $key ];
+    }
+    
+    
+    public function hasTopicMap($key)
+    {
+        return isset($this->topicmaps[ $key ]);
+    }
+    
+    
+    public function getTopicMapKeys()
+    {
+        return array_keys($this->topicmaps);
     }
 }

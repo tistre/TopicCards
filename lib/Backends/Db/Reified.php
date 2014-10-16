@@ -45,9 +45,9 @@ trait Reified
     
     public function newReifierTopic()
     {
-        $reifier_id = $this->services->topicmap->createId();
+        $reifier_id = $this->services->getTopicMap()->createId();
         
-        $reifier_topic = $this->services->topicmap->newTopic();
+        $reifier_topic = $this->services->getTopicMap()->newTopic();
         $reifier_topic->setId($reifier_id);
         
         if ($this instanceof \TopicBank\Interfaces\iName)

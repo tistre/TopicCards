@@ -12,7 +12,7 @@ trait AssociationDbAdapter
         if ($ok < 0)
             return $ok;
         
-        $prefix = $this->services->topicmap->getUrl();
+        $prefix = $this->topicmap->getUrl();
 
         if (isset($filters[ 'id' ]))
         {
@@ -46,7 +46,7 @@ trait AssociationDbAdapter
 
         $result = [ ];
         
-        $role = new Role($this->services);
+        $role = new Role($this->services, $this->topicmap);
         
         foreach ($sql->fetchAll() as $row)
         {
@@ -102,7 +102,7 @@ trait AssociationDbAdapter
             ];
         }
         
-        $sql = $this->services->db_utils->prepareInsertSql($this->services->topicmap->getUrl() . '_association', $values);
+        $sql = $this->services->db_utils->prepareInsertSql($this->topicmap->getUrl() . '_association', $values);
         
         $ok = $sql->execute();
         
@@ -113,7 +113,7 @@ trait AssociationDbAdapter
 
         if ($ok >= 0)
         {
-            $role = new Role($this->services);
+            $role = new Role($this->services, $this->topicmap);
             $ok = $role->insertAll($data[ 'id' ], $data[ 'roles' ]);
         }
 
@@ -170,7 +170,7 @@ trait AssociationDbAdapter
         
         $sql = $this->services->db_utils->prepareUpdateSql
         (
-            $this->services->topicmap->getUrl() . '_association', 
+            $this->topicmap->getUrl() . '_association', 
             $values,
             [
                 [
@@ -197,7 +197,7 @@ trait AssociationDbAdapter
         
         if ($ok >= 0)
         {
-            $role = new Role($this->services);
+            $role = new Role($this->services, $this->topicmap);
             $ok = $role->updateAll($data[ 'id' ], $data[ 'roles' ]);
         }
 
@@ -220,7 +220,7 @@ trait AssociationDbAdapter
         if ($ok < 0)
             return $ok;
 
-        $prefix = $this->services->topicmap->getUrl();
+        $prefix = $this->topicmap->getUrl();
 
         $sql = $this->services->db_utils->prepareDeleteSql
         (
