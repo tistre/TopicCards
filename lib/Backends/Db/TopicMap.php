@@ -9,6 +9,7 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
      
     protected $url;
     protected $services;
+    protected $db_table_prefix;
     
 
     public function __construct(\TopicBank\Interfaces\iServices $services)
@@ -37,6 +38,20 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     }
     
 
+    public function setDbTablePrefix($prefix)
+    {
+        $this->db_table_prefix = $prefix;
+        
+        return 1;
+    }
+    
+    
+    public function getDbTablePrefix()
+    {
+        return $this->db_table_prefix;
+    }
+    
+    
     public function getReifier()
     {
         return $this->getTopicBySubjectIdentifier($this->getUrl());

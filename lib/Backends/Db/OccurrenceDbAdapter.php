@@ -21,11 +21,11 @@ trait OccurrenceDbAdapter
             $where = 'occurrence_reifier = :reifier_id';
         }
         
-        $prefix = $this->topicmap->getUrl();
+        $prefix = $this->topicmap->getDbTablePrefix();
         
         $sql = $this->services->db->prepare(sprintf
         (
-            'select * from %s_occurrence'
+            'select * from %soccurrence'
             . ' where ' . $where, 
             $prefix
         ));
@@ -85,7 +85,11 @@ trait OccurrenceDbAdapter
                 ];
             }
         
-            $sql = $this->services->db_utils->prepareInsertSql($this->topicmap->getUrl() . '_occurrence', $values);
+            $sql = $this->services->db_utils->prepareInsertSql
+            (
+                $this->topicmap->getDbTablePrefix() . 'occurrence', 
+                $values
+            );
         
             $ok = $sql->execute();
         
@@ -113,7 +117,7 @@ trait OccurrenceDbAdapter
 
         $sql = $this->services->db_utils->prepareDeleteSql
         (
-            $this->topicmap->getUrl() . '_occurrence', 
+            $this->topicmap->getDbTablePrefix() . 'occurrence', 
             [ 
                 [ 'column' => 'occurrence_topic', 'value' => $topic_id ]
             ]

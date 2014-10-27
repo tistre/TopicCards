@@ -12,7 +12,7 @@ trait AssociationDbAdapter
         if ($ok < 0)
             return $ok;
         
-        $prefix = $this->topicmap->getUrl();
+        $prefix = $this->topicmap->getDbTablePrefix();
 
         if (isset($filters[ 'id' ]))
         {
@@ -25,7 +25,7 @@ trait AssociationDbAdapter
         
         $sql = $this->services->db->prepare(sprintf
         (
-            'select * from %s_association'
+            'select * from %sassociation'
             . ' where ' . $where, 
             $prefix
         ));
@@ -102,7 +102,11 @@ trait AssociationDbAdapter
             ];
         }
         
-        $sql = $this->services->db_utils->prepareInsertSql($this->topicmap->getUrl() . '_association', $values);
+        $sql = $this->services->db_utils->prepareInsertSql
+        (
+            $this->topicmap->getDbTablePrefix() . 'association', 
+            $values
+        );
         
         $ok = $sql->execute();
         
@@ -170,7 +174,7 @@ trait AssociationDbAdapter
         
         $sql = $this->services->db_utils->prepareUpdateSql
         (
-            $this->topicmap->getUrl() . '_association', 
+            $this->topicmap->getDbTablePrefix() . 'association', 
             $values,
             [
                 [
@@ -220,11 +224,11 @@ trait AssociationDbAdapter
         if ($ok < 0)
             return $ok;
 
-        $prefix = $this->topicmap->getUrl();
+        $prefix = $this->topicmap->getDbTablePrefix();
 
         $sql = $this->services->db_utils->prepareDeleteSql
         (
-            $prefix . '_association', 
+            $prefix . 'association', 
             [ 
                 [ 'column' => 'association_id', 'value' => $id ],
                 [ 'column' => 'association_version', 'value' => $version ]

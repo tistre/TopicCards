@@ -12,13 +12,13 @@ trait TopicMapDbAdapter
         if ($ok < 0)
             return $ok;
         
-        $prefix = $this->getUrl();
+        $prefix = $this->getDbTablePrefix();
         
         if ((! empty($filters[ 'name_like' ])) && (! empty($filters[ 'type' ])))
         {
             $sql = $this->services->db->prepare(sprintf
             (
-                'select distinct name_topic as topic_id from %s_name, %s_type'
+                'select distinct name_topic as topic_id from %sname, %stype'
                 . ' where lower(name_value) like lower(:name_value)'
                 . ' and type_type = :type_type'
                 . ' and type_topic = name_topic', 
@@ -32,7 +32,7 @@ trait TopicMapDbAdapter
         {
             $sql = $this->services->db->prepare(sprintf
             (
-                'select distinct type_topic as topic_id from %s_type'
+                'select distinct type_topic as topic_id from %stype'
                 . ' where type_type = :type_type', 
                 $prefix
             ));
@@ -43,7 +43,7 @@ trait TopicMapDbAdapter
         {
             $sql = $this->services->db->prepare(sprintf
             (
-                'select distinct name_topic as topic_id from %s_name'
+                'select distinct name_topic as topic_id from %sname'
                 . ' where lower(name_value) like lower(:name_value)', 
                 $prefix
             ));
@@ -52,7 +52,7 @@ trait TopicMapDbAdapter
         }
         else
         {
-            $sql = $this->services->db->prepare(sprintf('select topic_id from %s_topic', $prefix));
+            $sql = $this->services->db->prepare(sprintf('select topic_id from %stopic', $prefix));
         }
         
         $ok = $sql->execute();
@@ -78,11 +78,11 @@ trait TopicMapDbAdapter
         
         $sql = $this->services->db->prepare(sprintf
         (
-            'select subject_topic as topic_id from %s_subject'
+            'select subject_topic as topic_id from %ssubject'
             . ' where subject_value = :subject_value'
             // XXX "limit" MySQL specific? Does PDO have a better way?
             . ' limit 1', 
-            $this->getUrl()
+            $this->getDbTablePrefix()
         ));
 
         $sql->bindValue(':subject_value', $uri, \PDO::PARAM_STR);
@@ -106,9 +106,9 @@ trait TopicMapDbAdapter
         if ($ok < 0)
             return $ok;
         
-        $prefix = $this->getUrl();
+        $prefix = $this->getDbTablePrefix();
 
-        $sql_str = sprintf('select association_id from %s_association', $prefix);
+        $sql_str = sprintf('select association_id from %sassociation', $prefix);
         
         $where = [ ];
         $bind = [ ];
@@ -128,7 +128,7 @@ trait TopicMapDbAdapter
         {
             $where[ ] = sprintf
             (
-                'exists (select role_id from %s_role where role_player = :role_player'
+                'exists (select role_id from %srole where role_player = :role_player'
                 . ' and role_association = association_id)',
                 $prefix
             );
@@ -247,11 +247,11 @@ trait TopicMapDbAdapter
         if ($ok < 0)
             return $ok;
         
-        $prefix = $this->getUrl();
+        $prefix = $this->getDbTablePrefix();
         
         $sql = $this->services->db->prepare(sprintf
         (
-            'select distinct %s from %s_%s',
+            'select distinct %s from %s%s',
             $column,
             $prefix,
             $table

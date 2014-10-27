@@ -14,11 +14,11 @@ trait TopicDbAdapter
         if ($ok < 0)
             return $ok;
         
-        $prefix = $this->topicmap->getUrl();
+        $prefix = $this->topicmap->getDbTablePrefix();
         
         $sql = $this->services->db->prepare(sprintf
         (
-            'select * from %s_topic'
+            'select * from %stopic'
             . ' where topic_id = :topic_id', 
             $prefix
         ));
@@ -63,11 +63,11 @@ trait TopicDbAdapter
         if ($ok < 0)
             return $ok;
         
-        $prefix = $this->topicmap->getUrl();
+        $prefix = $this->topicmap->getDbTablePrefix();
 
         $sql = $this->services->db->prepare(sprintf
         (
-            'select type_type from %s_type'
+            'select type_type from %stype'
             . ' where type_topic = :type_topic', 
             $prefix
         ));
@@ -104,11 +104,11 @@ trait TopicDbAdapter
         if ($ok < 0)
             return $ok;
         
-        $prefix = $this->topicmap->getUrl();
+        $prefix = $this->topicmap->getDbTablePrefix();
         
         $sql = $this->services->db->prepare(sprintf
         (
-            'select subject_value from %s_subject'
+            'select subject_value from %ssubject'
             . ' where subject_topic = :subject_topic'
             . ' and subject_islocator = :subject_islocator', 
             $prefix
@@ -302,7 +302,11 @@ trait TopicDbAdapter
             ];
         }
         
-        $sql = $this->services->db_utils->prepareInsertSql($this->topicmap->getUrl() . '_topic', $values);
+        $sql = $this->services->db_utils->prepareInsertSql
+        (
+            $this->topicmap->getDbTablePrefix() . 'topic', 
+            $values
+        );
         
         $ok = $sql->execute();
         
@@ -364,7 +368,11 @@ trait TopicDbAdapter
                 'value' => $type
             ];
         
-            $sql = $this->services->db_utils->prepareInsertSql($this->topicmap->getUrl() . '_type', $values);
+            $sql = $this->services->db_utils->prepareInsertSql
+            (
+                $this->topicmap->getDbTablePrefix() . 'type', 
+                $values
+            );
         
             $ok = $sql->execute();
         
@@ -418,7 +426,11 @@ trait TopicDbAdapter
                 'datatype' => \PDO::PARAM_INT
             ];
         
-            $sql = $this->services->db_utils->prepareInsertSql($this->topicmap->getUrl() . '_subject', $values);
+            $sql = $this->services->db_utils->prepareInsertSql
+            (
+                $this->topicmap->getDbTablePrefix() . 'subject', 
+                $values
+            );
         
             $ok = $sql->execute();
         
@@ -471,7 +483,7 @@ trait TopicDbAdapter
         
         $sql = $this->services->db_utils->prepareUpdateSql
         (
-            $this->topicmap->getUrl() . '_topic', 
+            $this->topicmap->getDbTablePrefix() . 'topic', 
             $values,
             [
                 [
@@ -535,7 +547,7 @@ trait TopicDbAdapter
 
         $sql = $this->services->db_utils->prepareDeleteSql
         (
-            $this->topicmap->getUrl() . '_type', 
+            $this->topicmap->getDbTablePrefix() . 'type', 
             [ [ 'column' => 'type_topic', 'value' => $topic_id ] ]
         );
     
@@ -569,7 +581,7 @@ trait TopicDbAdapter
 
         $sql = $this->services->db_utils->prepareDeleteSql
         (
-            $this->topicmap->getUrl() . '_subject', 
+            $this->topicmap->getDbTablePrefix() . 'subject', 
             [ 
                 [ 'column' => 'subject_topic', 'value' => $topic_id ],
                 [ 'column' => 'subject_islocator', 'value' => intval($islocator), 'datatype' => \PDO::PARAM_INT ]
@@ -592,11 +604,11 @@ trait TopicDbAdapter
         if ($ok < 0)
             return $ok;
 
-        $prefix = $this->topicmap->getUrl();
+        $prefix = $this->topicmap->getDbTablePrefix();
 
         $sql = $this->services->db_utils->prepareDeleteSql
         (
-            $prefix . '_topic', 
+            $prefix . 'topic', 
             [ 
                 [ 'column' => 'topic_id', 'value' => $id ],
                 [ 'column' => 'topic_version', 'value' => $version ]

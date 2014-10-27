@@ -18,7 +18,9 @@ $services = new \TopicBank\Backends\Db\Services();
 $services->setDbParams($db_params);
 
 $topicmap = $services->getTopicMapSystem()->newTopicMap('default');
+$topicmap->setUrl('http://example.com/topicmaps/topicbank');
 $topicmap->setUrl('topicbank');
 
 $config_topicmap = $services->getTopicMapSystem()->newTopicMap('config');
+$config_topicmap->setUrl('http://example.com/topicmaps/topicbank_config');
 $config_topicmap->setUrl('topicbank_config');
