@@ -3,7 +3,7 @@
 namespace TopicBank\Interfaces;
 
 
-interface iOccurrence extends iReified, iScoped, iTyped
+interface iOccurrence extends iCore, iReified, iScoped, iTyped
 {
     public function getValue();
     public function setValue($str);

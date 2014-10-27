@@ -3,7 +3,7 @@
 namespace TopicBank\Interfaces;
 
 
-interface iName extends iReified, iScoped, iTyped
+interface iName extends iCore, iReified, iScoped, iTyped
 {
     public function getValue();
     public function setValue($str);

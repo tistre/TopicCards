@@ -3,7 +3,7 @@
 namespace TopicBank\Interfaces;
 
 
-interface iReified extends iCore
+interface iReified
 {
     public function getReifier();
     public function setReifier($topic_id);

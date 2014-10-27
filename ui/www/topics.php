@@ -10,7 +10,7 @@ $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
 $tpl[ 'topicbank_static_base_url' ] = TOPICBANK_STATIC_BASE_URL;
 
 $tpl[ 'topicmap' ] = [ ];
-$tpl[ 'topicmap' ][ 'display_name' ] = 'My first topic map';
+$tpl[ 'topicmap' ][ 'display_name' ] = $topicmap->getTopicLabel($topicmap->getReifier());
 
 
 $fulltext_query = '';

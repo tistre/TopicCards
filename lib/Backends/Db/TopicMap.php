@@ -36,6 +36,12 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
         return $this->url;
     }
     
+
+    public function getReifier()
+    {
+        return $this->getTopicBySubjectIdentifier($this->getUrl());
+    }
+    
     
     public function createId()
     {

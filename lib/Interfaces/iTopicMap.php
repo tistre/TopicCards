@@ -10,6 +10,8 @@ interface iTopicMap
 
     public function setUrl($url);
     public function getUrl();
+
+    public function getReifier();
     
     public function createId();
     
