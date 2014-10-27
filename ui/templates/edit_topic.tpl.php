@@ -12,6 +12,19 @@ function button_remove()
 }
 
 
+function button_add(array $params)
+{
+    ?>
+
+    <button data-topicbank_event="<?=htmlspecialchars($params[ 'event' ])?>" class="btn btn-link" type="button">
+      <span class="glyphicon glyphicon-plus"></span>
+      <?=htmlspecialchars($params[ 'label' ])?>
+    </button>
+    
+    <?php
+}
+
+
 function button_choose_topic(array $params)
 {
     ?>
@@ -69,28 +82,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
   <body>
 
     <div class="container">
-      <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-              <span class="glyphicon glyphicon-cog"></span>
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="<?=$tpl[ 'topicbank_base_url' ]?>edit_new_topic"><span class="glyphicon glyphicon-plus"></span> Create a new topic</a></li>
-              <li><a href="#">Logged in as …</a></li>
-              <li><a href="#">Log out</a></li>
-            </ul>
-          </li>
-        </ul>
-      <form class="form-inline pull-right" role="search" method="GET" action="<?=$tpl[ 'topicbank_base_url' ]?>topics">
-        <div class="form-group">
-          <input name="q" type="text" class="form-control" placeholder="Search" />
-        </div>
-        <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
-      </form>
-        <h3 class="text-muted"><?=htmlspecialchars($tpl[ 'topicmap' ][ 'display_name' ])?></h3>
-      </div>
+
+      <?php include('header.tpl.php'); ?>
 
       <?php if (! empty($tpl[ 'error_html' ])) { ?>
       <div class="alert alert-danger"><?=$tpl[ 'error_html' ]?></div>
@@ -134,10 +127,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 <tr>
                   <td>
-                    <button data-topicbank_event="new_type" class="btn btn-link" type="button">
-                      <span class="glyphicon glyphicon-plus"></span>
-                      Type
-                    </button>
+                    <?php button_add([ 'event' => 'new_type', 'label' => 'Add Type' ]); ?>
                   </td>
                 </tr>
             
@@ -211,10 +201,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                     <tr>
                       <td>
-                        <button data-topicbank_event="new_name_scope" class="btn btn-link" type="button">
-                          <span class="glyphicon glyphicon-plus"></span>
-                          Scope
-                        </button>
+                        <?php button_add([ 'event' => 'new_name_scope', 'label' => 'Add Scope' ]); ?>
                       </td>
                     </tr>
               
@@ -252,10 +239,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                     <tr>
                       <td>
-                        <button data-topicbank_event="new_name_scope" class="btn btn-link" type="button">
-                          <span class="glyphicon glyphicon-plus"></span>
-                          Scope
-                        </button>
+                        <?php button_add([ 'event' => 'new_name_scope', 'label' => 'Add Scope' ]); ?>
                       </td>
                     </tr>
               
@@ -271,10 +255,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
               <tr>
                 <td>
-                  <button data-topicbank_event="new_name" class="btn btn-link" type="button">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Name
-                  </button>
+                  <?php button_add([ 'event' => 'new_name', 'label' => 'Add Name' ]); ?>
                 </td>
               </tr>
           
@@ -315,10 +296,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               
               <tr>
                 <td>
-                  <button data-topicbank_event="new_subject_identifier" class="btn btn-link" type="button">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Identifier URL
-                  </button>
+                  <?php button_add([ 'event' => 'new_subject_identifier', 'label' => 'Add Identifier URL' ]); ?>
                 </td>
               </tr>
               
@@ -359,10 +337,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
               <tr>
                 <td>
-                  <button data-topicbank_event="new_subject_locator" class="btn btn-link" type="button">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Resource URL
-                  </button>
+                  <?php button_add([ 'event' => 'new_subject_locator', 'label' => 'Add Resource URL' ]); ?>
                 </td>
               </tr>
 
@@ -424,10 +399,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                     <tr>
                       <td>
-                        <button data-topicbank_event="new_occurrence_scope" class="btn btn-link" type="button">
-                          <span class="glyphicon glyphicon-plus"></span>
-                          Scope
-                        </button>
+                        <?php button_add([ 'event' => 'new_occurrence_scope', 'label' => 'Add Scope' ]); ?>
                       </td>
                     </tr>
               
@@ -477,10 +449,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                     <tr>
                       <td>
-                        <button data-topicbank_event="new_occurrence_scope" class="btn btn-link" type="button">
-                          <span class="glyphicon glyphicon-plus"></span>
-                          Scope
-                        </button>
+                        <?php button_add([ 'event' => 'new_occurrence_scope', 'label' => 'Add Scope' ]); ?>
                       </td>
                     </tr>
               
@@ -496,10 +465,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
               <tr>
                 <td>
-                  <button data-topicbank_event="new_occurrence" class="btn btn-link" type="button">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Property
-                  </button>
+                  <?php button_add([ 'event' => 'new_occurrence', 'label' => 'Add Property' ]); ?>
                 </td>
               </tr>
           
@@ -589,10 +555,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
                 <tr>
                   <td>
-                    <button data-topicbank_event="new_role" class="btn btn-link" type="button">
-                      <span class="glyphicon glyphicon-plus"></span>
-                      Role
-                    </button>
+                    <?php button_add([ 'event' => 'new_role', 'label' => 'Add Role' ]); ?>
                   </td>
                 </tr>
                 
@@ -625,10 +588,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 <tr>
                   <td>
-                    <button data-topicbank_event="new_association_scope" class="btn btn-link" type="button">
-                      <span class="glyphicon glyphicon-plus"></span>
-                      Scope
-                    </button>
+                    <?php button_add([ 'event' => 'new_association_scope', 'label' => 'Add Scope' ]); ?>
                   </td>
                 </tr>
               
@@ -708,10 +668,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
                 <tr>
                   <td>
-                    <button data-topicbank_event="new_role" class="btn btn-link" type="button">
-                      <span class="glyphicon glyphicon-plus"></span>
-                      Role
-                    </button>
+                    <?php button_add([ 'event' => 'new_role', 'label' => 'Add Role' ]); ?>
                   </td>
                 </tr>
                 
@@ -734,10 +691,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 <tr>
                   <td>
-                    <button data-topicbank_event="new_association_scope" class="btn btn-link" type="button">
-                      <span class="glyphicon glyphicon-plus"></span>
-                      Scope
-                    </button>
+                    <?php button_add([ 'event' => 'new_association_scope', 'label' => 'Add Scope' ]); ?>
                   </td>
                 </tr>
               
@@ -759,10 +713,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
           <tr>
             <td>
-              <button data-topicbank_event="new_association" class="btn btn-link" type="button">
-                <span class="glyphicon glyphicon-plus"></span>
-                Association
-              </button>
+              <?php button_add([ 'event' => 'new_association', 'label' => 'Add Association' ]); ?>
             </td>
           </tr>
 
