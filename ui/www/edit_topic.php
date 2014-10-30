@@ -288,6 +288,7 @@ foreach ($tpl[ 'topic' ][ 'occurrences' ] as $occurrence_arr)
 
 $tpl[ 'topic' ][ 'unscoped_basenames' ] = [ ];
 $tpl[ 'topic' ][ 'other_names' ] = [ ];
+$tpl[ 'topic' ][ 'display_name' ] = false;
 
 foreach ($tpl[ 'topic' ][ 'names' ] as $name)
 {
@@ -302,6 +303,15 @@ foreach ($tpl[ 'topic' ][ 'names' ] as $name)
     
     foreach ($name[ 'scope' ] as $scope)
         $tpl[ 'topic_names' ][ $scope ] = false;    
+
+    if ($tpl[ 'topic' ][ 'display_name' ] === false)
+    {
+        if (($name[ 'type' ] === 'basename') && (count($name[ 'scope'  ]) === 0))
+        {
+            $tpl[ 'topic' ][ 'display_name' ] = $name;
+            continue;
+        }
+    }
 }
 
 // Fill associations

@@ -67,7 +67,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     <link rel="shortcut icon" href="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/assets/ico/favicon.ico" />
 
     <title>
-      <?=htmlspecialchars($tpl[ 'topic' ][ 'id' ])?> | 
+      <?=htmlspecialchars($tpl[ 'topic' ][ 'display_name' ][ 'value' ])?> | 
       <?=htmlspecialchars($tpl[ 'topicmap' ][ 'display_name' ])?>
     </title>
 
@@ -774,6 +774,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     {
         var _private = { };
         
+        _private.topic_id = <?=json_encode($tpl[ 'topic' ][ 'id' ])?>;
+        _private.form_changed = false;
+        
+        
         _private.addFormSection = function($elem_to_clone)
         {
             var $clone, counter_value, counter_name, counter_pattern;
@@ -962,6 +966,27 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             data = $(e.target).data();
             
 console.log(data);
+        });
+        
+        
+        $('#topicbank_form_edit :input').on('change', function()
+        {
+            _private.form_changed = true;
+        });
+        
+        
+        window.addEventListener('beforeunload', function (e) 
+        {
+            if (! _private.form_changed)
+                return;
+                
+            var confirmationMessage = 'Your changes have not been saved yet. They will be lost if you leave now.';
+
+            //Gecko + IE
+            (e || window.event).returnValue = confirmationMessage;
+            
+            //Webkit, Safari, Chrome etc.
+            return confirmationMessage;                                
         });
 
     });
