@@ -975,6 +975,15 @@ console.log(data);
         });
         
         
+        $('#topicbank_form_edit').on('submit', function()
+        {
+            // Disable the "unsaved changes" beforeunload prompt - 
+            // we are about to save!
+            
+            _private.form_changed = false;            
+        });
+        
+        
         window.addEventListener('beforeunload', function (e) 
         {
             if (! _private.form_changed)
