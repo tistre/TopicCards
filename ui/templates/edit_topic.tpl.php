@@ -184,7 +184,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <?php $j = -1; foreach ($name[ 'scope' ] as $j => $scope) { ?>
                     <tr>
                       <td>
-                        <?php button_choose_topic([ 'what' => 'association_scope', 'label' => $tpl[ 'topic_names' ][ $scope ] ]); ?>
+                        <?php button_choose_topic([ 'what' => 'name_scope', 'label' => $tpl[ 'topic_names' ][ $scope ] ]); ?>
                         <input type="hidden" name="other_names[<?=$i?>][scope][<?=$j?>]" value="<?=htmlspecialchars($scope)?>" data-topicbank_element="id" />
                       </td>
                       <td><?php button_remove(); ?></td>
@@ -964,8 +964,6 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             $dialog_body = $reify_dialog.find('div.modal-body');
             
             data = $(e.target).data();
-            
-console.log(data);
         });
         
         
