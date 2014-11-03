@@ -139,15 +139,23 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <div>
             
             <?php 
-          
-            if (count($tpl[ 'topic' ][ 'unscoped_basenames' ]) === 0) 
-                $tpl[ 'topic' ][ 'unscoped_basenames' ][ ] = [ 'value' => '' ]; 
             
-            foreach ($tpl[ 'topic' ][ 'unscoped_basenames' ] as $name) 
+            $i = -1; 
+            
+            foreach ($tpl[ 'topic' ][ 'unscoped_basenames' ] as $i => $name) 
             { 
                 ?>
           
-              <input type="text" name="unscoped_basenames[]" value="<?=htmlspecialchars($name[ 'value' ])?>" style="font-weight: 500; font-size: 36px;" />
+              <input type="text" name="names[<?=$i?>][value]" value="<?=htmlspecialchars($name[ 'value' ])?>" style="font-weight: 500; font-size: 36px;" />
+
+              <input type="hidden" name="names[<?=$i?>][type]" value="<?=htmlspecialchars($name[ 'type' ])?>" />
+              <input type="hidden" name="names[<?=$i?>][id]" value="<?=htmlspecialchars($name[ 'id' ])?>" />
+              <input type="hidden" name="names[<?=$i?>][reifier]" value="<?=htmlspecialchars($name[ 'reifier' ])?>" />
+              
+              <?php foreach ($name[ 'scope' ] as $scope) { ?>
+              <input type="hidden" name="names[<?=$i?>][scope][]" value="<?=htmlspecialchars($scope)?>" />
+              <?php } ?>
+              
               <br />
           
                 <?php 
@@ -167,15 +175,16 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             
             <table>
           
-            <?php $i = -1; foreach ($tpl[ 'topic' ][ 'other_names' ] as $i => $name) { ?>
+            <?php foreach ($tpl[ 'topic' ][ 'other_names' ] as $i => $name) { ?>
 
               <tr>
                 <td>
                   <?php button_choose_topic([ 'what' => 'name_type', 'label' => $tpl[ 'topic_names' ][ $name[ 'type' ] ] ]); ?>
-                  <input type="hidden" name="other_names[<?=$i?>][type]" value="<?=htmlspecialchars($name[ 'type' ])?>" data-topicbank_element="id" />
+                  <input type="hidden" name="names[<?=$i?>][type]" value="<?=htmlspecialchars($name[ 'type' ])?>" data-topicbank_element="id" />
                 </td>
                 <td>
-                  <input type="text" name="other_names[<?=$i?>][value]" value="<?=htmlspecialchars($name[ 'value' ])?>" />
+                  <input type="text" name="names[<?=$i?>][value]" value="<?=htmlspecialchars($name[ 'value' ])?>" />
+                  <input type="hidden" name="names[<?=$i?>][id]" value="<?=htmlspecialchars($name[ 'id' ])?>" />
                 </td>
                 <td>
                 
@@ -185,7 +194,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <tr>
                       <td>
                         <?php button_choose_topic([ 'what' => 'name_scope', 'label' => $tpl[ 'topic_names' ][ $scope ] ]); ?>
-                        <input type="hidden" name="other_names[<?=$i?>][scope][<?=$j?>]" value="<?=htmlspecialchars($scope)?>" data-topicbank_element="id" />
+                        <input type="hidden" name="names[<?=$i?>][scope][<?=$j?>]" value="<?=htmlspecialchars($scope)?>" data-topicbank_element="id" />
                       </td>
                       <td><?php button_remove(); ?></td>
                     </tr>              
@@ -194,7 +203,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <tr data-topicbank_template="new_name_scope" class="hidden" data-topicbank_counter_value="<?=$j?>" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                       <td>
                         <?php button_choose_topic([ 'what' => 'name_scope', 'label' => '[Scope]' ]); ?>
-                        <input type="hidden" name="other_names[<?=$i?>][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
+                        <input type="hidden" name="names[<?=$i?>][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                       </td>
                       <td><?php button_remove(); ?></td>
                     </tr>
@@ -210,7 +219,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 </td>
                 <td>
                   <?php button_reify([ 'reifies_type' => 'name', 'reifies_id' => $name[ 'id' ] ]); ?>
-                  <input type="hidden" name="other_names[<?=$i?>][reifier]" value="<?=htmlspecialchars($name[ 'reifier' ])?>" />
+                  <input type="hidden" name="names[<?=$i?>][reifier]" value="<?=htmlspecialchars($name[ 'reifier' ])?>" />
                 </td>
                 <td><?php button_remove(); ?></td>
               </tr>
@@ -220,10 +229,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               <tr data-topicbank_template="new_name" class="hidden" data-topicbank_counter_value="<?=$i?>" data-topicbank_counter_name="TOPICBANK_COUNTER1">
                 <td>
                   <?php button_choose_topic([ 'what' => 'name_type', 'label' => '[Type]' ]); ?>
-                  <input type="hidden" name="other_names[TOPICBANK_COUNTER1][type]" value="" data-topicbank_element="id" />
+                  <input type="hidden" name="names[TOPICBANK_COUNTER1][type]" value="" data-topicbank_element="id" />
                 </td>
                 <td>
-                  <input type="text" name="other_names[TOPICBANK_COUNTER1][value]" value="" />
+                  <input type="text" name="names[TOPICBANK_COUNTER1][value]" value="" />
                 </td>
                 <td>
                 
@@ -232,7 +241,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <tr data-topicbank_template="new_name_scope" class="hidden" data-topicbank_counter_value="0" data-topicbank_counter_name="TOPICBANK_COUNTER2">
                       <td>
                         <?php button_choose_topic([ 'what' => 'name_scope', 'label' => '[Scope]' ]); ?>
-                        <input type="hidden" name="other_names[TOPICBANK_COUNTER1][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
+                        <input type="hidden" name="names[TOPICBANK_COUNTER1][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                       </td>
                       <td><?php button_remove(); ?></td>
                     </tr>
@@ -248,7 +257,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 </td>
                 <td>
                   <?php button_reify([ 'reifies_type' => 'name' ]); ?>
-                  <input type="hidden" name="other_names[TOPICBANK_COUNTER1][reifier]" value="" />
+                  <input type="hidden" name="names[TOPICBANK_COUNTER1][reifier]" value="" />
                 </td>
                 <td><?php button_remove(); ?></td>
               </tr>

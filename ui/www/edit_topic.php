@@ -28,7 +28,7 @@ $topic->load($topic_id);
 
 $tpl[ 'error_html' ] = '';
 
-if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_basenames' ]))
+if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
 {
     $services->db_utils->beginTransaction();
 
@@ -37,25 +37,11 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'unscoped_base
     if (! $topic->isLoaded())
         $topic->setId($topic_id);
     
-    // Names: Unscoped base name
+    // Names
     
     $topic->setNames([ ]);
     
-    foreach ($_REQUEST[ 'unscoped_basenames' ] as $name_value)
-    {
-        $name_value = trim($name_value);
-        
-        if ($name_value === '')
-            continue;
-            
-        $name = $topic->newName();
-        $name->setType('basename');
-        $name->setValue($name_value);
-    }
-
-    // Other names
-    
-    foreach ($_REQUEST[ 'other_names' ] as $name_arr)
+    foreach ($_REQUEST[ 'names' ] as $name_arr)
     {
         $name_arr[ 'value' ] = trim($name_arr[ 'value' ]);
         
@@ -290,14 +276,14 @@ $tpl[ 'topic' ][ 'unscoped_basenames' ] = [ ];
 $tpl[ 'topic' ][ 'other_names' ] = [ ];
 $tpl[ 'topic' ][ 'display_name' ] = false;
 
-foreach ($tpl[ 'topic' ][ 'names' ] as $name)
+foreach ($tpl[ 'topic' ][ 'names' ] as $i => $name)
 {
     $key = 'other_names';
     
     if (($name[ 'type' ] === 'basename') && (count($name[ 'scope' ]) === 0))
         $key = 'unscoped_basenames';
 
-    $tpl[ 'topic' ][ $key ][ ] = $name;
+    $tpl[ 'topic' ][ $key ][ $i ] = $name;
     
     $tpl[ 'topic_names' ][ $name[ 'type' ] ] = false;
     
@@ -312,6 +298,17 @@ foreach ($tpl[ 'topic' ][ 'names' ] as $name)
             continue;
         }
     }
+}
+
+if (count($tpl[ 'topic' ][ 'unscoped_basenames' ]) === 0) 
+{
+    $dummy_name = $topic->newName();
+    $dummy_name->setType('basename');
+    
+    $tpl[ 'topic' ][ 'unscoped_basenames' ][ ] = $dummy_name->getAll(); 
+    
+    // XXX assuming that $topic won't be saved below, otherwise we'd
+    // add an unwanted name...
 }
 
 // Fill associations
