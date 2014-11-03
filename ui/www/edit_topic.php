@@ -39,7 +39,11 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
     
     // Names
     
-    $topic->setNames([ ]);
+    $old_names = [ ];
+    $new_names = [ ];
+    
+    foreach ($topic->getNames([ ]) as $name)
+        $old_names[ $name->getId() ] = $name;
     
     foreach ($_REQUEST[ 'names' ] as $name_arr)
     {
@@ -47,14 +51,24 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
         
         if ($name_arr[ 'value' ] === '')
             continue;
-            
-        $name = $topic->newName();
+        
+        if (isset($old_names[ $name_arr[ 'id' ] ]))
+        {
+            $name = $old_names[ $name_arr[ 'id' ] ];
+        }
+        else
+        {
+            $name = $topic->newName();
+        }
         
         $name->setType($name_arr[ 'type' ]);
         $name->setValue($name_arr[ 'value' ]);
         $name->setReifier($name_arr[ 'reifier' ]);
         
         $scopes = [ ];
+        
+        if (! isset($name_arr[ 'scope' ]))
+            $name_arr[ 'scope' ] = [ ];
         
         foreach ($name_arr[ 'scope' ] as $scope)
         {
@@ -68,7 +82,11 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
         
         if (count($scopes) > 0)
             $name->setScope($scopes);
+            
+        $new_names[ ] = $name;
     }
+    
+    $topic->setNames($new_names);
     
     // Types
     

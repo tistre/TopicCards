@@ -233,6 +233,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 </td>
                 <td>
                   <input type="text" name="names[TOPICBANK_COUNTER1][value]" value="" />
+                  <input type="hidden" name="names[TOPICBANK_COUNTER1][id]" value="" />
                 </td>
                 <td>
                 
