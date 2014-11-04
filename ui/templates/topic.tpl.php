@@ -47,8 +47,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     <link rel="shortcut icon" href="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/assets/ico/favicon.ico" />
 
     <title>
-      <?=htmlspecialchars($tpl[ 'topic' ][ 'display_name' ][ 'value' ])?> | 
-      <?=htmlspecialchars($tpl[ 'topicmap' ][ 'display_name' ])?>
+      <?=htmlspecialchars($tpl[ 'topic' ][ 'label' ])?> | 
+      <?=htmlspecialchars($tpl[ 'topicmap' ][ 'label' ])?>
     </title>
 
     <!-- Bootstrap core CSS -->
@@ -68,9 +68,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
       <div class="well well-lg">
         <h1>
 
-          <!-- Unscoped base name -->
+          <!-- Topic label -->
           
-          <?=htmlspecialchars($tpl[ 'topic' ][ 'display_name' ][ 'value' ])?>
+          <?=htmlspecialchars($tpl[ 'topic' ][ 'label' ])?>
           
           <!-- Topic reifies ... -->
           
@@ -99,15 +99,15 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
           </small>
         </h1>
 
-        <!-- Additional names -->
+        <!-- Names -->
         
         <?php
         
-        if (count($tpl[ 'topic' ][ 'additional_names' ]) > 0)
+        if (count($tpl[ 'topic' ][ 'names' ]) > 0)
         {
             echo '<p class="small"><i>';
             
-            foreach ($tpl[ 'topic' ][ 'additional_names' ] as $i => $name)
+            foreach ($tpl[ 'topic' ][ 'names' ] as $i => $name)
             {
                 if ($i > 0)
                     echo '. ';

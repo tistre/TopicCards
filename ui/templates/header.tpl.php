@@ -25,5 +25,5 @@
       </a>
     </li>
   </ul>
-  <h3 class="text-muted"><?=htmlspecialchars($tpl[ 'topicmap' ][ 'display_name' ])?></h3>
+  <h3 class="text-muted"><?=htmlspecialchars($tpl[ 'topicmap' ][ 'label' ])?></h3>
 </div>

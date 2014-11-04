@@ -10,7 +10,7 @@ $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
 $tpl[ 'topicbank_static_base_url' ] = TOPICBANK_STATIC_BASE_URL;
 
 $tpl[ 'topicmap' ] = [ ];
-$tpl[ 'topicmap' ][ 'display_name' ] = $topicmap->getTopicLabel($topicmap->getReifier());
+$tpl[ 'topicmap' ][ 'label' ] = $topicmap->getTopicLabel($topicmap->getReifier());
 
 
 $fulltext_query = '';
@@ -43,10 +43,15 @@ foreach ($topic_ids as $id)
     foreach ($topic->getTypes() as $type)
         $types[ ] = $topicmap->getTopicLabel($type);
 
+    $label = $topic->getLabel();
+    
+    if (strlen($label) === 0)
+        $label = $topic->getId();
+
     $tpl[ 'topics' ][ ] = 
     [
         'id' => $id,
-        'label' => $topicmap->getTopicLabel($id),
+        'label' => $label,
         'type' => implode(', ', $types),
         'url' => sprintf('%stopic/%s', TOPICBANK_BASE_URL, $id)
     ];

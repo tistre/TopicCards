@@ -39,7 +39,7 @@ function getTopicVars($topic_id, &$result, &$topic_names)
         }
     }
 
-    splitTopicNames($result[ 'topic' ]);
+    $result[ 'topic' ][ 'label' ] = $topic->getLabel();
 
     foreach ($result[ 'topic' ][ 'occurrences' ] as $key => $occurrence)
     {
@@ -156,105 +156,9 @@ function getTopicVars($topic_id, &$result, &$topic_names)
     
     // Topic is a reifier?
 
-    addReifiesSummary($topic, $result[ 'topic' ]);
+    $result[ 'topic' ][ 'reifies_summary_html' ] = \TopicBank\Ui\Utils::getReifiesSummary($topic);
     
     return $result;
-}
-
-
-function splitTopicNames(array &$topic_data)
-{
-    $topic_data[ 'display_name' ] = false;
-    $topic_data[ 'additional_names' ] = [ ];
-    
-    foreach ($topic_data[ 'names' ] as $name)
-    {
-        if ($topic_data[ 'display_name' ] === false)
-        {
-            if (($name[ 'type' ] === 'basename') && (count($name[ 'scope'  ]) === 0))
-            {
-                $topic_data[ 'display_name' ] = $name;
-                continue;
-            }
-        }
-        
-        $topic_data[ 'additional_names' ][ ] = $name;
-    }
-    
-    return 0;
-}
-
-
-function addReifiesSummary(iTopic $topic, array &$topic_data)
-{
-    global $services;
-    global $topicmap;
-    
-    $topic_data[ 'reifies_summary_html' ] = '';
-
-    $objects = $topic->getReifiedObject();
-    
-    if ($objects === false)
-        return;
-    
-    if ($topic_data[ 'isreifier' ] === iTopic::REIFIES_NAME)
-    {
-        $topic_data[ 'reifies_summary_html' ] = sprintf
-        (
-            'Name “%s” of <a href="%stopic/%s">%s</a>',
-            htmlspecialchars($objects[ 'name' ]->getValue()),
-            TOPICBANK_BASE_URL,
-            htmlspecialchars(urlencode($objects[ 'topic' ]->getId())),
-            htmlspecialchars($topicmap->getTopicLabel($objects[ 'topic' ]->getId()))
-        );
-    }
-    elseif ($topic_data[ 'isreifier' ] === iTopic::REIFIES_OCCURRENCE)
-    {
-        $topic_data[ 'reifies_summary_html' ] = sprintf
-        (
-            'Property “%s: %s” of <a href="%stopic/%s">%s</a>',
-            htmlspecialchars($topicmap->getTopicLabel($objects[ 'occurrence' ]->getType())),
-            htmlspecialchars($objects[ 'occurrence' ]->getValue()),
-            TOPICBANK_BASE_URL,
-            htmlspecialchars(urlencode($objects[ 'topic' ]->getId())),
-            htmlspecialchars($topicmap->getTopicLabel($objects[ 'topic' ]->getId()))
-        );
-    }
-    elseif ($topic_data[ 'isreifier' ] === iTopic::REIFIES_ASSOCIATION)
-    {
-        $players = [ ];
-        
-        foreach ($objects[ 'association' ]->getRoles() as $role)
-            $players[ ] = $topicmap->getTopicLabel($role->getPlayer());
-            
-        $topic_data[ 'reifies_summary_html' ] = sprintf
-        (
-            '<a href="#">A “%s” association</a> between %s',
-            htmlspecialchars($topicmap->getTopicLabel($objects[ 'association' ]->getType())),
-            htmlspecialchars(implode(' and ', $players))
-        );
-    }
-    elseif ($topic_data[ 'isreifier' ] === iTopic::REIFIES_ROLE)
-    {
-        $other_players = [ ];
-        
-        foreach ($objects[ 'association' ]->getRoles() as $role)
-        {
-            if ($role->getPlayer() === $objects[ 'role' ]->getPlayer())
-                continue;
-                
-            $other_players[ ] = $topicmap->getTopicLabel($role->getPlayer());
-        }
-            
-        $topic_data[ 'reifies_summary_html' ] = sprintf
-        (
-            'Role “%s: %s” in <a href="#">a “%s” association</a> with %s',
-            htmlspecialchars($topicmap->getTopicLabel($objects[ 'role' ]->getType())),
-            htmlspecialchars($topicmap->getTopicLabel($objects[ 'role' ]->getPlayer())),
-            htmlspecialchars($topicmap->getTopicLabel($objects[ 'association' ]->getType())),
-            htmlspecialchars(implode(' and ', $other_players))
-        );
-    }
 }
 
 
@@ -264,7 +168,7 @@ $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
 $tpl[ 'topicbank_static_base_url' ] = TOPICBANK_STATIC_BASE_URL;
 
 $tpl[ 'topicmap' ] = [ ];
-$tpl[ 'topicmap' ][ 'display_name' ] = $topicmap->getTopicLabel($topicmap->getReifier());
+$tpl[ 'topicmap' ][ 'label' ] = $topicmap->getTopicLabel($topicmap->getReifier());
 
 $request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(TOPICBANK_BASE_URL));
 

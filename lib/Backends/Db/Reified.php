@@ -54,15 +54,15 @@ trait Reified
         {
             $is_reifier = iTopic::REIFIES_NAME;
         }
-        elseif ($this instanceof \TopicBank\Interfaces\iName)
+        elseif ($this instanceof \TopicBank\Interfaces\iOccurrence)
         {
             $is_reifier = iTopic::REIFIES_OCCURRENCE;
         }
-        elseif ($this instanceof \TopicBank\Interfaces\iName)
+        elseif ($this instanceof \TopicBank\Interfaces\iAssociation)
         {
             $is_reifier = iTopic::REIFIES_ASSOCIATION;
         }
-        elseif ($this instanceof \TopicBank\Interfaces\iName)
+        elseif ($this instanceof \TopicBank\Interfaces\iRole)
         {
             $is_reifier = iTopic::REIFIES_ROLE;
         }

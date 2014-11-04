@@ -17,7 +17,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
     <title>
       Search topics | 
-      <?=htmlspecialchars($tpl[ 'topicmap' ][ 'display_name' ])?>
+      <?=htmlspecialchars($tpl[ 'topicmap' ][ 'label' ])?>
     </title>
 
     <!-- Bootstrap core CSS -->

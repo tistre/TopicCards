@@ -81,7 +81,7 @@ class Topic extends Core implements iTopic
 
     public function getLabel()
     {
-        $result = $this->getId();
+        $result = '';
 
         foreach ($this->getNames([ ]) as $name)
         {
@@ -261,6 +261,9 @@ class Topic extends Core implements iTopic
     {
         if ($this->getVersion() === 0)
             return 0;
+        
+        // XXX to be implemented: if this topic is a reifier, empty
+        // the reifier property in the reifying object
         
         return $this->deleteById($this->getId(), $this->getVersion());
     }

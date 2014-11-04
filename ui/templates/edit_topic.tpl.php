@@ -40,12 +40,39 @@ function button_choose_topic(array $params)
 
 function button_reify(array $params)
 {
+    global $tpl;
+    
+    if (! empty($params[ 'reifier' ]))
+    {
+        $url = sprintf('%sedit_topic/%s', TOPICBANK_BASE_URL, $params[ 'reifier' ]);
+    }
+    elseif (empty($params[ 'reifies_id' ]))
+    {
+        $url = "javascript:alert('Please save this topic first.');";
+    }        
+    else
+    {
+        $url = sprintf
+        (
+            '%sedit_new_reifier_topic?reifies_type=%s&reifies_id=%s&topic=%s', 
+            TOPICBANK_BASE_URL, 
+            urlencode($params[ 'reifies_type' ]),
+            urlencode($params[ 'reifies_id' ]),
+            urlencode($tpl[ 'topic' ][ 'id' ])
+        );
+        
+        if (isset($params[ 'association' ]))
+            $url .= sprintf('&association=%s', urlencode($params[ 'association' ]));
+    }
+
     ?>
     
-    <button class="btn btn-link" data-topicbank_event="show_reify_dialog" data-topicbank_reifies_type="<?=htmlspecialchars($params[ 'reifies_type' ])?>" data-topicbank_reifies_id="<?=(isset($params[ 'reifies_id' ]) ? htmlspecialchars($params[ 'reifies_id' ]) : '')?>" type="button" data-toggle="modal" data-target="#reify_dialog">
+    <a class="btn btn-link" href="<?=htmlspecialchars($url)?>">
+      <?php if (empty($params[ 'reifier' ])) { ?>
+      <span class="glyphicon glyphicon-plus"></span>
+      <?php } ?>
       <span class="glyphicon glyphicon-paperclip"></span>
-      <span class="caret"></span>
-    </button>
+    </a>
 
     <?php
 }
@@ -67,8 +94,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     <link rel="shortcut icon" href="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/assets/ico/favicon.ico" />
 
     <title>
-      <?=htmlspecialchars($tpl[ 'topic' ][ 'display_name' ][ 'value' ])?> | 
-      <?=htmlspecialchars($tpl[ 'topicmap' ][ 'display_name' ])?>
+      <?=htmlspecialchars($tpl[ 'topic' ][ 'label' ])?> | 
+      <?=htmlspecialchars($tpl[ 'topicmap' ][ 'label' ])?>
     </title>
 
     <!-- Bootstrap core CSS -->
@@ -93,7 +120,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
       <div class="well well-lg">
 
-          <div style="padding-bottom: 15px; border-bottom: 1px solid #CCCCCC;">
+          <div>
 
             <!-- Types -->
 
@@ -133,49 +160,32 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             
               </table>
             </div>
-          
-            <!-- Unscoped base names -->
 
-            <div>
-            
-            <?php 
-            
-            $i = -1; 
-            
-            foreach ($tpl[ 'topic' ][ 'unscoped_basenames' ] as $i => $name) 
-            { 
-                ?>
+            <h1>
           
-              <input type="text" name="names[<?=$i?>][value]" value="<?=htmlspecialchars($name[ 'value' ])?>" style="font-weight: 500; font-size: 36px;" />
+              <!-- Topic label -->
 
-              <input type="hidden" name="names[<?=$i?>][type]" value="<?=htmlspecialchars($name[ 'type' ])?>" />
-              <input type="hidden" name="names[<?=$i?>][id]" value="<?=htmlspecialchars($name[ 'id' ])?>" />
-              <input type="hidden" name="names[<?=$i?>][reifier]" value="<?=htmlspecialchars($name[ 'reifier' ])?>" />
-              
-              <?php foreach ($name[ 'scope' ] as $scope) { ?>
-              <input type="hidden" name="names[<?=$i?>][scope][]" value="<?=htmlspecialchars($scope)?>" />
+              <?=htmlspecialchars($tpl[ 'topic' ][ 'label' ])?>        
+
+              <!-- Topic reifies ... -->
+          
+              <?php if (strlen($tpl[ 'topic' ][ 'reifies_summary_html' ]) > 0) { ?>
+              <small><?=$tpl[ 'topic' ][ 'reifies_summary_html' ]?></small>
               <?php } ?>
-              
-              <br />
-          
-                <?php 
-            } 
-        
-            ?>
             
-            </div>
+            </h1>
 
           </div>
           
-          <!-- Additional names -->
+          <!-- Names -->
         
           <div>
           
-            <h4>Additional names</h4>
+            <h4>Names</h4>
             
             <table>
           
-            <?php foreach ($tpl[ 'topic' ][ 'other_names' ] as $i => $name) { ?>
+            <?php $i = -1; foreach ($tpl[ 'topic' ][ 'names' ] as $i => $name) { ?>
 
               <tr>
                 <td>
@@ -218,7 +228,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   
                 </td>
                 <td>
-                  <?php button_reify([ 'reifies_type' => 'name', 'reifies_id' => $name[ 'id' ] ]); ?>
+                  <?php button_reify([ 'reifier' => $name[ 'reifier' ], 'reifies_type' => 'name', 'reifies_id' => $name[ 'id' ] ]); ?>
                   <input type="hidden" name="names[<?=$i?>][reifier]" value="<?=htmlspecialchars($name[ 'reifier' ])?>" />
                 </td>
                 <td><?php button_remove(); ?></td>
@@ -389,7 +399,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                   <table>
               
-                  <?php foreach ($occurrence[ 'scope' ] as $j => $scope) { ?>
+                  <?php $j = -1; foreach ($occurrence[ 'scope' ] as $j => $scope) { ?>
                     <tr>
                       <td>
                         <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => $tpl[ 'topic_names' ][ $scope ] ]); ?>
@@ -417,7 +427,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 </td>
                 <td>
-                  <?php button_reify([ 'reifies_type' => 'occurrence', 'reifies_id' => $occurrence[ 'id' ] ]); ?>
+                  <?php button_reify([ 'reifier' => $occurrence[ 'reifier' ], 'reifies_type' => 'occurrence', 'reifies_id' => $occurrence[ 'id' ] ]); ?>
                   <input type="hidden" name="occurrences[<?=$i?>][reifier]" value="<?=htmlspecialchars($occurrence[ 'reifier' ])?>" />
                 </td>
                 <td><?php button_remove(); ?></td>
@@ -538,7 +548,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <input type="hidden" name="associations[<?=$i?>][roles][<?=$j?>][player]" value="<?=htmlspecialchars($role[ 'player' ])?>" data-topicbank_element="id" />
                   </td>
                   <td>
-                    <?php button_reify([ 'reifies_type' => 'role', 'reifies_id' => $role[ 'id' ] ]); ?>
+                    <?php button_reify([ 'reifier' => $role[ 'reifier' ], 'reifies_type' => 'role', 'reifies_id' => $role[ 'id' ], 'association' => $association[ 'id' ] ]); ?>
                     <input type="hidden" name="associations[<?=$i?>][roles][<?=$j?>][reifier]" value="<?=htmlspecialchars($role[ 'reifier' ])?>" />
                   </td>
                   <td>
@@ -608,7 +618,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <!-- Association reifier -->
             
             <td>
-              <?php button_reify([ 'reifies_type' => 'association', 'reifies_id' => $association[ 'id' ] ]); ?>
+              <?php button_reify([ 'reifier' => $association[ 'reifier' ], 'reifies_type' => 'association', 'reifies_id' => $association[ 'id' ], 'association' => $association[ 'id' ] ]); ?>
               <input type="hidden" name="associations[<?=$i?>][reifier]" value="<?=htmlspecialchars($association[ 'reifier' ])?>" />
             </td>
 

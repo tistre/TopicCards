@@ -8,7 +8,7 @@ $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
 $tpl[ 'topicbank_static_base_url' ] = TOPICBANK_STATIC_BASE_URL;
 
 $tpl[ 'topicmap' ] = [ ];
-$tpl[ 'topicmap' ][ 'display_name' ] = $topicmap->getTopicLabel($topicmap->getReifier());
+$tpl[ 'topicmap' ][ 'label' ] = $topicmap->getTopicLabel($topicmap->getReifier());
 
 $request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(TOPICBANK_BASE_URL));
 
@@ -260,16 +260,12 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
     if ($ok < 0)
     {
         $services->db_utils->rollBack();
+        $tpl[ 'error_html' ] = htmlspecialchars(sprintf('Could not save topic. Error code: %s', $ok));
     }
     else
     {
         $services->db_utils->commit();
-        
-        header(sprintf('Location: %stopic/%s', TOPICBANK_BASE_URL, $topic_id));
-        exit;
     }
-    
-    $tpl[ 'error_html' ] = htmlspecialchars(sprintf('Could not save topic. Error code: %s', $ok));
 }
 
 $tpl[ 'topic_names' ] = [ ];
@@ -288,46 +284,19 @@ foreach ($tpl[ 'topic' ][ 'occurrences' ] as $occurrence_arr)
         $tpl[ 'topic_names' ][ $scope ] = false;        
 }
 
-// Fill "unscoped_basenames"
+// Names
 
-$tpl[ 'topic' ][ 'unscoped_basenames' ] = [ ];
-$tpl[ 'topic' ][ 'other_names' ] = [ ];
-$tpl[ 'topic' ][ 'display_name' ] = false;
+$tpl[ 'topic' ][ 'label' ] = $topic->getLabel();
 
 foreach ($tpl[ 'topic' ][ 'names' ] as $i => $name)
 {
-    $key = 'other_names';
-    
-    if (($name[ 'type' ] === 'basename') && (count($name[ 'scope' ]) === 0))
-        $key = 'unscoped_basenames';
-
-    $tpl[ 'topic' ][ $key ][ $i ] = $name;
-    
     $tpl[ 'topic_names' ][ $name[ 'type' ] ] = false;
     
     foreach ($name[ 'scope' ] as $scope)
-        $tpl[ 'topic_names' ][ $scope ] = false;    
-
-    if ($tpl[ 'topic' ][ 'display_name' ] === false)
-    {
-        if (($name[ 'type' ] === 'basename') && (count($name[ 'scope'  ]) === 0))
-        {
-            $tpl[ 'topic' ][ 'display_name' ] = $name;
-            continue;
-        }
-    }
+        $tpl[ 'topic_names' ][ $scope ] = false;
 }
 
-if (count($tpl[ 'topic' ][ 'unscoped_basenames' ]) === 0) 
-{
-    $dummy_name = $topic->newName();
-    $dummy_name->setType('basename');
-    
-    $tpl[ 'topic' ][ 'unscoped_basenames' ][ ] = $dummy_name->getAll(); 
-    
-    // XXX assuming that $topic won't be saved below, otherwise we'd
-    // add an unwanted name...
-}
+$tpl[ 'topic' ][ 'reifies_summary_html' ] = \TopicBank\Ui\Utils::getReifiesSummary($topic);
 
 // Fill associations
 
