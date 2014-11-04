@@ -2,8 +2,8 @@
 
 require_once dirname(dirname(__DIR__)) . '/include/config.php';
 
-// XXX add this check:
-// ($_SERVER[ 'REQUEST_METHOD' ] === 'POST')
+if ($_SERVER[ 'REQUEST_METHOD' ] !== 'POST')
+    die('Please POST');
 
 $ok = $services->db_utils->connect();
 

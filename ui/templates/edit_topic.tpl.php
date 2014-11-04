@@ -41,6 +41,8 @@ function button_choose_topic(array $params)
 function button_reify(array $params)
 {
     global $tpl;
+
+    $data_str = '';
     
     if (! empty($params[ 'reifier' ]))
     {
@@ -52,22 +54,29 @@ function button_reify(array $params)
     }        
     else
     {
-        $url = sprintf
-        (
-            '%sedit_new_reifier_topic?reifies_type=%s&reifies_id=%s&topic=%s', 
-            TOPICBANK_BASE_URL, 
-            urlencode($params[ 'reifies_type' ]),
-            urlencode($params[ 'reifies_id' ]),
-            urlencode($tpl[ 'topic' ][ 'id' ])
-        );
+        $url = '#';
         
-        if (isset($params[ 'association' ]))
-            $url .= sprintf('&association=%s', urlencode($params[ 'association' ]));
+        $data =
+        [
+            'event' => 'submit_reify_form',
+            'reifies_type' => $params[ 'reifies_type' ],
+            'reifies_id' => $params[ 'reifies_id' ],
+            'topic' => $tpl[ 'topic' ][ 'id' ],
+            'association' => 
+            (
+                isset($params[ 'association' ])
+                ? $params[ 'association' ]
+                : ''
+            )
+        ];
+                
+        foreach ($data as $key => $value)
+            $data_str .= sprintf(' data-topicbank_%s="%s"', $key, htmlspecialchars($value));
     }
 
     ?>
     
-    <a class="btn btn-link" href="<?=htmlspecialchars($url)?>">
+    <a class="btn btn-link" href="<?=htmlspecialchars($url)?>" <?=$data_str?>>
       <?php if (empty($params[ 'reifier' ])) { ?>
       <span class="glyphicon glyphicon-plus"></span>
       <?php } ?>
@@ -764,20 +773,14 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         </div>
       </div>
     
-      <!-- "Reify" dialog, initially hidden -->
+      <!-- "Reify" form, hidden -->
 
-      <div class="modal" id="reify_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="container modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h4 class="modal-title" id="myModalLabel">More properties</h4>
-            </div>
-            <div class="modal-body">
-            </div>
-          </div>
-        </div>
-      </div>
+      <form method="POST" action="<?=TOPICBANK_BASE_URL?>edit_new_reifier_topic" id="reify_form">
+        <input type="hidden" name="reifies_type" value="" />
+        <input type="hidden" name="reifies_id" value="" />
+        <input type="hidden" name="association" value="" />
+        <input type="hidden" name="topic" value="" />
+      </form>
     
     </div> <!-- /container -->
     
@@ -976,14 +979,20 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             return false;
         });
 
-        $('#topicbank_form_edit').on('click', 'button[data-topicbank_event="show_reify_dialog"]', function(e)
+        $('#topicbank_form_edit').on('click', 'a[data-topicbank_event="submit_reify_form"]', function(e)
         {
             var $reify_dialog, $dialog_body, data;
 
-            $reify_dialog = $('#reify_dialog');
-            $dialog_body = $reify_dialog.find('div.modal-body');
-            
+            $reify_form = $('#reify_form');
+                        
             data = $(e.target).data();
+            
+            $reify_form.find('input[name="reifies_type"]').val(data.topicbank_reifies_type);
+            $reify_form.find('input[name="reifies_id"]').val(data.topicbank_reifies_id);
+            $reify_form.find('input[name="topic"]').val(data.topicbank_topic);
+            $reify_form.find('input[name="association"]').val(data.topicbank_association);
+            
+            $reify_form.submit();
         });
         
         
