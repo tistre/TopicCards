@@ -985,7 +985,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
             $reify_form = $('#reify_form');
                         
-            data = $(e.target).data();
+            data = $(e.currentTarget).data();
             
             $reify_form.find('input[name="reifies_type"]').val(data.topicbank_reifies_type);
             $reify_form.find('input[name="reifies_id"]').val(data.topicbank_reifies_id);
