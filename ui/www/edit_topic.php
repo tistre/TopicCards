@@ -288,6 +288,15 @@ foreach ($tpl[ 'topic' ][ 'occurrences' ] as $occurrence_arr)
 
 $tpl[ 'topic' ][ 'label' ] = $topic->getLabel();
 
+if (count($tpl[ 'topic' ][ 'names' ]) === 0)
+{
+    $dummy_name = $topic->newName();
+    
+    $dummy_name->setType('basename');
+    
+    $tpl[ 'topic' ][ 'names' ][ ] = $dummy_name->getAll();
+}
+
 foreach ($tpl[ 'topic' ][ 'names' ] as $i => $name)
 {
     $tpl[ 'topic_names' ][ $name[ 'type' ] ] = false;
