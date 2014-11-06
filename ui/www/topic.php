@@ -59,7 +59,7 @@ function getTopicVars($topic_id, &$result, &$topic_names)
 
     foreach ($result[ 'topic' ][ 'subject_identifiers' ] as $i => $subject_identifier)
     {
-        if (strpos($subject_identifier, '/') !== false)
+        if (strpbrk($subject_identifier, '/:') !== false)
             continue;
         
         $result[ 'topic' ][ 'subject_identifiers' ][ $i ] = sprintf
