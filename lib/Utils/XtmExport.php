@@ -203,14 +203,14 @@ class XtmExport
             $result .= $this->exportType($occurrence->getType(), ($indent + 1));
             $result .= $this->exportScope($occurrence->getScope(), ($indent + 1));
             
+            $datatype = $this->topicmap->getTopicRef($occurrence->getDatatype());
+            
             $result .= sprintf
             (
                 '%s<resourceData datatype="%s">%s</resourceData>' . "\n", 
                 str_repeat('  ', ($indent + 1)),
-                htmlspecialchars($this->topicmap->getTopicRef($occurrence->getDatatype())),
-                // XXX support inline XML?
-                // http://www.w3.org/2001/XMLSchema#anyType !                
-                htmlspecialchars($occurrence->getValue())
+                htmlspecialchars($datatype),
+                \TopicBank\Utils\DatatypeUtils::valueToXml($occurrence->getValue(), $datatype)
             );
             
             $result .= sprintf

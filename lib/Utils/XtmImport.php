@@ -159,13 +159,13 @@ class XtmImport
             
             foreach ($node->getElementsByTagName('resourceData') as $subnode)
             {
-                // XXX support inline XML?
-                // http://www.w3.org/2001/XMLSchema#anyType !
-                $occurrence->setValue($subnode->nodeValue);
+                $datatype = $subnode->getAttribute('datatype');
+                
+                $occurrence->setValue(\TopicBank\Utils\DatatypeUtils::getValueFromDomNode($subnode, $datatype));
                 
                 $occurrence->setDataType
                 (
-                    $topic->getTopicMap()->getTopicBySubjectIdentifier($subnode->getAttribute('datatype'))
+                    $topic->getTopicMap()->getTopicBySubjectIdentifier($datatype)
                 );
             }
                 
