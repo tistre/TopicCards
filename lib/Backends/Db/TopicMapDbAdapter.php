@@ -99,6 +99,41 @@ trait TopicMapDbAdapter
     }
     
     
+    public function selectTopicSubjectIdentifier($topic_id)
+    {
+        $ok = $this->services->db_utils->connect();
+        
+        if ($ok < 0)
+            return false;
+        
+        $prefix = $this->getDbTablePrefix();
+        
+        $sql = $this->services->db->prepare(sprintf
+        (
+            'select subject_value from %ssubject'
+            . ' where subject_topic = :subject_topic'
+            . ' and subject_islocator = :subject_islocator'
+            . ' order by subject_id', 
+            $prefix
+        ));
+        
+        $sql->bindValue(':subject_topic', $topic_id, \PDO::PARAM_STR);
+        $sql->bindValue(':subject_islocator', 0, \PDO::PARAM_INT);
+        
+        $ok = $sql->execute();
+        
+        if ($ok === false)
+            return false;
+
+        $row = $sql->fetch();
+        
+        if ($row === false)
+            return false;
+        
+        return $row[ 'subject_value' ];
+    }
+    
+    
     public function selectAssociations(array $filters)
     {
         $ok = $this->services->db_utils->connect();

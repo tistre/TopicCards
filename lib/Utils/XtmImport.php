@@ -5,8 +5,13 @@ namespace TopicBank\Utils;
 
 class XtmImport
 {
-    public static function importObjects($xml, \TopicBank\Interfaces\iTopicMap $topicmap)
+    protected $topicmap;
+    
+    
+    public function importObjects($xml, \TopicBank\Interfaces\iTopicMap $topicmap)
     {
+        $this->topicmap = $topicmap;
+        
         $dom = new \DOMDocument();
         
         $ok = $dom->loadXML($xml);
@@ -23,11 +28,11 @@ class XtmImport
                 
             if ($node->tagName === 'topic')
             {
-                $result[ ] = self::importTopic($node, $topicmap);
+                $result[ ] = $this->importTopic($node);
             }
             elseif ($node->tagName === 'association')
             {
-                $result[ ] = self::importAssociation($node, $topicmap);
+                $result[ ] = $this->importAssociation($node);
             }
         }
         
@@ -35,49 +40,49 @@ class XtmImport
     }
     
     
-    protected static function importTopic(\DOMElement $context_node, \TopicBank\Interfaces\iTopicMap $topicmap)
+    protected function importTopic(\DOMElement $context_node)
     {
-        $topic = $topicmap->newTopic();
+        $topic = $this->topicmap->newTopic();
 
         if ($context_node->hasAttribute('id'))
             $topic->setId($context_node->getAttribute('id'));
 
-        self::importTypes($context_node, $topic);
-        self::importSubjectIdentifiers($context_node, $topic);
-        self::importSubjectLocators($context_node, $topic);
-        self::importNames($context_node, $topic);
-        self::importOccurrences($context_node, $topic);
+        $this->importTypes($context_node, $topic);
+        $this->importSubjectIdentifiers($context_node, $topic);
+        $this->importSubjectLocators($context_node, $topic);
+        $this->importNames($context_node, $topic);
+        $this->importOccurrences($context_node, $topic);
         
         return $topic;
     }
     
     
-    protected static function importAssociation(\DOMElement $context_node, \TopicBank\Interfaces\iTopicMap $topicmap)
+    protected function importAssociation(\DOMElement $context_node)
     {
-        $association = $topicmap->newAssociation();
+        $association = $this->topicmap->newAssociation();
 
         if ($context_node->hasAttribute('id'))
             $association->setId($context_node->getAttribute('id'));
 
         if ($context_node->hasAttribute('reifier'))
-            $association->setReifier($context_node->getAttribute('reifier'));
+            $association->setReifier($this->topicRefToId($context_node->getAttribute('reifier')));
 
-        $association->setType(self::getType($context_node));
-        $association->setScope(self::getScope($context_node));
+        $association->setType($this->getType($context_node));
+        $association->setScope($this->getScope($context_node));
 
-        self::importRoles($context_node, $association);
+        $this->importRoles($context_node, $association);
         
         return $association;
     }
     
     
-    protected static function importTypes(\DOMElement $context_node, \TopicBank\Interfaces\iTopic $topic)
+    protected function importTypes(\DOMElement $context_node, \TopicBank\Interfaces\iTopic $topic)
     {
         $topic_refs = [ ];
         
         foreach ($context_node->getElementsByTagName('instanceOf') as $node)
         {
-            $topic_ref = self::getTopicRef($node);
+            $topic_ref = $this->getTopicRef($node);
             
             if (strlen($topic_ref) > 0)
                 $topic_refs[ ] = $topic_ref;
@@ -87,19 +92,19 @@ class XtmImport
     }
     
     
-    protected static function importSubjectIdentifiers(\DOMElement $context_node, \TopicBank\Interfaces\iTopic $topic)
+    protected function importSubjectIdentifiers(\DOMElement $context_node, \TopicBank\Interfaces\iTopic $topic)
     {
-        self::importSubjects('subjectIdentifier', $context_node, $topic);
+        $this->importSubjects('subjectIdentifier', $context_node, $topic);
     }
     
     
-    protected static function importSubjectLocators(\DOMElement $context_node, \TopicBank\Interfaces\iTopic $topic)
+    protected function importSubjectLocators(\DOMElement $context_node, \TopicBank\Interfaces\iTopic $topic)
     {
-        self::importSubjects('subjectLocator', $context_node, $topic);
+        $this->importSubjects('subjectLocator', $context_node, $topic);
     }
     
     
-    protected static function importSubjects($what, \DOMElement $context_node, \TopicBank\Interfaces\iTopic $topic)
+    protected function importSubjects($what, \DOMElement $context_node, \TopicBank\Interfaces\iTopic $topic)
     {
         $hrefs = [ ];
         
@@ -117,7 +122,7 @@ class XtmImport
     }
 
 
-    protected static function importNames(\DOMElement $context_node, \TopicBank\Interfaces\iTopic $topic)
+    protected function importNames(\DOMElement $context_node, \TopicBank\Interfaces\iTopic $topic)
     {
         $names = [ ];
         
@@ -125,14 +130,14 @@ class XtmImport
         {
             $name = $topic->newName();
             
-            $name->setType(self::getType($node));
-            $name->setScope(self::getScope($node));
+            $name->setType($this->getType($node));
+            $name->setScope($this->getScope($node));
             
             foreach ($node->getElementsByTagName('value') as $subnode)
                 $name->setValue($subnode->nodeValue);
 
             if ($node->hasAttribute('reifier'))
-                $name->setReifier($node->getAttribute('reifier'));
+                $name->setReifier($this->topicRefToId($node->getAttribute('reifier')));
                 
             $names[ ] = $name;
         }
@@ -141,7 +146,7 @@ class XtmImport
     }
     
     
-    protected static function importOccurrences(\DOMElement $context_node, \TopicBank\Interfaces\iTopic $topic)
+    protected function importOccurrences(\DOMElement $context_node, \TopicBank\Interfaces\iTopic $topic)
     {
         $occurrences = [ ];
         
@@ -149,12 +154,13 @@ class XtmImport
         {
             $occurrence = $topic->newOccurrence();
             
-            $occurrence->setType(self::getType($node));
-            $occurrence->setScope(self::getScope($node));
+            $occurrence->setType($this->getType($node));
+            $occurrence->setScope($this->getScope($node));
             
             foreach ($node->getElementsByTagName('resourceData') as $subnode)
             {
                 // XXX support inline XML?
+                // http://www.w3.org/2001/XMLSchema#anyType !
                 $occurrence->setValue($subnode->nodeValue);
                 
                 $occurrence->setDataType
@@ -164,7 +170,7 @@ class XtmImport
             }
                 
             if ($node->hasAttribute('reifier'))
-                $occurrence->setReifier($node->getAttribute('reifier'));
+                $occurrence->setReifier($this->topicRefToId($node->getAttribute('reifier')));
                 
             $occurrences[ ] = $occurrence;
         }
@@ -173,7 +179,7 @@ class XtmImport
     }
     
     
-    protected static function importRoles(\DOMElement $context_node, \TopicBank\Interfaces\iAssociation $association)
+    protected function importRoles(\DOMElement $context_node, \TopicBank\Interfaces\iAssociation $association)
     {
         $roles = [ ];
         
@@ -181,11 +187,11 @@ class XtmImport
         {
             $role = $association->newRole();
             
-            $role->setType(self::getType($node));
-            $role->setPlayer(self::getTopicRef($node));
+            $role->setType($this->getType($node));
+            $role->setPlayer($this->getTopicRef($node));
             
             if ($node->hasAttribute('reifier'))
-                $role->setReifier($node->getAttribute('reifier'));
+                $role->setReifier($this->topicRefToId($node->getAttribute('reifier')));
                 
             $roles[ ] = $role;
         }
@@ -194,22 +200,22 @@ class XtmImport
     }
     
     
-    protected static function getType(\DOMElement $node)
+    protected function getType(\DOMElement $node)
     {
         foreach ($node->getElementsByTagName('type') as $subnode)
-            return self::getTopicRef($subnode);
+            return $this->getTopicRef($subnode);
         
         return false;
     }
 
 
-    protected static function getScope(\DOMElement $node)
+    protected function getScope(\DOMElement $node)
     {
         $result = [ ];
         
         foreach ($node->getElementsByTagName('scope') as $subnode)
         {
-            $scope = self::getTopicRef($subnode);
+            $scope = $this->getTopicRef($subnode);
             
             if (strlen($scope) > 0)
                 $result[ ] = $scope;
@@ -219,7 +225,7 @@ class XtmImport
     }
 
 
-    protected static function getTopicRef(\DOMElement $node)
+    protected function getTopicRef(\DOMElement $node)
     {
         foreach ($node->childNodes as $subnode)
         {
@@ -231,10 +237,36 @@ class XtmImport
 
             if (! $subnode->hasAttribute('href'))
                 continue;
-    
-            return $subnode->getAttribute('href');
+
+            // XXX return an error if subject does not exist!
+            
+            $topic_ref = $subnode->getAttribute('href');
+            
+            if (strlen($topic_ref) === 0)
+                continue;
+            
+            return $this->topicRefToId($topic_ref);
         }
         
         return false;
+    }
+    
+    
+    protected function topicRefToId($topic_ref)
+    {
+        if (strlen($topic_ref) === 0)
+            continue;
+            
+        // Local IDs are prefixed with "#"
+        // XXX does this conform to the XTM 2.0 spec?
+        
+        if ($topic_ref[ 0 ] === '#')
+        {
+            return substr($topic_ref, 1);
+        }
+        else
+        {
+            return $this->topicmap->getTopicBySubjectIdentifier($topic_ref);
+        }
     }
 }

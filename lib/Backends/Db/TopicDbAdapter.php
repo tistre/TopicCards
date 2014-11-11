@@ -110,7 +110,8 @@ trait TopicDbAdapter
         (
             'select subject_value from %ssubject'
             . ' where subject_topic = :subject_topic'
-            . ' and subject_islocator = :subject_islocator', 
+            . ' and subject_islocator = :subject_islocator'
+            . ' order by subject_id', 
             $prefix
         ));
         

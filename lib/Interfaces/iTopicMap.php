@@ -21,7 +21,9 @@ interface iTopicMap
     public function getTopics(array $filters);
     // XXX rename to ...TopicIdBy...?
     public function getTopicBySubjectIdentifier($uri);
-    public function getTopicLabel($id);
+    public function getTopicSubjectIdentifier($topic_id);
+    public function getTopicRef($topic_id);
+    public function getTopicLabel($topic_id);
     public function getAssociations(array $filters);
     public function getTopicTypes(array $filters);
     public function getNameTypes(array $filters);

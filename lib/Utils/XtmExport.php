@@ -5,7 +5,10 @@ namespace TopicBank\Utils;
 
 class XtmExport
 {
-    public static function exportObjects(array $objects)
+    protected $topicmap;
+    
+    
+    public function exportObjects(array $objects)
     {
         $result = 
             '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
@@ -15,11 +18,11 @@ class XtmExport
         {
             if ($object instanceOf \TopicBank\Interfaces\iTopic)
             {
-                $result .= self::exportTopic($object, 1);
+                $result .= $this->exportTopic($object, 1);
             }
             elseif ($object instanceOf \TopicBank\Interfaces\iAssociation)
             {
-                $result .= self::exportAssociation($object, 1);
+                $result .= $this->exportAssociation($object, 1);
             }
         }
         
@@ -29,8 +32,10 @@ class XtmExport
     }
     
     
-    protected static function exportTopic(\TopicBank\Interfaces\iTopic $topic, $indent)
+    protected function exportTopic(\TopicBank\Interfaces\iTopic $topic, $indent)
     {
+        $this->topicmap = $topic->getTopicMap();
+        
         $result = sprintf
         (
             '%s<topic id="%s">' . "\n",
@@ -38,11 +43,11 @@ class XtmExport
             htmlspecialchars($topic->getId())
         );
         
-        $result .= self::exportSubjectIdentifiers($topic->getSubjectIdentifiers(), ($indent + 1));        
-        $result .= self::exportSubjectLocators($topic->getSubjectLocators(), ($indent + 1));
-        $result .= self::exportTypes($topic->getTypes(), ($indent + 1));
-        $result .= self::exportNames($topic->getNames([ ]), ($indent + 1));
-        $result .= self::exportOccurrences($topic->getOccurrences([ ]), ($indent + 1));
+        $result .= $this->exportSubjectIdentifiers($topic->getSubjectIdentifiers(), ($indent + 1));        
+        $result .= $this->exportSubjectLocators($topic->getSubjectLocators(), ($indent + 1));
+        $result .= $this->exportTypes($topic->getTypes(), ($indent + 1));
+        $result .= $this->exportNames($topic->getNames([ ]), ($indent + 1));
+        $result .= $this->exportOccurrences($topic->getOccurrences([ ]), ($indent + 1));
                     
         $result .= sprintf
         (
@@ -54,18 +59,20 @@ class XtmExport
     }
 
 
-    protected static function exportAssociation(\TopicBank\Interfaces\iAssociation $association, $indent)
+    protected function exportAssociation(\TopicBank\Interfaces\iAssociation $association, $indent)
     {
+        $this->topicmap = $association->getTopicMap();
+
         $result = sprintf
         (
             '%s<association%s>' . "\n",
             str_repeat('  ', $indent),
-            self::exportReifier($association->getReifier())
+            $this->exportReifier($association->getReifier())
         );
 
-        $result .= self::exportType($association->getType(), ($indent + 1));
-        $result .= self::exportScope($association->getScope(), ($indent + 1));
-        $result .= self::exportRoles($association->getRoles([ ]), ($indent + 1));
+        $result .= $this->exportType($association->getType(), ($indent + 1));
+        $result .= $this->exportScope($association->getScope(), ($indent + 1));
+        $result .= $this->exportRoles($association->getRoles([ ]), ($indent + 1));
 
         $result .= sprintf
         (
@@ -77,30 +84,30 @@ class XtmExport
     }
 
 
-    protected static function exportTopicRef($topic_id, $indent)
+    protected function exportTopicRef($topic_id, $indent)
     {
         return sprintf
         (
             '%s<topicRef href="%s"/>' . "\n", 
             str_repeat('  ', $indent),
-            htmlspecialchars($topic_id)
+            htmlspecialchars($this->topicmap->getTopicRef($topic_id))
         );
     }
 
 
-    protected static function exportSubjectLocators(array $subject_locators, $indent)
+    protected function exportSubjectLocators(array $subject_locators, $indent)
     {
-        return self::exportSubjects('subjectLocator', $subject_locators, $indent);
+        return $this->exportSubjects('subjectLocator', $subject_locators, $indent);
     }
     
 
-    protected static function exportSubjectIdentifiers(array $subject_identifiers, $indent)
+    protected function exportSubjectIdentifiers(array $subject_identifiers, $indent)
     {
-        return self::exportSubjects('subjectIdentifier', $subject_identifiers, $indent);
+        return $this->exportSubjects('subjectIdentifier', $subject_identifiers, $indent);
     }
     
 
-    protected static function exportSubjects($tag, array $urls, $indent)
+    protected function exportSubjects($tag, array $urls, $indent)
     {
         $result = '';
         
@@ -119,7 +126,7 @@ class XtmExport
     }
     
     
-    protected static function exportNames(array $names, $indent)
+    protected function exportNames(array $names, $indent)
     {
         $result = '';
         
@@ -129,11 +136,11 @@ class XtmExport
             (
                 "%s<name%s>\n", 
                 str_repeat('  ', $indent),
-                self::exportReifier($name->getReifier())
+                $this->exportReifier($name->getReifier())
             );
             
-            $result .= self::exportType($name->getType(), ($indent + 1));
-            $result .= self::exportScope($name->getScope(), ($indent + 1));
+            $result .= $this->exportType($name->getType(), ($indent + 1));
+            $result .= $this->exportScope($name->getScope(), ($indent + 1));
             
             $result .= sprintf
             (
@@ -153,7 +160,7 @@ class XtmExport
     }
     
     
-    protected static function exportRoles(array $roles, $indent)
+    protected function exportRoles(array $roles, $indent)
     {
         $result = '';
     
@@ -163,11 +170,11 @@ class XtmExport
             (
                 "%s<role%s>\n",
                 str_repeat('  ', $indent),
-                self::exportReifier($role->getReifier())
+                $this->exportReifier($role->getReifier())
             );
 
-            $result .= self::exportType($role->getType(), ($indent + 1));
-            $result .= self::exportTopicRef($role->getPlayer(), ($indent + 1));
+            $result .= $this->exportType($role->getType(), ($indent + 1));
+            $result .= $this->exportTopicRef($role->getPlayer(), ($indent + 1));
             
             $result .= sprintf
             (
@@ -180,7 +187,7 @@ class XtmExport
     }
 
     
-    protected static function exportOccurrences(array $occurrences, $indent)
+    protected function exportOccurrences(array $occurrences, $indent)
     {
         $result = '';
         
@@ -190,22 +197,19 @@ class XtmExport
             (
                 "%s<occurrence%s>\n", 
                 str_repeat('  ', $indent),
-                self::exportReifier($occurrence->getReifier())
+                $this->exportReifier($occurrence->getReifier())
             );
             
-            $result .= self::exportType($occurrence->getType(), ($indent + 1));
-            $result .= self::exportScope($occurrence->getScope(), ($indent + 1));
+            $result .= $this->exportType($occurrence->getType(), ($indent + 1));
+            $result .= $this->exportScope($occurrence->getScope(), ($indent + 1));
             
-            $datatype_topic = $occurrence->getTopicMap()->newTopic();
-            $datatype_topic->load($occurrence->getDatatype());
-            $datatype_urls = $datatype_topic->getSubjectIdentifiers();
-
             $result .= sprintf
             (
                 '%s<resourceData datatype="%s">%s</resourceData>' . "\n", 
                 str_repeat('  ', ($indent + 1)),
-                htmlspecialchars($datatype_urls[ 0 ]),
+                htmlspecialchars($this->topicmap->getTopicRef($occurrence->getDatatype())),
                 // XXX support inline XML?
+                // http://www.w3.org/2001/XMLSchema#anyType !                
                 htmlspecialchars($occurrence->getValue())
             );
             
@@ -220,16 +224,20 @@ class XtmExport
     }
     
 
-    protected static function exportReifier($reifier)
+    protected function exportReifier($reifier)
     {
         if (strlen($reifier) === 0)
             return '';
             
-        return sprintf(' reifier="%s"', htmlspecialchars($reifier));
+        return sprintf
+        (
+            ' reifier="%s"', 
+            htmlspecialchars($this->topicmap->getTopicRef($reifier))
+        );
     }
 
 
-    protected static function exportTypes(array $types, $indent)
+    protected function exportTypes(array $types, $indent)
     {
         if (count($types) === 0)
             return '';
@@ -237,7 +245,7 @@ class XtmExport
         $result = sprintf("%s<instanceOf>\n", str_repeat('  ', $indent));
             
         foreach ($types as $topic_id)
-            $result .= self::exportTopicRef($topic_id, ($indent + 1));
+            $result .= $this->exportTopicRef($topic_id, ($indent + 1));
             
         $result .= sprintf("%s</instanceOf>\n", str_repeat('  ', $indent));
         
@@ -245,7 +253,7 @@ class XtmExport
     }
 
 
-    protected static function exportType($type, $indent)
+    protected function exportType($type, $indent)
     {
         if (strlen($type) === 0)
             return '';
@@ -254,13 +262,13 @@ class XtmExport
         (
             "%s<type>\n%s%s</type>\n",
             str_repeat('  ', $indent),
-            self::exportTopicRef($type, ($indent + 1)),
+            $this->exportTopicRef($type, ($indent + 1)),
             str_repeat('  ', $indent)
         );
     }
 
 
-    protected static function exportScope(array $scope, $indent)
+    protected function exportScope(array $scope, $indent)
     {
         $result = '';
         
@@ -270,7 +278,7 @@ class XtmExport
             (
                 "%s<scope>\n%s%s</scope>\n",
                 str_repeat('  ', $indent),
-                self::exportTopicRef($topic_id, ($indent + 1)),
+                $this->exportTopicRef($topic_id, ($indent + 1)),
                 str_repeat('  ', $indent)
             );
         }

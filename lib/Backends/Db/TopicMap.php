@@ -107,14 +107,37 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     }
     
     
-    public function getTopicLabel($id)
+    public function getTopicSubjectIdentifier($topic_id)
     {
-        if (strlen($id) === 0)
+        if (strlen($topic_id) === 0)
+            return false;
+            
+        return $this->selectTopicSubjectIdentifier($topic_id);
+    }
+    
+    
+    public function getTopicRef($topic_id)
+    {
+        if (strlen($topic_id) === 0)
+            return false;
+        
+        $result = $this->getTopicSubjectIdentifier($topic_id);
+        
+        if (strlen($result) === 0)
+            $result = '#' . $topic_id;
+            
+        return $result;
+    }
+    
+    
+    public function getTopicLabel($topic_id)
+    {
+        if (strlen($topic_id) === 0)
             return false;
             
         $topic = $this->newTopic();
         
-        $ok = $topic->load($id);
+        $ok = $topic->load($topic_id);
         
         if ($ok < 0)
             return false;
