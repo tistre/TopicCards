@@ -396,7 +396,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <!-- Occurrence value and datatype -->
                 
                 <td>
-                  <input type="text" name="occurrences[<?=$i?>][value]" value="<?=htmlspecialchars($occurrence[ 'value' ])?>" />
+                  <textarea name="occurrences[<?=$i?>][value]"><?=htmlspecialchars($occurrence[ 'value' ])?></textarea>
                   <br />
                   <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => $tpl[ 'topic_names' ][ $occurrence[ 'datatype' ] ] ]); ?>
                   <input type="hidden" name="occurrences[<?=$i?>][datatype]" value="<?=htmlspecialchars($occurrence[ 'datatype' ])?>" data-topicbank_element="id" />
@@ -456,7 +456,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <!-- New occurrence value and datatype -->
                 
                 <td>
-                  <input type="text" name="occurrences[TOPICBANK_COUNTER1][value]" value="" />
+                  <textarea name="occurrences[TOPICBANK_COUNTER1][value]"></textarea>
                   <br />
                   <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => '[Datatype]' ]); ?>
                   <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][datatype]" value="" data-topicbank_element="id" />
