@@ -192,6 +192,11 @@ class Topic extends Core implements iTopic
     
     public function save()
     {
+        $ok = $this->validate($dummy);
+        
+        if ($ok < 0)
+            return $ok;
+            
         if ($this->getVersion() === 0)
         {
             $ok = $this->insertAll($this->getAll());

@@ -33,6 +33,26 @@ class Association extends Core implements \TopicBank\Interfaces\iAssociation
     }
     
     
+    public function validate(&$msg_html)
+    {
+        $result = 1;
+        $msg_html = '';
+        
+        foreach ($this->getRoles([ ]) as $role)
+        {
+            $ok = $role->validate($msg);
+            
+            if ($ok < 0)
+            {
+                $result = $ok;
+                $msg_html .= $msg;
+            }
+        }
+        
+        return $result;
+    }
+    
+    
     public function load($id)
     {
         $rows = $this->selectAll([ 'id' => $id ]);
@@ -54,6 +74,11 @@ class Association extends Core implements \TopicBank\Interfaces\iAssociation
     
     public function save()
     {
+        $ok = $this->validate($dummy);
+        
+        if ($ok < 0)
+            return $ok;
+            
         if ($this->getVersion() === 0)
         {
             $ok = $this->insertAll($this->getAll());
