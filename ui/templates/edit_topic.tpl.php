@@ -822,7 +822,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             {
                 counter_value = parseInt(counter_value, 10);
                 
-                $clone.find('input').each(function(i, item)
+                $clone.find('input, textarea').each(function(i, item)
                 {
                     var $item = $(item);
                     var elem_name = $item.attr('name');
