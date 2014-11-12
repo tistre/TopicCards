@@ -20,6 +20,7 @@ class Occurrence extends Core implements \TopicBank\Interfaces\iOccurrence
     public function setValue($str)
     {
         $this->value = $str;
+
         return 1;
     }
     
@@ -29,13 +30,29 @@ class Occurrence extends Core implements \TopicBank\Interfaces\iOccurrence
         return $this->datatype;
     }
     
-    
+
     public function setDatatype($str)
     {
         $this->datatype = $str;
+        
         return 1;
     }
     
+    
+    public function validate(&$msg_html)
+    {
+        $ok = \TopicBank\Utils\DatatypeUtils::validate
+        (
+            $this->value, 
+            $this->getTopicMap()->getTopicSubjectIdentifier($this->getDatatype()), 
+            $msg_txt
+        );
+        
+        $msg_html = htmlspecialchars($msg_txt);
+        
+        return $ok;
+    }
+
     
     public function getAll()
     {

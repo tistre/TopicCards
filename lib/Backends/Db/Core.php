@@ -26,4 +26,12 @@ class Core implements \TopicBank\Interfaces\iCore
     {
         return $this->topicmap;
     }
+
+
+    public function validate(&$msg_html)
+    {
+        $msg_html = '';
+        
+        return 0;
+    }
 }

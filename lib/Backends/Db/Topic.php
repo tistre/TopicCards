@@ -150,7 +150,27 @@ class Topic extends Core implements iTopic
         return $this->selectReifiedObjectInfo($this->id, $this->isreifier);
     }
     
+    
+    public function validate(&$msg_html)
+    {
+        $result = 1;
+        $msg_html = '';
         
+        foreach (array_merge($this->getNames([ ]), $this->getOccurrences([ ])) as $obj)
+        {
+            $ok = $obj->validate($msg);
+            
+            if ($ok < 0)
+            {
+                $result = $ok;
+                $msg_html .= $msg;
+            }
+        }
+        
+        return $result;
+    }
+    
+    
     public function load($id)
     {
         $rows = $this->selectAll([ 'id' => $id ]);

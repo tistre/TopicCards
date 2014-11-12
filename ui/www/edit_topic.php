@@ -138,6 +138,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
 
     // Occurrences
     
+    // XXX don't re-add all the occurrences, losing their IDs
     $topic->setOccurrences([ ]);
     
     foreach ($_REQUEST[ 'occurrences' ] as $occ_arr)
@@ -170,9 +171,14 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
             $occurrence->setScope($scopes);
     }
 
+    // Validate
+    
+    $ok = $topic->validate($msg_html);
+    
     // Save
     
-    $ok = $topic->save();
+    if ($ok >= 0)
+        $ok = $topic->save();
 
     // Associations
     
@@ -230,6 +236,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
         
             $association->setScope($scopes);
     
+            // XXX don't re-add all the roles, losing their IDs
             $association->setRoles([ ]);
     
             foreach ($assoc_arr[ 'roles' ] as $role_arr)
@@ -250,7 +257,10 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
                 $role->setReifier($role_arr[ 'reifier' ]);
             }
         
-            $ok = $association->save();
+            $ok = $association->validate($msg_html);
+            
+            if ($ok >= 0)
+                $ok = $association->save();
         
             if ($ok < 0)
                 break;

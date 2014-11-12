@@ -5,6 +5,69 @@ namespace TopicBank\Utils;
 
 class DatatypeUtils
 {
+    public static function validate(&$value, $datatype, &$error_msg)
+    {
+        $error_msg = '';
+        
+        if (self::isXhtml($datatype))
+        {
+            return self::validateXhtml($value, $datatype, $error_msg);
+        }
+        elseif (self::isXml($datatype))
+        {
+            return self::validateXml($value, $datatype, $error_msg);
+        }
+        
+        return 1;
+    }
+    
+    
+    protected static function validateXhtml(&$value, $datatype, &$error_msg)
+    {
+        // XHTML value can be "hello <i>world</i>", need to wrap it in a div
+        // to validate
+        
+        $xml_value = self::valueToXml($value, $datatype);
+        
+        return self::validateXml($xml_value, $datatype, $error_msg);
+    }
+    
+    
+    protected static function validateXml(&$value, $datatype, &$error_msg)
+    {
+        libxml_use_internal_errors(true);
+    
+        $dom = new \DOMDocument;
+        $dom->loadXML($value);
+        
+        $errors = libxml_get_errors();
+
+        libxml_clear_errors();
+        libxml_use_internal_errors(false);
+        
+        if (count($errors) === 0)
+            return 1;
+            
+        $msgs = [ ];
+        
+        foreach ($errors as $error)
+        {
+            $msgs[ ] = sprintf
+            (
+                'XML error %s: %s, line %s, column %s', 
+                $error->code,
+                trim(strtr($error->message, "\n\r", '  ')),
+                $error->line,
+                $error->column
+            );
+        }
+
+        $error_msg = implode('. ', $msgs);
+    
+        return -1;
+    }
+    
+    
     public static function valueToXml($value, $datatype)
     {
         if (self::isXhtml($datatype))
