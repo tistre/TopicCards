@@ -12,7 +12,7 @@ class XtmExport
     {
         $result = 
             '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
-            . '<topicMap xmlns="http://www.topicmaps.org/xtm/">' . "\n";
+            . '<topicMap xmlns="http://www.topicmaps.org/xtm/" version="2.0">' . "\n";
         
         foreach ($objects as $object)
         {
@@ -203,7 +203,12 @@ class XtmExport
             $result .= $this->exportType($occurrence->getType(), ($indent + 1));
             $result .= $this->exportScope($occurrence->getScope(), ($indent + 1));
             
-            $datatype = $this->topicmap->getTopicRef($occurrence->getDatatype());
+            $datatype = $occurrence->getDatatype();
+            
+            if (strlen($datatype) === 0)
+                $datatype = 'http://www.w3.org/2001/XMLSchema#string';
+                
+            $datatype = $this->topicmap->getTopicRef($datatype);
             
             $result .= sprintf
             (
@@ -228,7 +233,7 @@ class XtmExport
     {
         if (strlen($reifier) === 0)
             return '';
-            
+
         return sprintf
         (
             ' reifier="%s"', 
