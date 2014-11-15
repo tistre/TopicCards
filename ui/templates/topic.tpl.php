@@ -194,20 +194,20 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         
         ?>
 
-        <!-- Description -->
+        <!-- Text -->
 
         <?php        
 
-        if (! isset($tpl[ 'occurrence_type_index' ][ 'description' ]))
-            $tpl[ 'occurrence_type_index' ][ 'description' ] = [ ];
+        if (! isset($tpl[ 'occurrence_type_index' ][ $tpl[ 'id_text' ] ]))
+            $tpl[ 'occurrence_type_index' ][ $tpl[ 'id_text' ] ] = [ ];
 
-        foreach ($tpl[ 'occurrence_type_index' ][ 'description' ] as $key)
+        foreach ($tpl[ 'occurrence_type_index' ][ $tpl[ 'id_text' ] ] as $key)
         {
             $occurrence = $tpl[ 'topic' ][ 'occurrences' ][ $key ];
             
             echo '<div>';
             
-            if ($occurrence[ 'datatype' ] === 'datatype-xhtml')
+            if ($occurrence[ 'datatype' ] === $tpl[ 'id_xhtml' ])
             {
                 echo $occurrence[ 'value' ];
             }
@@ -243,7 +243,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
         foreach ($tpl[ 'occurrence_type_index' ] as $occurrence_type => $keys)
         {
-            if ($occurrence_type === 'description')
+            if ($occurrence_type === $tpl[ 'id_text' ])
                 continue;
                         
             ?>
