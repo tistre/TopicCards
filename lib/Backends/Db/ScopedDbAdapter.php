@@ -34,7 +34,12 @@ trait ScopedDbAdapter
 
         $rows = $sql->fetchAll();
         
-        return array_column($rows, 'scope_scope');
+        $result = [ ];
+        
+        foreach ($rows as $row)
+            $result[ ] = $row[ 'scope_scope' ];
+            
+        return $result;
     }
 
 

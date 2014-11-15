@@ -27,7 +27,7 @@ class DbUtils
             $db_params[ 'dsn' ], 
             $db_params[ 'username' ], 
             $db_params[ 'password' ],
-            $db_params[ 'driver_options' ]
+            (isset($db_params[ 'driver_options' ]) ? $db_params[ 'driver_options' ] : [ ])
         );
 
         $this->services->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
@@ -177,6 +177,9 @@ class DbUtils
         
         if ($ok < 0)
             return $ok;
+
+        $columns = [ ];
+        $bind_params = [ ];
         
         foreach ($values as $key => $value)
         {
@@ -184,14 +187,17 @@ class DbUtils
                 $values[ $key ][ 'bind_param' ] = ':' . $value[ 'column' ];
 
             $values[ $key ] = $this->prepareBindValue($values[ $key ]);
+            
+            $columns[ ] = $values[ $key ][ 'column' ];
+            $bind_params[ ] = $values[ $key ][ 'bind_param' ];
         }
-        
+                
         $sql = $this->services->db->prepare(sprintf
         (
             'insert into %s (%s) values (%s)', 
             $table, 
-            implode(', ', array_column($values, 'column')),
-            implode(', ', array_column($values, 'bind_param'))
+            implode(', ', $columns),
+            implode(', ', $bind_params)
         ));
 
         $this->bindValues($sql, $values);

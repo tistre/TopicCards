@@ -81,7 +81,12 @@ trait TopicDbAdapter
 
         $rows = $sql->fetchAll();
         
-        return array_column($rows, 'type_type');
+        $result = [ ];
+        
+        foreach ($rows as $row)
+            $result[ ] = $row[ 'type_type' ];
+            
+        return $result;
     }    
 
 
@@ -125,7 +130,12 @@ trait TopicDbAdapter
 
         $rows = $sql->fetchAll();
         
-        return array_column($rows, 'subject_value');
+        $result = [ ];
+        
+        foreach ($rows as $row)
+            $result[ ] = $row[ 'subject_value' ];
+            
+        return $result;
     }
 
 
