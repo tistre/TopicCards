@@ -83,18 +83,25 @@ class Topic extends Core implements iTopic
     {
         $result = '';
 
+        // Prefer basename, otherwise use first name without scope
+        
+        $basename = '';
+
         foreach ($this->getNames([ ]) as $name)
         {
-            if ($name->getType() !== 'basename')
-                continue;
-    
             if (count($name->getScope()) > 0)
                 continue;
     
-            $result = $name->getValue();
-            break;
+            if ($name->getType() === 'basename')
+                $basename = $name->getValue();
+
+            if (strlen($result) === 0)    
+                $result = $name->getValue();
         }
-    
+
+        if (strlen($basename) > 0)
+            $result = $basename;
+                
         return $result;
     }
 
