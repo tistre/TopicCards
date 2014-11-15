@@ -78,6 +78,11 @@ trait OccurrenceDbAdapter
                 if ($key === 'scope')
                     continue;
                     
+                // PostgreSQL "serial" does not kick in if we provide an empty value
+                
+                if (($key === 'id') && (strlen($value) === 0))
+                    continue;
+                    
                 $values[ ] =
                 [
                     'column' => 'occurrence_' . $key,
