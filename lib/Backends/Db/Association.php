@@ -81,6 +81,9 @@ class Association extends Core implements \TopicBank\Interfaces\iAssociation
             
         if ($this->getVersion() === 0)
         {
+            if (strlen($this->getId()) === 0)
+                $this->setId($this->getTopicmap()->createId());
+                
             $ok = $this->insertAll($this->getAll());
         }
         else
