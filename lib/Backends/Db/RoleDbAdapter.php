@@ -70,6 +70,11 @@ trait RoleDbAdapter
 
             foreach ($name_data as $key => $value)
             {
+                // PostgreSQL "serial" does not kick in if we provide an empty value
+                
+                if (($key === 'id') && (strlen($value) === 0))
+                    continue;
+                    
                 $values[ ] =
                 [
                     'column' => 'role_' . $key,
