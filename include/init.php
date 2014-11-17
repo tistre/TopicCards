@@ -1,5 +1,7 @@
 <?php
 
+require_once(dirname(__DIR__) . '/vendor/autoload.php');
+
 /**
  * An example of a project-specific implementation.
  * 
