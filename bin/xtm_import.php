@@ -14,11 +14,7 @@ unset($filenames[ 0 ]);
 
 foreach ($filenames as $filename)
 {
-    $xml = file_get_contents($filename);
-
-    $importer = new \TopicBank\Utils\XtmImport();
-    
-    $objects = $importer->importObjects($xml, $topicmap);
+    $objects = new \TopicBank\Utils\XtmReader($filename, $topicmap);
 
     $services->db_utils->beginTransaction();
 
@@ -26,6 +22,9 @@ foreach ($filenames as $filename)
 
     foreach ($objects as $object)
     {
+        if (! is_object($object))
+            continue;
+            
         $ok = $object->save();
         
         printf

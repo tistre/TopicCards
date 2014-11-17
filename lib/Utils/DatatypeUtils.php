@@ -105,30 +105,14 @@ class DatatypeUtils
                 if ($node->tagName !== 'div')
                     continue;
                     
-                $xhtml = $node->ownerDocument->saveXML($node);
-
-                // Hack: saveXML() keeps the surrounding <div> tag, remove it
-            
-                $start  = strpos($xhtml, '>') + 1;
-                $length = strrpos($xhtml, '<') - $start;
-
-                $xhtml = substr($xhtml, $start, $length);
+                $xhtml = self::getNodeXml($node);
             }
             
             return $xhtml;
         }
         elseif (self::isXml($datatype))
         {
-            $xml = $context_node->ownerDocument->saveXML($context_node);
-
-            // Hack: saveXML() keeps the surrounding tag, remove it
-        
-            $start  = strpos($xml, '>') + 1;
-            $length = strrpos($xml, '<') - $start;
-
-            $xml = substr($xml, $start, $length);
-
-            return $xml;
+            return self::getNodeXml($context_node);
         }
         else
         {
@@ -137,6 +121,22 @@ class DatatypeUtils
     }
     
 
+    protected static function getNodeXml(\DOMElement $node)
+    {
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        
+        $node_copy = $dom->importNode($node, true);
+        $dom->appendChild($node_copy);
+
+        $xml = $dom->saveXML($node_copy);
+
+        $start  = strpos($xml, '>') + 1;
+        $length = strrpos($xml, '<') - $start;
+
+        return substr($xml, $start, $length);
+    }
+    
+    
     public static function isXhtml($datatype)
     {
         return ($datatype === 'http://www.w3.org/1999/xhtml');

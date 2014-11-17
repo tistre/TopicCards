@@ -8,10 +8,14 @@ class XtmImport
     protected $topicmap;
     
     
-    public function importObjects($xml, \TopicBank\Interfaces\iTopicMap $topicmap)
+    public function __construct(\TopicBank\Interfaces\iTopicMap $topicmap)
     {
         $this->topicmap = $topicmap;
-        
+    }
+    
+    
+    public function importObjects($xml)
+    {        
         $dom = new \DOMDocument();
         
         $ok = $dom->loadXML($xml);
@@ -40,7 +44,7 @@ class XtmImport
     }
     
     
-    protected function importTopic(\DOMElement $context_node)
+    public function importTopic(\DOMElement $context_node)
     {
         $topic = $this->topicmap->newTopic();
 
@@ -57,7 +61,7 @@ class XtmImport
     }
     
     
-    protected function importAssociation(\DOMElement $context_node)
+    public function importAssociation(\DOMElement $context_node)
     {
         $association = $this->topicmap->newAssociation();
 
