@@ -110,6 +110,7 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     }
     
     
+    // XXX rename to getTopicIds()
     public function getTopics(array $filters)
     {
         return $this->selectTopics($filters);
