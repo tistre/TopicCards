@@ -38,15 +38,51 @@ trait TopicSearchAdapter
     {
         $result = 
         [ 
-            'name' => [ ],
-            'type' => [ ]
+            'label' => $this->getLabel(),
+            'type_id' => [ ] 
         ];
         
-        foreach ($this->getNames([ ]) as $name)
-            $result[ 'name' ][ ] = $name->getValue();
-
         foreach ($this->getTypes([ ]) as $type_id)
-            $result[ 'type' ][ ] = $type_id;
+            $result[ 'type_id' ][ ] = $type_id;
+        
+        foreach ($this->getNames([ ]) as $name)
+        {
+            $search_fields = $this->getSearchFieldsByType($name->getType());
+            
+            foreach ($search_fields as $search_field)
+            {
+                if (! isset($result[ $search_field ]))
+                    $result[ $search_field ] = [ ];
+                    
+                $result[ $search_field ][ ] = $name->getValue();
+            }
+        }
+
+        // XXX add occurrences here
+        
+        return $result;
+    }
+    
+    
+    protected function getSearchFieldsByType($type_id)
+    {
+        static $search_field_type = false;
+        
+        if ($search_field_type === false)
+            $search_field_type = $this->topicmap->getTopicBySubjectIdentifier('http://www.strehle.de/schema/searchField');
+        
+        $type_topic = $this->topicmap->newTopic();
+        $type_topic->load($type_id);
+        
+        $result = [ ];
+        
+        foreach ($type_topic->getNames([ ]) as $name)
+        {
+            if ($name->getType() !== $search_field_type)
+                continue;
+                
+            $result[ ] = $name->getValue();
+        }
         
         return $result;
     }

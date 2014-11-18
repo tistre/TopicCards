@@ -23,15 +23,21 @@ $type_query = '';
 if (isset($_REQUEST[ 'type' ]))
     $type_query = $_REQUEST[ 'type' ];
 
-$query = [ 'match' => [ ] ];
+$query = 
+[ 
+    'size' => 20,
+    // XXX must set up label.raw for sorting to work correctly, see
+    // http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/multi-fields.html
+    'sort' => 'label'
+];
 
 if (strlen($fulltext_query) > 0)
-    $query[ 'match' ][ 'name' ] = $fulltext_query;
+    $query[ 'query' ][ 'filtered' ][ 'query' ][ 'match' ][ 'name' ] = $fulltext_query;
 
 if (strlen($type_query) > 0)
-    $query[ 'match' ][ 'type' ] = $type_query;
-
-$topic_ids = [ ];
+    $query[ 'query' ][ 'filtered' ][ 'filter' ][ 'term' ][ 'type_id' ] = $type_query;
+    
+$response = [ ];
     
 $services->search_utils->init();
 
@@ -41,11 +47,8 @@ try
     (
         'index' => $topicmap->getSearchIndex(),
         'type' => 'topic',
-        'body' => [ 'query' => $query ]
+        'body' => $query
     ));
-
-    foreach ($response[ 'hits' ][ 'hits' ] as $hit)
-        $topic_ids[ ] = $hit[ '_id' ];
 }
 catch (\Exception $e)
 {
@@ -56,31 +59,26 @@ $tpl[ 'fulltext_query' ] = $fulltext_query;
 
 $tpl[ 'topics' ] = [ ];
 
-foreach ($topic_ids as $id)
+foreach ($response[ 'hits' ][ 'hits' ] as $hit)
 {
-    $topic = $topicmap->newTopic();
-    $topic->load($id);
-    
     $types = [ ];
     
-    foreach ($topic->getTypes() as $type)
+    foreach ($hit[ '_source' ][ 'type_id' ] as $type)
         $types[ ] = $topicmap->getTopicLabel($type);
 
-    $label = $topic->getLabel();
+    $label = $hit[ '_source' ][ 'label' ];
     
     if (strlen($label) === 0)
-        $label = $topic->getId();
+        $label = $hit[ '_id' ];
 
     $tpl[ 'topics' ][ ] = 
     [
-        'id' => $id,
+        'id' => $hit[ '_id' ],
         'label' => $label,
         'type' => implode(', ', $types),
-        'url' => sprintf('%stopic/%s', TOPICBANK_BASE_URL, $id)
+        'url' => sprintf('%stopic/%s', TOPICBANK_BASE_URL, $hit[ '_id' ])
     ];
 }
-
-TopicBank\Utils\StringUtils::usortByKey($tpl[ 'topics' ], 'label');
 
 $tpl[ 'topic_types' ] = [ ];
 
