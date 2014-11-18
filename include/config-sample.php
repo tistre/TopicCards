@@ -8,6 +8,8 @@ $db_params =
     'driver_options' => [ \PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION sql_mode='STRICT_ALL_TABLES'" ]
 ];
 
+$search_params = [ ];
+
 define('TOPICBANK_BASE_DIR', dirname(__DIR__));
 define('TOPICBANK_BASE_URL', '/topicbank/');
 define('TOPICBANK_STATIC_BASE_URL', '/topicbank_static/');
@@ -19,8 +21,9 @@ $services->setDbParams($db_params);
 
 $topicmap = $services->getTopicMapSystem()->newTopicMap('default');
 $topicmap->setUrl('http://example.com/topicmaps/topicbank');
-$topicmap->setUrl('topicbank');
+$topicmap->setDbTablePrefix('topicbank_');
+$topicmap->setSearchIndex('topicbank');
 
 $config_topicmap = $services->getTopicMapSystem()->newTopicMap('config');
 $config_topicmap->setUrl('http://example.com/topicmaps/topicbank_config');
-$config_topicmap->setUrl('topicbank_config');
+$config_topicmap->setDbTablePrefix('topicbank_config_');

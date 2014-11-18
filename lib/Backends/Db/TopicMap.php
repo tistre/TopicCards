@@ -10,6 +10,7 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     protected $url;
     protected $services;
     protected $db_table_prefix;
+    protected $search_index;
     
 
     public function __construct(\TopicBank\Interfaces\iServices $services)
@@ -49,6 +50,20 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     public function getDbTablePrefix()
     {
         return $this->db_table_prefix;
+    }
+    
+    
+    public function setSearchIndex($index)
+    {
+        $this->search_index = $index;
+        
+        return 1;
+    }
+    
+    
+    public function getSearchIndex()
+    {
+        return $this->search_index;
     }
     
     

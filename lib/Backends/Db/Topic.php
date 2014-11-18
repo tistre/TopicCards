@@ -7,7 +7,7 @@ use \TopicBank\Interfaces\iTopic;
 
 class Topic extends Core implements iTopic
 {
-    use Id, Persistent, TopicDbAdapter;
+    use Id, Persistent, TopicDbAdapter, TopicSearchAdapter;
     
     protected $subject_identifiers = [ ];
     protected $subject_locators = [ ];
@@ -206,6 +206,9 @@ class Topic extends Core implements iTopic
             
         if ($this->getVersion() === 0)
         {
+            if (strlen($this->getId()) === 0)
+                $this->setId($this->getTopicmap()->createId());
+                
             $ok = $this->insertAll($this->getAll());
         }
         else
@@ -214,7 +217,11 @@ class Topic extends Core implements iTopic
         }
             
         if ($ok >= 0)
+        {
             $this->setVersion($this->getVersion() + 1);
+            
+            $this->index();
+        }
         
         return $ok;
     }
