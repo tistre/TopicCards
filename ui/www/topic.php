@@ -199,6 +199,7 @@ include TOPICBANK_BASE_DIR . '/ui/templates/topic.tpl.php';
 // Add to "recent" list
 // XXX work in progress
 
+/*
 if ($services->getTopicMapSystem()->hasTopicMap('config'))
 {
     $recent_entry = $services->getTopicMapSystem()->getTopicMap('config')->newTopic();
@@ -207,3 +208,4 @@ if ($services->getTopicMapSystem()->hasTopicMap('config'))
 
     $recent_entry->save();
 }
+*/
