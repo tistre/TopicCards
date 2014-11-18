@@ -17,17 +17,40 @@ $fulltext_query = '';
 
 if (isset($_REQUEST[ 'q' ]))
     $fulltext_query = $_REQUEST[ 'q' ];
-    
-$filter = [ 'name_like' => '', 'type' => '' ];
 
-if (strlen($fulltext_query) > 0)
-    $filter[ 'name_like' ] = '%' . $fulltext_query . '%';
+$type_query = '';
 
 if (isset($_REQUEST[ 'type' ]))
-    $filter[ 'type' ] = $_REQUEST[ 'type' ];
-    
-$topic_ids = $topicmap->getTopics($filter);
+    $type_query = $_REQUEST[ 'type' ];
 
+$query = [ 'match' => [ ] ];
+
+if (strlen($fulltext_query) > 0)
+    $query[ 'match' ][ 'name' ] = $fulltext_query;
+
+if (strlen($type_query) > 0)
+    $query[ 'match' ][ 'type' ] = $type_query;
+
+$topic_ids = [ ];
+    
+$services->search_utils->init();
+
+try
+{
+    $response = $services->search->search(array
+    (
+        'index' => $topicmap->getSearchIndex(),
+        'type' => 'topic',
+        'body' => [ 'query' => $query ]
+    ));
+
+    foreach ($response[ 'hits' ][ 'hits' ] as $hit)
+        $topic_ids[ ] = $hit[ '_id' ];
+}
+catch (\Exception $e)
+{
+    trigger_error(sprintf("%s: %s", __METHOD__, $e->getMessage()), E_USER_WARNING);
+}
 
 $tpl[ 'fulltext_query' ] = $fulltext_query;
 
@@ -67,7 +90,7 @@ foreach ($topicmap->getTopicTypes([ 'get_mode' => 'all' ]) as $id)
     [
         'id' => $id,
         'label' => $topicmap->getTopicLabel($id),
-        'selected' => ($id === $filter[ 'type' ])
+        'selected' => ($id === $type_query)
     ];
 }
 

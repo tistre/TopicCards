@@ -7,23 +7,28 @@ namespace TopicBank\Backends\Db;
 
 trait TopicSearchAdapter
 {
-    protected function index()
+    public function index()
     {
         $ok = $this->services->search_utils->init();
         
         if ($ok < 0)
             return $ok;
 
-        $response = $this->services->search->index(array
-        (
-            'index' => $this->topicmap->getSearchIndex(),
-            'type' => 'topic',
-            'id' => $this->getId(),
-            'body' => $this->getIndexFields()
-        ));
-        
-        if (! $response[ 'created' ])
+        try
+        {
+            $response = $this->services->search->index(array
+            (
+                'index' => $this->topicmap->getSearchIndex(),
+                'type' => 'topic',
+                'id' => $this->getId(),
+                'body' => $this->getIndexFields()
+            ));
+        }
+        catch (\Exception $e)
+        {
+            trigger_error(sprintf("%s: %s", __METHOD__, $e->getMessage()), E_USER_WARNING);
             return -1;
+        }
         
         return 1;
     }
@@ -31,14 +36,23 @@ trait TopicSearchAdapter
     
     protected function getIndexFields()
     {
-        return
-        [
-            'name' => $this->getLabel()
+        $result = 
+        [ 
+            'name' => [ ],
+            'type' => [ ]
         ];
+        
+        foreach ($this->getNames([ ]) as $name)
+            $result[ 'name' ][ ] = $name->getValue();
+
+        foreach ($this->getTypes([ ]) as $type_id)
+            $result[ 'type' ][ ] = $type_id;
+        
+        return $result;
     }
     
     
-    public function getIndexData()
+    public function getIndexedData()
     {
         $ok = $this->services->search_utils->init();
         
