@@ -54,7 +54,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         </div>
 
         <div class="form-group">
-          <select name="type" size="1" onchange="document.forms.main_searchform.submit()" class="form-control">
+          <select name="type" size="1" class="form-control">
             <option value="">All types</option>
             <?php foreach ($tpl[ 'topic_types' ] as $topic_arr) { ?>
             <option value="<?=htmlspecialchars($topic_arr[ 'id' ])?>" <?=($topic_arr[ 'selected' ] ? 'selected="selected"' : '')?>><?=htmlspecialchars($topic_arr[ 'label' ])?></option>
@@ -112,17 +112,28 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     $(document).ready(function() 
     {
         var _private = { };
+        
+        _private.$search_form = $('#main_searchform');
+        _private.$page_num_input = _private.$search_form.find('input[name="p"]');
+        
 
         $('button[data-topicbank_event="go_to_page"]').on('click', function(e)
         {
-            var $search_form;
-
-            $search_form = $('#main_searchform');
-                        
-            $search_form.find('input[name="p"]').val($(e.currentTarget).data('topicbank_page_num'));
+            _private.$page_num_input.val($(e.currentTarget).data('topicbank_page_num'));
             
-            $search_form.submit();
+            _private.$search_form.submit();
         });  
+        
+        
+        _private.$search_form.on('change', ':input', function(e)
+        {
+            _private.$page_num_input.val('1');
+            
+            if ($(e.currentTarget).attr('name') === 'type')
+            {
+                _private.$search_form.submit();
+            }
+        });
     });
         
     // ]]>
