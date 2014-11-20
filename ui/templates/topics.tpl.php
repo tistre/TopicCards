@@ -65,6 +65,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         <input type="hidden" name="p" value="<?=htmlspecialchars($tpl[ 'page_num' ])?>" />
       
         <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Search</button>
+        
+        <a href="<?=$tpl[ 'topicbank_base_url' ]?>topics">Reset</a>
 
       </form>
       
