@@ -981,7 +981,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
         $('#topicbank_form_edit').on('click', 'a[data-topicbank_event="submit_reify_form"]', function(e)
         {
-            var $reify_dialog, $dialog_body, data;
+            var $reify_form, $dialog_body, data;
 
             $reify_form = $('#reify_form');
                         
