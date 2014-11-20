@@ -23,7 +23,7 @@ $type_query = '';
 if (isset($_REQUEST[ 'type' ]))
     $type_query = $_REQUEST[ 'type' ];
 
-$page_size = 20;
+$page_size = 50;
 $page_num = 1;
 
 if (isset($_REQUEST[ 'p' ]))
