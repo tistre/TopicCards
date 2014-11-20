@@ -35,9 +35,7 @@ $query =
 [ 
     'size' => $page_size,
     'from' => ($page_size * ($page_num - 1)),
-    // XXX must set up label.raw for sorting to work correctly, see
-    // http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/multi-fields.html
-    'sort' => 'label'
+    'sort' => 'label.raw'
 ];
 
 if (strlen($fulltext_query) > 0)
