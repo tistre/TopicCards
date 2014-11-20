@@ -1,5 +1,16 @@
 <?php
 
+function button_go_to_page(array $params)
+{
+    ?>
+    
+    <button class="btn btn-default" data-topicbank_event="go_to_page" data-topicbank_page_num="<?=htmlspecialchars($params[ 'page_num' ])?>" type="button">
+      <?=htmlspecialchars($params[ 'label' ])?>
+    </button>
+
+    <?php
+}
+
 header('Content-Type: application/xhtml+xml; charset=UTF-8');
 
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
@@ -36,7 +47,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
       <h1>Search</h1>
 
-      <form class="form-inline" role="search" action="" method="GET" name="main_searchform">
+      <form class="form-inline" role="search" action="" method="GET" name="main_searchform" id="main_searchform">
     
         <div class="form-group">
           <input name="q" type="text" value="<?=htmlspecialchars($tpl[ 'fulltext_query' ])?>" autofocus="autofocus" class="form-control" />
@@ -51,9 +62,22 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
           </select>
         </div>
       
+        <input type="hidden" name="p" value="<?=htmlspecialchars($tpl[ 'page_num' ])?>" />
+      
         <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Search</button>
 
       </form>
+      
+      <div>
+        <?=$tpl[ 'total_hits' ]?> topics found.
+      </div>
+      <div>
+        <?php button_go_to_page($tpl[ 'pages' ][ 'first' ]); ?>
+        <?php button_go_to_page($tpl[ 'pages' ][ 'previous' ]); ?>
+        <?=htmlspecialchars($tpl[ 'page_num' ])?>
+        <?php button_go_to_page($tpl[ 'pages' ][ 'next' ]); ?>
+        <?php button_go_to_page($tpl[ 'pages' ][ 'last' ]); ?>
+      </div>
       
       <div>
     
@@ -78,6 +102,31 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
     <script src="<?=$tpl[ 'topicbank_static_base_url' ]?>jquery.min.js"></script>
     <script src="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/js/bootstrap.min.js"></script>
+
+    <script>
+    // <![CDATA[
+    
+    var topicbank_base_url = '<?=$tpl[ 'topicbank_base_url' ]?>';
+    var topicbank_static_base_url = '<?=$tpl[ 'topicbank_static_base_url' ]?>';
+    
+    $(document).ready(function() 
+    {
+        var _private = { };
+
+        $('button[data-topicbank_event="go_to_page"]').on('click', function(e)
+        {
+            var $search_form;
+
+            $search_form = $('#main_searchform');
+                        
+            $search_form.find('input[name="p"]').val($(e.currentTarget).data('topicbank_page_num'));
+            
+            $search_form.submit();
+        });  
+    });
+        
+    // ]]>
+    </script>
 
   </body>
 </html>

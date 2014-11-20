@@ -23,9 +23,18 @@ $type_query = '';
 if (isset($_REQUEST[ 'type' ]))
     $type_query = $_REQUEST[ 'type' ];
 
+$page_size = 20;
+$page_num = 1;
+
+if (isset($_REQUEST[ 'p' ]))
+    $page_num = max($page_num, intval($_REQUEST[ 'p' ]));
+
+$tpl[ 'page_num' ] = $page_num;
+
 $query = 
 [ 
-    'size' => 20,
+    'size' => $page_size,
+    'from' => ($page_size * ($page_num - 1)),
     // XXX must set up label.raw for sorting to work correctly, see
     // http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/multi-fields.html
     'sort' => 'label'
@@ -79,6 +88,34 @@ foreach ($response[ 'hits' ][ 'hits' ] as $hit)
         'url' => sprintf('%stopic/%s', TOPICBANK_BASE_URL, $hit[ '_id' ])
     ];
 }
+
+$tpl[ 'total_hits' ] = $response[ 'hits' ][ 'total' ];
+
+$last_page = intval(ceil($response[ 'hits' ][ 'total' ] / $page_size));
+
+$tpl[ 'pages' ] = 
+[
+    'first' => 
+    [
+        'page_num' => 1,
+        'label' => '<<'
+    ],
+    'previous' => 
+    [
+        'page_num' => max(1, ($page_num - 1)),
+        'label' => '<'
+    ],
+    'next' =>
+    [
+        'page_num' => min($last_page, ($page_num + 1)),
+        'label' => '>'
+    ],
+    'last' => 
+    [
+        'page_num' => $last_page,
+        'label' => '>>'
+    ]
+];
 
 $tpl[ 'topic_types' ] = [ ];
 
