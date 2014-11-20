@@ -11,6 +11,21 @@ function button_go_to_page(array $params)
     <?php
 }
 
+function pagination(array $tpl)
+{
+    ?>
+    
+    <div>
+      <?php button_go_to_page($tpl[ 'pages' ][ 'first' ]); ?>
+      <?php button_go_to_page($tpl[ 'pages' ][ 'previous' ]); ?>
+      <?=htmlspecialchars($tpl[ 'page_num' ])?>
+      <?php button_go_to_page($tpl[ 'pages' ][ 'next' ]); ?>
+      <?php button_go_to_page($tpl[ 'pages' ][ 'last' ]); ?>
+    </div>
+    
+    <?php
+}
+
 header('Content-Type: application/xhtml+xml; charset=UTF-8');
 
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
@@ -73,13 +88,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
       <div>
         <?=$tpl[ 'total_hits' ]?> topics found.
       </div>
-      <div>
-        <?php button_go_to_page($tpl[ 'pages' ][ 'first' ]); ?>
-        <?php button_go_to_page($tpl[ 'pages' ][ 'previous' ]); ?>
-        <?=htmlspecialchars($tpl[ 'page_num' ])?>
-        <?php button_go_to_page($tpl[ 'pages' ][ 'next' ]); ?>
-        <?php button_go_to_page($tpl[ 'pages' ][ 'last' ]); ?>
-      </div>
+      
+      <?php pagination($tpl); ?>
       
       <div>
     
@@ -95,6 +105,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
       <?php } ?>
       
       </div>
+
+      <?php pagination($tpl); ?>
 
       <div class="footer">
         <p>TopicBank 0.1 by Tim Strehle</p>
