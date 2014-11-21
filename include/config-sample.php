@@ -8,11 +8,8 @@ $db_params =
     'driver_options' => [ \PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION sql_mode='STRICT_ALL_TABLES'" ]
 ];
 
-$search_params = [ ];
-
 define('TOPICBANK_BASE_DIR', dirname(__DIR__));
 define('TOPICBANK_BASE_URL', '/topicbank/');
-define('TOPICBANK_STATIC_BASE_URL', '/topicbank_static/');
 
 require_once TOPICBANK_BASE_DIR . '/include/init.php';
 

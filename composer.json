@@ -1,5 +1,8 @@
 {
-    "require": {
-        "elasticsearch/elasticsearch": "~1.0"
+    "require": 
+    {
+        "components/jquery": "~2.1",
+        "elasticsearch/elasticsearch": "~1.0",
+        "twbs/bootstrap": "~3.3"
     }
 }

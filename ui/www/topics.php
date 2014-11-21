@@ -7,7 +7,6 @@ require_once dirname(dirname(__DIR__)) . '/include/config.php';
 $tpl = [ ];
 
 $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
-$tpl[ 'topicbank_static_base_url' ] = TOPICBANK_STATIC_BASE_URL;
 
 $tpl[ 'topicmap' ] = [ ];
 $tpl[ 'topicmap' ][ 'label' ] = $topicmap->getTopicLabel($topicmap->getReifier());

@@ -100,7 +100,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/assets/ico/favicon.ico" />
+    <link rel="shortcut icon" href="<?=$tpl[ 'topicbank_base_url' ]?>bootstrap/assets/ico/favicon.ico" />
 
     <title>
       <?=htmlspecialchars($tpl[ 'topic' ][ 'label' ])?> | 
@@ -108,10 +108,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     </title>
 
     <!-- Bootstrap core CSS -->
-    <link href="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="<?=$tpl[ 'topicbank_base_url' ]?>bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- Custom styles for this template -->
-    <link href="<?=$tpl[ 'topicbank_static_base_url' ]?>topicbank.css" rel="stylesheet" />
+    <link href="<?=$tpl[ 'topicbank_base_url' ]?>static/topicbank.css" rel="stylesheet" />
 
   </head>
 
@@ -784,14 +784,13 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     
     </div> <!-- /container -->
     
-    <script src="<?=$tpl[ 'topicbank_static_base_url' ]?>jquery.min.js"></script>
-    <script src="<?=$tpl[ 'topicbank_static_base_url' ]?>bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?=$tpl[ 'topicbank_base_url' ]?>jquery/jquery.min.js"></script>
+    <script src="<?=$tpl[ 'topicbank_base_url' ]?>bootstrap/js/bootstrap.min.js"></script>
     
     <script>
     // <![CDATA[
     
     var topicbank_base_url = '<?=$tpl[ 'topicbank_base_url' ]?>';
-    var topicbank_static_base_url = '<?=$tpl[ 'topicbank_static_base_url' ]?>';
     
     $(document).ready(function() 
     {

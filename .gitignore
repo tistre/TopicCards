@@ -1,3 +1,9 @@
-#composer related
+# Config files
+
+include/config.php
+
+# Composer related
+
+components/
 composer.phar
 vendor/

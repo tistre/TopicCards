@@ -5,7 +5,6 @@ require_once dirname(dirname(__DIR__)) . '/include/config.php';
 $tpl = [ ];
 
 $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
-$tpl[ 'topicbank_static_base_url' ] = TOPICBANK_STATIC_BASE_URL;
 
 $name_like = '%' . $_REQUEST[ 'name' ] . '%';
 $type = $_REQUEST[ 'type' ];
