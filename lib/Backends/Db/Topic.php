@@ -300,10 +300,19 @@ class Topic extends Core implements iTopic
     {
         if ($this->getVersion() === 0)
             return 0;
+
+        $this->removeFromIndex();
         
         // XXX to be implemented: if this topic is a reifier, empty
         // the reifier property in the reifying object
         
-        return $this->deleteById($this->getId(), $this->getVersion());
+        $ok = $this->deleteById($this->getId(), $this->getVersion());
+        
+        // Sort of manual rollback: If deletion failed, re-add to index
+        
+        if ($ok < 0)
+            $this->index();
+            
+        return $ok;
     }
 }

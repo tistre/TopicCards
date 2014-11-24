@@ -34,6 +34,32 @@ trait TopicSearchAdapter
     }
     
     
+    public function removeFromIndex()
+    {
+        $ok = $this->services->search_utils->init();
+        
+        if ($ok < 0)
+            return $ok;
+
+        try
+        {
+            $response = $this->services->search->delete(array
+            (
+                'index' => $this->topicmap->getSearchIndex(),
+                'type' => 'topic',
+                'id' => $this->getId()
+            ));
+        }
+        catch (\Exception $e)
+        {
+            trigger_error(sprintf("%s: %s", __METHOD__, $e->getMessage()), E_USER_WARNING);
+            return -1;
+        }
+        
+        return 1;
+    }
+
+    
     protected function getIndexFields()
     {
         $result = 
