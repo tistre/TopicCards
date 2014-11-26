@@ -105,7 +105,7 @@ if (in_array('-', $ids, true))
 }
 else
 {
-    foreach ($ids as $topic_id)
+    foreach ($ids as $id)
     {
         deleteObject($id);
     }
