@@ -303,7 +303,16 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         ?>
         </table>
         
-        <p><a href="<?=htmlspecialchars($tpl[ 'edit_url' ])?>" class="btn btn-default pull-right">Edit</a></p>
+        <p>
+        
+          <a href="<?=htmlspecialchars($tpl[ 'edit_url' ])?>" class="btn btn-default pull-right">Edit</a>
+          
+          <form method="POST" action="<?=htmlspecialchars($tpl[ 'delete_url' ])?>" style="padding-right: 20px;">
+            <button type="submit" class="btn btn-link pull-right" onclick="return confirm('Delete this topic?');">Delete</button>
+            <input type="hidden" name="delete" value="1" />
+          </form>
+          
+        </p>
         
       </div>
 

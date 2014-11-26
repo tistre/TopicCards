@@ -179,6 +179,7 @@ if (strlen($topic_id) === 0)
     $topic_id = $topic_identifier_or_id;
 
 $tpl[ 'edit_url' ] = sprintf('%sedit_topic/%s', TOPICBANK_BASE_URL, $topic_id);
+$tpl[ 'delete_url' ] = sprintf('%sdelete_topic/%s', TOPICBANK_BASE_URL, $topic_id);
 
 $tpl[ 'id_text' ] = $topicmap->getTopicBySubjectIdentifier('http://schema.org/text');
 $tpl[ 'id_xhtml' ] = $topicmap->getTopicBySubjectIdentifier('http://www.w3.org/1999/xhtml');
