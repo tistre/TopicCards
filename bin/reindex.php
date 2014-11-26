@@ -1,9 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('error_log', false);
-ini_set('display_errors', 'stderr');
-
 require_once dirname(__DIR__) . '/include/config.php';
 
 $services->search_utils->init();

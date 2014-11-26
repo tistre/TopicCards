@@ -1,5 +1,12 @@
 <?php
 
+if (PHP_SAPI === 'cli')
+{   
+    error_reporting(E_ALL);
+    ini_set('error_log', false);
+    ini_set('display_errors', 'stderr');
+}
+
 $db_params =
 [
     'dsn' => 'mysql:host=localhost;dbname=topicbank_test;charset=utf8mb4', 
