@@ -6,6 +6,7 @@ namespace TopicBank\Utils;
 class XtmImport
 {
     protected $topicmap;
+    protected $generated_guids = [ ];
     
     
     public function __construct(\TopicBank\Interfaces\iTopicMap $topicmap)
@@ -49,7 +50,7 @@ class XtmImport
         $topic = $this->topicmap->newTopic();
 
         if ($context_node->hasAttribute('id'))
-            $topic->setId($context_node->getAttribute('id'));
+            $topic->setId($this->generateGuid($context_node->getAttribute('id')));
 
         $this->importTypes($context_node, $topic);
         $this->importSubjectIdentifiers($context_node, $topic);
@@ -66,7 +67,7 @@ class XtmImport
         $association = $this->topicmap->newAssociation();
 
         if ($context_node->hasAttribute('id'))
-            $association->setId($context_node->getAttribute('id'));
+            $association->setId($this->generateGuid($context_node->getAttribute('id')));
 
         if ($context_node->hasAttribute('reifier'))
             $association->setReifier($this->topicRefToId($context_node->getAttribute('reifier')));
@@ -266,6 +267,7 @@ class XtmImport
         
         if ($topic_ref[ 0 ] === '#')
         {
+            $topic_ref = $this->generateGuid($topic_ref);
             return substr($topic_ref, 1);
         }
         else
@@ -273,4 +275,32 @@ class XtmImport
             return $this->topicmap->getTopicBySubjectIdentifier($topic_ref);
         }
     }
+    
+    
+    protected function generateGuid($id)
+    {
+        // #topicbank-generate-uuid:idm38524599744 => 7b1931ef-d101-4a7b-81de-b174ab7872df
+        // topicbank-generate-uuid:idm38524599744 => 7b1931ef-d101-4a7b-81de-b174ab7872df
+
+        if (strlen($id) === 0)
+            return $id;
+        
+        $prefix = '';
+        
+        if ($id[ 0 ] === '#')
+        {
+            $prefix = '#';
+            $id = substr($id, 1);
+        }
+        
+        if (substr($id, 0, 24) !== 'topicbank-generate-uuid:')
+            return $prefix . $id;
+
+        $key = substr($id, 24);
+        
+        if (! isset($this->generated_guids[ $key ]))
+            $this->generated_guids[ $key ] = $this->topicmap->createId();
+
+        return $prefix . $this->generated_guids[ $key ];
+    }    
 }
