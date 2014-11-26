@@ -25,7 +25,7 @@ foreach ($filenames as $filename)
         
         printf
         (
-            "%s: %s <%s> (%s)\n",
+            "%s: Created %s <%s> (%s)\n",
             $filename,
             ($object instanceof \TopicBank\Interfaces\iTopic ? 'topic' : 'association'),
             $object->getId(),
