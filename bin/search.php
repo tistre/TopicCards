@@ -1,13 +1,27 @@
 <?php
 
+use Ulrichsg\Getopt\Getopt;
+use Ulrichsg\Getopt\Option;
+
 require_once dirname(__DIR__) . '/include/config.php';
 
-$page_size = 20;
-$qstring = $argv[ 1 ];
+$getopt = new Getopt(
+[
+    new Option('l', 'limit', Getopt::REQUIRED_ARGUMENT)
+]);
+
+$getopt->parse();
+
+$limit = 20;
+
+if ($getopt[ 'limit' ])
+    $limit = $getopt[ 'limit' ];
+    
+$qstring = $getopt->getOperand(0);
 
 $query = 
 [ 
-    'size' => $page_size,
+    'size' => $limit,
     'query' => [ 'query_string' => [ 'query' => $qstring ] ]
 ];
 
