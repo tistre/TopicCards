@@ -1,17 +1,20 @@
 <?php
 
+use Ulrichsg\Getopt\Getopt;
+use Ulrichsg\Getopt\Option;
+
 require_once dirname(__DIR__) . '/include/config.php';
 
 
 function deleteObject($id)
 {
-    global $options;
+    global $getopt;
     
-    if ($options[ 'topics' ])
+    if ($getopt[ 'topics' ])
     {
         deleteTopic($id);
     }
-    elseif ($options[ 'associations' ])
+    elseif ($getopt[ 'associations' ])
     {
         deleteAssociation($id);
     }
@@ -21,12 +24,12 @@ function deleteObject($id)
 function deleteTopic($topic_id)
 {
     global $topicmap;
-    global $options;
+    global $getopt;
     
     $topic = $topicmap->newTopic();
     $topic->load($topic_id);
     
-    if ($options[ 'with-associations' ])
+    if ($getopt[ 'with_associations' ])
     {
         foreach ($topicmap->getAssociations([ 'role_player' => $topic_id ]) as $association_id)
             deleteAssociation($association_id);
@@ -41,7 +44,7 @@ function deleteTopic($topic_id)
 function deleteAssociation($association_id)
 {
     global $topicmap;
-    global $options;
+    global $getopt;
     
     $association = $topicmap->newAssociation();
     $reifier = $topicmap->newTopic();
@@ -54,7 +57,7 @@ function deleteAssociation($association_id)
             
     printf("Deleted association <%s> (%s)\n", $association_id, $ok);
         
-    if ($options[ 'with-reifiers' ] && (strlen($reifier_id) > 0))
+    if ($getopt[ 'with_reifiers' ] && (strlen($reifier_id) > 0))
     {
         $reifier->load($reifier_id);
 
@@ -65,33 +68,26 @@ function deleteAssociation($association_id)
 }
 
 
-// XXX use proper CLI argument parser
-
-$ids = [ ];
-
-$options = 
+$getopt = new Getopt(
 [
-    'topics' => false,
-    'associations' => false,
-    'with-associations' => false,
-    'with-reifiers' => false
-];
+    new Option(null, 'topics'),
+    new Option(null, 'associations'),
+    new Option(null, 'with_associations'),
+    new Option(null, 'with_reifiers'),
+    new Option('h', 'help')
+]);
 
-foreach ($argv as $i => $arg)
+$getopt->parse();
+
+if ($getopt[ 'help' ])
 {
-    if ($i === 0)
-        continue;
-
-    if (substr($arg, 0, 2) === '--')
-    {
-        $options[ substr($arg, 2) ] = true;
-        continue;
-    }
-
-    $ids[ ] = $arg;
+    $getopt->setBanner("\nTopicBank topic/association deletion\n\n");
+    
+    echo $getopt->getHelpText();
+    exit;
 }
 
-if (in_array('-', $ids, true))
+if ($getopt->getOperand(0) === '-')
 {
     while (! feof(STDIN))
     {
@@ -105,7 +101,7 @@ if (in_array('-', $ids, true))
 }
 else
 {
-    foreach ($ids as $id)
+    foreach ($getopt->getOperands() as $id)
     {
         deleteObject($id);
     }

@@ -7,10 +7,19 @@ require_once dirname(__DIR__) . '/include/config.php';
 
 $getopt = new Getopt(
 [
-    new Option('l', 'limit', Getopt::REQUIRED_ARGUMENT)
+    new Option('l', 'limit', Getopt::REQUIRED_ARGUMENT),
+    new Option('h', 'help')
 ]);
 
 $getopt->parse();
+
+if ($getopt[ 'help' ])
+{
+    $getopt->setBanner("\nTopicBank topic search, using Elasticsearch\n\n");
+    
+    echo $getopt->getHelpText();
+    exit;
+}
 
 $limit = 20;
 
