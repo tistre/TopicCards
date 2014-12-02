@@ -1,17 +1,20 @@
 <?php
 
+use Ulrichsg\Getopt\Getopt;
+use Ulrichsg\Getopt\Option;
+
 require_once dirname(__DIR__) . '/include/config.php';
 
 
 function addObject($id)
 {
-    global $options;
+    global $getopt;
     
-    if ($options[ 'topics' ])
+    if ($getopt[ 'topics' ])
     {
         addTopic($id);
     }
-    elseif ($options[ 'associations' ])
+    elseif ($getopt[ 'associations' ])
     {
         addAssociation($id);
     }
@@ -21,7 +24,7 @@ function addObject($id)
 function addTopic($topic_id)
 {
     global $topicmap;
-    global $options;
+    global $getopt;
     global $objects;
     
     $topic = $topicmap->newTopic();
@@ -29,7 +32,7 @@ function addTopic($topic_id)
 
     $objects[ ] = $topic;
     
-    if ($options[ 'with-associations' ])
+    if ($getopt[ 'with_associations' ])
     {
         foreach ($topicmap->getAssociations([ 'role_player' => $topic_id ]) as $association_id)
             addAssociation($association_id);
@@ -40,7 +43,7 @@ function addTopic($topic_id)
 function addAssociation($association_id)
 {
     global $topicmap;
-    global $options;
+    global $getopt;
     global $objects;
     
     $association = $topicmap->newAssociation();
@@ -50,7 +53,7 @@ function addAssociation($association_id)
         
     $reifier_id = $association->getReifier();
  
-    if ($options[ 'with-reifiers' ] && (strlen($reifier_id) > 0))
+    if ($getopt[ 'with_reifiers' ] && (strlen($reifier_id) > 0))
     {
         $reifier->load($reifier_id);
 
@@ -61,35 +64,28 @@ function addAssociation($association_id)
 }
 
 
-// XXX use proper CLI argument parser
-
-$ids = [ ];
-
-$options = 
+$getopt = new Getopt(
 [
-    'topics' => false,
-    'associations' => false,
-    'with-associations' => false,
-    'with-reifiers' => false
-];
+    new Option(null, 'topics'),
+    new Option(null, 'associations'),
+    new Option(null, 'with_associations'),
+    new Option(null, 'with_reifiers'),
+    new Option('h', 'help')
+]);
 
-foreach ($argv as $i => $arg)
+$getopt->parse();
+
+if ($getopt[ 'help' ])
 {
-    if ($i === 0)
-        continue;
-
-    if (substr($arg, 0, 2) === '--')
-    {
-        $options[ substr($arg, 2) ] = true;
-        continue;
-    }
-
-    $ids[ ] = $arg;
+    $getopt->setBanner("\nTopicBank XTM export\n\n");
+    
+    echo $getopt->getHelpText();
+    exit;
 }
 
 $objects = [ ];
 
-if (in_array('-', $ids, true))
+if ($getopt->getOperand(0) === '-')
 {
     while (! feof(STDIN))
     {
@@ -103,7 +99,7 @@ if (in_array('-', $ids, true))
 }
 else
 {
-    foreach ($ids as $id)
+    foreach ($getopt->getOperands() as $id)
     {
         addObject($id);
     }
