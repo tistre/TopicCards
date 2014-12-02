@@ -38,19 +38,12 @@ if
     if (! $ok)
         die('Failed to copy file to ' . $filename);
 
-    $finfo = finfo_open(FILEINFO_MIME_TYPE);    
-    $mimetype = finfo_file($finfo, $filename);
-    finfo_close($finfo);
-
     $topic = $topicmap->newTopic();
     $topic->setId($topic_id);
 
-    // XXX not every file is an ImageObject!
-    $topic->setTypes([ $topicmap->getTopicBySubjectIdentifier('http://schema.org/ImageObject') ]);        
-    
     $name = $topic->newName();
         
-    $name->setType($topicmap->getTopicBySubjectIdentifier('http://schema.org/name'));
+    $name->setType($topicmap->getTopicBySubjectIdentifier('http://www.strehle.de/schema/fileName'));
     $name->setValue(pathinfo($file_arr[ 'name' ], PATHINFO_BASENAME));
     
     $topic->setSubjectLocators([ 'file://' . $filename ]);
@@ -60,6 +53,25 @@ if
     $occurrence->setDatatype($topicmap->getTopicBySubjectIdentifier('http://www.strehle.de/schema/sizeInBytes'));
     $occurrence->setValue(filesize($filename));
 
+    $type_subject = 'http://www.strehle.de/schema/file';
+    
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);    
+    $mimetype = finfo_file($finfo, $filename);
+    finfo_close($finfo);
+
+    if (strlen($mimetype) > 0)
+    {
+        $occurrence = $topic->newOccurrence();    
+        $occurrence->setType($topicmap->getTopicBySubjectIdentifier('http://www.strehle.de/schema/mimeType'));
+        $occurrence->setDatatype($topicmap->getTopicBySubjectIdentifier('http://www.w3.org/2001/XMLSchema#string'));
+        $occurrence->setValue($mimetype);
+        
+        if (substr($mimetype, 0, 6) === 'image/')
+            $type_subject = 'http://schema.org/ImageObject';
+    }
+
+    $topic->setTypes([ $topicmap->getTopicBySubjectIdentifier($type_subject) ]);
+    
     $size = getimagesize($filename);
     
     if (is_array($size))
