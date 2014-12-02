@@ -11,6 +11,7 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     protected $services;
     protected $db_table_prefix;
     protected $search_index;
+    protected $upload_path;
     
 
     public function __construct(\TopicBank\Interfaces\iServices $services)
@@ -65,7 +66,21 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     {
         return $this->search_index;
     }
+
+
+    public function setUploadPath($path)
+    {
+        $this->upload_path = $path;
+        
+        return 1;
+    }
     
+    
+    public function getUploadPath()
+    {
+        return $this->upload_path;
+    }
+        
     
     public function getReifier()
     {

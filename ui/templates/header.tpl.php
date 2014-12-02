@@ -18,11 +18,16 @@
     <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
   </form>
   <ul class="nav nav-pills pull-right">
-    <li>
-      <!-- XXX this should be a form POST, not idempotent -->
-      <a href="<?=$tpl[ 'topicbank_base_url' ]?>edit_new_topic">
-        <span class="glyphicon glyphicon-plus"></span> Add topic
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <span class="glyphicon glyphicon-plus"></span> Add…
+        <span class="caret"></span>
       </a>
+      <ul class="dropdown-menu">
+        <!-- XXX this should be a form POST, not idempotent -->
+        <li><a href="<?=$tpl[ 'topicbank_base_url' ]?>edit_new_topic">Add a topic</a></li>
+        <li><a href="<?=$tpl[ 'topicbank_base_url' ]?>upload_file">Upload a file</a></li>
+      </ul>
     </li>
   </ul>
   <h3 class="text-muted"><?=htmlspecialchars($tpl[ 'topicmap' ][ 'label' ])?></h3>
