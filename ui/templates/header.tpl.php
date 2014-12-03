@@ -25,8 +25,18 @@
       </a>
       <ul class="dropdown-menu">
         <!-- XXX this should be a form POST, not idempotent -->
-        <li><a href="<?=$tpl[ 'topicbank_base_url' ]?>edit_new_topic">Add a topic</a></li>
-        <li><a href="<?=$tpl[ 'topicbank_base_url' ]?>upload_file">Upload a file</a></li>
+        <li>
+          <a href="<?=$tpl[ 'topicbank_base_url' ]?>edit_new_topic">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add a topic
+          </a>
+        </li>
+        <li>
+          <a href="<?=$tpl[ 'topicbank_base_url' ]?>upload_file">
+            <span class="glyphicon glyphicon-cloud-upload"></span>
+            Upload a file
+          </a>
+        </li>
       </ul>
     </li>
   </ul>
