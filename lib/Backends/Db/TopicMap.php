@@ -147,17 +147,12 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     }
     
     
-    public function getTopicRef($topic_id)
+    public function getTopicSubjectLocator($topic_id)
     {
         if (strlen($topic_id) === 0)
             return false;
-        
-        $result = $this->getTopicSubjectIdentifier($topic_id);
-        
-        if (strlen($result) === 0)
-            $result = '#' . $topic_id;
             
-        return $result;
+        return $this->selectTopicSubjectLocator($topic_id);
     }
     
     

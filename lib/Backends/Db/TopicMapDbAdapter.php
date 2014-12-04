@@ -101,6 +101,18 @@ trait TopicMapDbAdapter
     
     public function selectTopicSubjectIdentifier($topic_id)
     {
+        return $this->selectTopicSubject($topic_id, 0);
+    }
+    
+    
+    public function selectTopicSubjectLocator($topic_id)
+    {
+        return $this->selectTopicSubject($topic_id, 1);
+    }
+    
+    
+    protected function selectTopicSubject($topic_id, $islocator)
+    {
         $ok = $this->services->db_utils->connect();
         
         if ($ok < 0)
@@ -118,7 +130,7 @@ trait TopicMapDbAdapter
         ));
         
         $sql->bindValue(':subject_topic', $topic_id, \PDO::PARAM_STR);
-        $sql->bindValue(':subject_islocator', 0, \PDO::PARAM_INT);
+        $sql->bindValue(':subject_islocator', $islocator, \PDO::PARAM_INT);
         
         $ok = $sql->execute();
         

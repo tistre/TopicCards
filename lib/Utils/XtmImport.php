@@ -69,9 +69,7 @@ class XtmImport
         if ($context_node->hasAttribute('id'))
             $association->setId($this->generateGuid($context_node->getAttribute('id')));
 
-        if ($context_node->hasAttribute('reifier'))
-            $association->setReifier($this->topicRefToId($context_node->getAttribute('reifier')));
-
+        $association->setReifier($this->getReifier($context_node));
         $association->setType($this->getType($context_node));
         $association->setScope($this->getScope($context_node));
 
@@ -135,15 +133,13 @@ class XtmImport
         {
             $name = $topic->newName();
             
+            $name->setReifier($this->getReifier($node));
             $name->setType($this->getType($node));
             $name->setScope($this->getScope($node));
             
             foreach ($node->getElementsByTagName('value') as $subnode)
                 $name->setValue($subnode->nodeValue);
 
-            if ($node->hasAttribute('reifier'))
-                $name->setReifier($this->topicRefToId($node->getAttribute('reifier')));
-                
             $names[ ] = $name;
         }
         
@@ -159,6 +155,7 @@ class XtmImport
         {
             $occurrence = $topic->newOccurrence();
             
+            $occurrence->setReifier($this->getReifier($node));
             $occurrence->setType($this->getType($node));
             $occurrence->setScope($this->getScope($node));
             
@@ -173,9 +170,6 @@ class XtmImport
                     $topic->getTopicMap()->getTopicBySubjectIdentifier($datatype)
                 );
             }
-                
-            if ($node->hasAttribute('reifier'))
-                $occurrence->setReifier($this->topicRefToId($node->getAttribute('reifier')));
                 
             $occurrences[ ] = $occurrence;
         }
@@ -192,12 +186,10 @@ class XtmImport
         {
             $role = $association->newRole();
             
+            $role->setReifier($this->getReifier($node));
             $role->setType($this->getType($node));
             $role->setPlayer($this->getTopicRef($node));
             
-            if ($node->hasAttribute('reifier'))
-                $role->setReifier($this->topicRefToId($node->getAttribute('reifier')));
-                
             $roles[ ] = $role;
         }
         
@@ -205,6 +197,15 @@ class XtmImport
     }
     
     
+    protected function getReifier(\DOMElement $node)
+    {
+        foreach ($node->getElementsByTagName('reifier') as $subnode)
+            return $this->getTopicRef($subnode);
+        
+        return false;
+    }
+
+
     protected function getType(\DOMElement $node)
     {
         foreach ($node->getElementsByTagName('type') as $subnode)
@@ -237,43 +238,45 @@ class XtmImport
             if ($subnode->nodeType != XML_ELEMENT_NODE)
                 continue;
                 
-            if ($subnode->tagName !== 'topicRef')
-                continue;
-
-            if (! $subnode->hasAttribute('href'))
-                continue;
-
-            // XXX return an error if subject does not exist!
-            
-            $topic_ref = $subnode->getAttribute('href');
-            
-            if (strlen($topic_ref) === 0)
-                continue;
-            
-            return $this->topicRefToId($topic_ref);
+            if 
+            (
+                ($subnode->tagName === 'subjectIdentifierRef') 
+                && $subnode->hasAttribute('href') 
+                && (strlen($subnode->getAttribute('href')) > 0)
+            )
+            {
+                $topic_id = $this->topicmap->getTopicBySubjectIdentifier($subnode->getAttribute('href'));
+                
+                if (strlen($topic_id) > 0)
+                    return $topic_id;
+            }
+            elseif 
+            (
+                ($subnode->tagName === 'subjectLocatorRef') 
+                && $subnode->hasAttribute('href') 
+                && (strlen($subnode->getAttribute('href')) > 0)
+            )
+            {
+                $topic_id = $this->topicmap->getTopicBySubjectLocator($subnode->getAttribute('href'));
+                
+                if (strlen($topic_id) > 0)
+                    return $topic_id;
+            }
+            elseif 
+            (
+                ($subnode->tagName === 'topicRef') 
+                && $subnode->hasAttribute('href') 
+                && (strlen($subnode->getAttribute('href')) > 0)
+            )
+            {
+                // XXX assuming topicRef contains a local ID prefixed with "#"
+                
+                $topic_ref = $this->generateGuid($subnode->getAttribute('href'));
+                return substr($topic_ref, 1);
+            }
         }
         
         return false;
-    }
-    
-    
-    protected function topicRefToId($topic_ref)
-    {
-        if (strlen($topic_ref) === 0)
-            continue;
-            
-        // Local IDs are prefixed with "#"
-        // XXX does this conform to the XTM 2.0 spec?
-        
-        if ($topic_ref[ 0 ] === '#')
-        {
-            $topic_ref = $this->generateGuid($topic_ref);
-            return substr($topic_ref, 1);
-        }
-        else
-        {
-            return $this->topicmap->getTopicBySubjectIdentifier($topic_ref);
-        }
     }
     
     

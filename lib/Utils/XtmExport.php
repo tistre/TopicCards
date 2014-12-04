@@ -65,11 +65,11 @@ class XtmExport
 
         $result = sprintf
         (
-            '%s<association%s>' . "\n",
-            str_repeat('  ', $indent),
-            $this->exportReifier($association->getReifier())
+            "%s<association>\n",
+            str_repeat('  ', $indent)
         );
 
+        $result .= $this->exportReifier($association->getReifier(), ($indent + 1));
         $result .= $this->exportType($association->getType(), ($indent + 1));
         $result .= $this->exportScope($association->getScope(), ($indent + 1));
         $result .= $this->exportRoles($association->getRoles([ ]), ($indent + 1));
@@ -86,11 +86,33 @@ class XtmExport
 
     protected function exportTopicRef($topic_id, $indent)
     {
+        $value = $this->topicmap->getTopicSubjectIdentifier($topic_id);
+        
+        if (strlen($value) > 0)
+        {
+            $tag = 'subjectIdentifierRef';
+        }
+        else
+        {
+            $value = $this->topicmap->getTopicSubjectLocator($topic_id);
+            
+            if (strlen($value) > 0)
+            {
+                $tag = 'subjectLocatorRef';
+            }
+            else
+            {
+                $value = '#' . $topic_id;
+                $tag = 'topicRef';
+            }
+        }
+        
         return sprintf
         (
-            '%s<topicRef href="%s"/>' . "\n", 
+            '%s<%s href="%s"/>' . "\n", 
             str_repeat('  ', $indent),
-            htmlspecialchars($this->topicmap->getTopicRef($topic_id))
+            $tag,
+            htmlspecialchars($value)
         );
     }
 
@@ -134,11 +156,11 @@ class XtmExport
         {
             $result .= sprintf
             (
-                "%s<name%s>\n", 
-                str_repeat('  ', $indent),
-                $this->exportReifier($name->getReifier())
+                "%s<name>\n", 
+                str_repeat('  ', $indent)
             );
             
+            $result .= $this->exportReifier($name->getReifier(), ($indent + 1));
             $result .= $this->exportType($name->getType(), ($indent + 1));
             $result .= $this->exportScope($name->getScope(), ($indent + 1));
             
@@ -168,11 +190,11 @@ class XtmExport
         {
             $result .= sprintf
             (
-                "%s<role%s>\n",
-                str_repeat('  ', $indent),
-                $this->exportReifier($role->getReifier())
+                "%s<role>\n",
+                str_repeat('  ', $indent)
             );
 
+            $result .= $this->exportReifier($role->getReifier(), ($indent + 1));
             $result .= $this->exportType($role->getType(), ($indent + 1));
             $result .= $this->exportTopicRef($role->getPlayer(), ($indent + 1));
             
@@ -195,21 +217,19 @@ class XtmExport
         {
             $result .= sprintf
             (
-                "%s<occurrence%s>\n", 
-                str_repeat('  ', $indent),
-                $this->exportReifier($occurrence->getReifier())
+                "%s<occurrence>\n", 
+                str_repeat('  ', $indent)
             );
             
+            $result .= $this->exportReifier($occurrence->getReifier(), ($indent + 1));
             $result .= $this->exportType($occurrence->getType(), ($indent + 1));
             $result .= $this->exportScope($occurrence->getScope(), ($indent + 1));
             
-            $datatype = $occurrence->getDatatype();
+            $datatype = $this->topicmap->getTopicSubjectIdentifier($occurrence->getDatatype());
             
             if (strlen($datatype) === 0)
-                $datatype = 'http://www.w3.org/2001/XMLSchema#string';
-                
-            $datatype = $this->topicmap->getTopicRef($datatype);
-            
+                $datatype = '#' . $occurrence->getDataType();
+                            
             $result .= sprintf
             (
                 '%s<resourceData datatype="%s">%s</resourceData>' . "\n", 
@@ -229,15 +249,17 @@ class XtmExport
     }
     
 
-    protected function exportReifier($reifier)
+    protected function exportReifier($reifier, $indent)
     {
         if (strlen($reifier) === 0)
             return '';
 
         return sprintf
         (
-            ' reifier="%s"', 
-            htmlspecialchars($this->topicmap->getTopicRef($reifier))
+            "%s<reifier>\n%s%s</reifier>\n",
+            str_repeat('  ', $indent),
+            $this->exportTopicRef($reifier, ($indent + 1)),
+            str_repeat('  ', $indent)
         );
     }
 
