@@ -3,6 +3,7 @@
     {
         "components/jquery": "~2.1",
         "elasticsearch/elasticsearch": "~1.0",
+        "tinymce/tinymce": "~4.1",
         "twbs/bootstrap": "~3.3",
         "ulrichsg/getopt-php": "~2.2"
     }

@@ -260,8 +260,15 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 if (! $first)
                     echo '<br />';
-                    
-                echo htmlspecialchars($occurrence[ 'value' ]);
+
+                if ($occurrence[ 'datatype' ] === $tpl[ 'id_xhtml' ])
+                {
+                    echo $occurrence[ 'value' ];
+                }
+                else
+                {                    
+                    echo htmlspecialchars($occurrence[ 'value' ]);
+                }
                 
                 if (count($occurrence[ 'scope' ]) > 0)
                 {

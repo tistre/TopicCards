@@ -396,7 +396,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <!-- Occurrence value and datatype -->
                 
                 <td>
-                  <textarea name="occurrences[<?=$i?>][value]"><?=htmlspecialchars($occurrence[ 'value' ])?></textarea>
+                  <textarea name="occurrences[<?=$i?>][value]" <?php if ($occurrence[ 'datatype' ] === $tpl[ 'id_xhtml' ]) { ?>data-topicbank_html_editor="enabled"<?php } ?>><?=htmlspecialchars($occurrence[ 'value' ])?></textarea>
                   <br />
                   <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => $tpl[ 'topic_names' ][ $occurrence[ 'datatype' ] ] ]); ?>
                   <input type="hidden" name="occurrences[<?=$i?>][datatype]" value="<?=htmlspecialchars($occurrence[ 'datatype' ])?>" data-topicbank_element="id" />
@@ -786,6 +786,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     
     <script src="<?=$tpl[ 'topicbank_base_url' ]?>jquery/jquery.min.js"></script>
     <script src="<?=$tpl[ 'topicbank_base_url' ]?>bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?=$tpl[ 'topicbank_base_url' ]?>tinymce/tinymce.jquery.min.js"></script>
     
     <script>
     // <![CDATA[
@@ -1022,6 +1023,17 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             
             //Webkit, Safari, Chrome etc.
             return confirmationMessage;                                
+        });
+        
+        
+        tinymce.init(
+        {
+            entity_encoding: 'raw',
+            gecko_spellcheck: true,
+            menubar: false,
+            relative_urls: false,
+            selector: 'textarea[data-topicbank_html_editor="enabled"]',
+            toolbar_items_size: 'small'
         });
 
     });
