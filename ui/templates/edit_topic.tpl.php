@@ -1031,6 +1031,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             entity_encoding: 'raw',
             gecko_spellcheck: true,
             menubar: false,
+            plugins: [ 'link' ],
             relative_urls: false,
             selector: 'textarea[data-topicbank_html_editor="enabled"]',
             toolbar_items_size: 'small'
