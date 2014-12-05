@@ -506,8 +506,15 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
           
           <div>
             <p class="pull-right">
+            
               <a href="<?=htmlspecialchars($tpl[ 'cancel_url' ])?>" class="btn btn-link">Cancel</a>
-              <button type="submit" class="btn btn-primary">Save</button>
+              
+              <button type="submit" class="btn btn-default">Save</button>
+              
+              <button type="submit" class="btn btn-primary" onclick="$('#input_close_after_save').val('1');">Save and close</button>
+              
+              <input type="hidden" id="input_close_after_save" name="close_after_save" value="" />
+              
             </p>
           </div>
           

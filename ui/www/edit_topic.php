@@ -274,6 +274,19 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
     else
     {
         $services->db_utils->commit();
+        
+        if (! empty($_REQUEST[ 'close_after_save' ]))
+        {
+            $topic_url = sprintf
+            (
+                '%stopic/%s',
+                TOPICBANK_BASE_URL,
+                $topic->getId()
+            );
+
+            header('Location: ' . $topic_url);
+            exit;
+        }
     }
 }
 
