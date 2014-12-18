@@ -21,6 +21,23 @@ class Role extends Core implements \TopicBank\Interfaces\iRole
         $this->player = $topic_id;
         return 1;
     }
+
+
+    public function getPlayerSubject()
+    {
+        return $this->getTopicMap()->getTopicSubject($this->getPlayer());
+    }
+
+
+    public function setPlayerSubject($topic_subject)
+    {
+        $topic_id = $this->getTopicMap()->getTopicBySubject($topic_subject);
+        
+        if (strlen($topic_id) === 0)
+            return -1;
+            
+        return $this->setPlayer($topic_id);
+    }
     
     
     public function getAll()

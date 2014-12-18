@@ -31,20 +31,37 @@ class Occurrence extends Core implements \TopicBank\Interfaces\iOccurrence
     }
     
 
-    public function setDatatype($str)
+    public function setDatatype($topic_id)
     {
-        $this->datatype = $str;
+        $this->datatype = $topic_id;
         
         return 1;
     }
     
+
+    public function getDatatypeSubject()
+    {
+        return $this->getTopicMap()->getTopicSubject($this->getDatatype());
+    }
+    
+    
+    public function setDatatypeSubject($topic_subject)
+    {
+        $topic_id = $this->getTopicMap()->getTopicBySubject($topic_subject);
+        
+        if (strlen($topic_id) === 0)
+            return -1;
+            
+        return $this->setDatatype($topic_id);
+    }
+
     
     public function validate(&$msg_html)
     {
         $ok = \TopicBank\Utils\DatatypeUtils::validate
         (
             $this->value, 
-            $this->getTopicMap()->getTopicSubjectIdentifier($this->getDatatype()), 
+            $this->getDatatypeSubject(), 
             $msg_txt
         );
         

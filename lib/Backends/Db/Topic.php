@@ -56,6 +56,57 @@ class Topic extends Core implements iTopic
     }
     
 
+    public function getTypeSubjects()
+    {
+        $result = [ ];
+        
+        foreach ($this->getTypes() as $topic_id)
+            $result[ ] = $this->getTopicMap()->getTopicSubject($topic_id);
+            
+        return $result;
+    }
+    
+    
+    public function setTypeSubjects(array $topic_subjects)
+    {
+        $topic_ids = [ ];
+        $result = 1;
+        
+        foreach ($topic_subjects as $topic_subject)
+        {
+            $topic_id = $this->getTopicMap()->getTopicBySubject($topic_subject);
+            
+            if (strlen($topic_id) === 0)
+            {
+                $result = -1;
+            }
+            else
+            {
+                $topic_ids[ ] = $topic_id;
+            }   
+        }
+        
+        $ok = $this->setTypes($topic_ids);
+        
+        if ($ok < 0)
+            $result = $ok;
+        
+        return $result;
+    }
+    
+        
+    public function hasType($topic_id)
+    {
+        return in_array($topic_id, $this->types);
+    }
+    
+    
+    public function hasTypeSubject($topic_subject)
+    {
+        return $this->hasType($this->getTopicMap()->getTopicBySubject($topic_subject));
+    }
+    
+
     public function newName()
     {   
         $name = new Name($this->services, $this->topicmap);
@@ -66,9 +117,26 @@ class Topic extends Core implements iTopic
     }
 
     
-    public function getNames(array $filters)
+    public function getNames(array $filters = [ ])
     {
-        return $this->names;
+        if (count($filters) === 0)            
+            return $this->names;
+        
+        $result = [ ];
+        
+        if (isset($filters[ 'type_subject' ]))
+            $filters[ 'type' ] = $this->getTopicMap()->getTopicBySubject($filters[ 'type_subject' ]);
+
+        foreach ($this->names as $name)
+        {
+            if (isset($filters[ 'type' ]))
+            {
+                if ($name->getType() === $filters[ 'type' ])
+                    $result[ ] = $name;
+            }
+        }
+        
+        return $result;
     }
     
     
@@ -116,8 +184,11 @@ class Topic extends Core implements iTopic
     }
 
 
-    public function getOccurrences(array $filters)
+    public function getOccurrences(array $filters = [ ])
     {
+        if (count($filters) === 0)
+            return $this->occurrences;
+            
         $result = [ ];
         
         foreach ($this->occurrences as $occurrence)

@@ -17,11 +17,15 @@ interface iTopic extends iPersistent
     public function setSubjectLocators(array $strings);
     public function getTypes();
     public function setTypes(array $topic_ids);
+    public function getTypeSubjects();
+    public function setTypeSubjects(array $topic_subjects);
+    public function hasType($topic_id);
+    public function hasTypeSubject($topic_subject);
     public function newName();
-    public function getNames(array $filters);
+    public function getNames(array $filters = [ ]);
     public function setNames(array $names);
     public function newOccurrence();
-    public function getOccurrences(array $filters);
+    public function getOccurrences(array $filters = [ ]);
     public function setOccurrences(array $occurrences);
     public function getIsReifier();
     public function setIsReifier($is_reifier);
