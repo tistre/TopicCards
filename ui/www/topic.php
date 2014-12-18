@@ -173,7 +173,7 @@ $request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(TOPICBANK_BASE_URL));
 
 list(, $topic_identifier_or_id) = explode('/', $request_path);
 
-$topic_id = $topicmap->getTopicBySubjectIdentifier($topic_identifier_or_id);
+$topic_id = $topicmap->getTopicBySubject($topic_identifier_or_id);
 
 if (strlen($topic_id) === 0)
     $topic_id = $topic_identifier_or_id;
@@ -181,8 +181,8 @@ if (strlen($topic_id) === 0)
 $tpl[ 'edit_url' ] = sprintf('%sedit_topic/%s', TOPICBANK_BASE_URL, $topic_id);
 $tpl[ 'delete_url' ] = sprintf('%sdelete_topic/%s', TOPICBANK_BASE_URL, $topic_id);
 
-$tpl[ 'id_text' ] = $topicmap->getTopicBySubjectIdentifier('http://schema.org/text');
-$tpl[ 'id_xhtml' ] = $topicmap->getTopicBySubjectIdentifier('http://www.w3.org/1999/xhtml');
+$tpl[ 'id_text' ] = $topicmap->getTopicBySubject('http://schema.org/text');
+$tpl[ 'id_xhtml' ] = $topicmap->getTopicBySubject('http://www.w3.org/1999/xhtml');
 
 getTopicVars($topic_id, $topic_vars, $tpl[ 'topic_names' ]);
 

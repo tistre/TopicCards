@@ -225,10 +225,10 @@ class XtmExport
             $result .= $this->exportType($occurrence->getType(), ($indent + 1));
             $result .= $this->exportScope($occurrence->getScope(), ($indent + 1));
             
-            $datatype = $this->topicmap->getTopicSubjectIdentifier($occurrence->getDatatype());
+            $datatype = $occurrence->getDatatypeSubject();
             
             if (strlen($datatype) === 0)
-                $datatype = '#' . $occurrence->getDataType();
+                $datatype = '#' . $occurrence->getDatatype();
                             
             $result .= sprintf
             (

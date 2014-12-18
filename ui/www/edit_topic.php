@@ -13,7 +13,7 @@ $request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(TOPICBANK_BASE_URL));
 
 list(, $topic_identifier_or_id) = explode('/', $request_path);
 
-$topic_id = $topicmap->getTopicBySubjectIdentifier($topic_identifier_or_id);
+$topic_id = $topicmap->getTopicBySubject($topic_identifier_or_id);
 
 if (strlen($topic_id) === 0)
     $topic_id = $topic_identifier_or_id;
@@ -297,7 +297,7 @@ $tpl[ 'topic' ] = $topic->getAll();
 foreach ($tpl[ 'topic' ][ 'types' ] as $helper_topic_id)
     $tpl[ 'topic_names' ][ $helper_topic_id ] = false;
 
-$tpl[ 'id_xhtml' ] = $topicmap->getTopicBySubjectIdentifier('http://www.w3.org/1999/xhtml');
+$tpl[ 'id_xhtml' ] = $topicmap->getTopicBySubject('http://www.w3.org/1999/xhtml');
 
 foreach ($tpl[ 'topic' ][ 'occurrences' ] as $i => $occurrence_arr)
 {

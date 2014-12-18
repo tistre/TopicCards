@@ -167,7 +167,7 @@ class XtmImport
                 
                 $occurrence->setDataType
                 (
-                    $topic->getTopicMap()->getTopicBySubjectIdentifier($datatype)
+                    $topic->getTopicMap()->getTopicBySubject($datatype)
                 );
             }
                 
@@ -235,7 +235,7 @@ class XtmImport
     {
         foreach ($node->childNodes as $subnode)
         {
-            if ($subnode->nodeType != XML_ELEMENT_NODE)
+            if ($subnode->nodeType !== XML_ELEMENT_NODE)
                 continue;
                 
             if 
@@ -245,7 +245,7 @@ class XtmImport
                 && (strlen($subnode->getAttribute('href')) > 0)
             )
             {
-                $topic_id = $this->topicmap->getTopicBySubjectIdentifier($subnode->getAttribute('href'));
+                $topic_id = $this->topicmap->getTopicBySubject($subnode->getAttribute('href'));
                 
                 if (strlen($topic_id) > 0)
                     return $topic_id;
@@ -268,11 +268,27 @@ class XtmImport
                 && $subnode->hasAttribute('href') 
                 && (strlen($subnode->getAttribute('href')) > 0)
             )
-            {
-                // XXX assuming topicRef contains a local ID prefixed with "#"
+            {                
+                $href = $subnode->getAttribute('href');
                 
-                $topic_ref = $this->generateGuid($subnode->getAttribute('href'));
-                return substr($topic_ref, 1);
+                if (substr($href, 0, 1) === '#')
+                {
+                    // XXX assuming local IDs are prefixed with "#"
+                    
+                    $topic_ref = $this->generateGuid($href);
+                    return substr($topic_ref, 1);
+                }
+                else
+                {
+                    // Subject identifier or locator
+                    
+                    $topic_id = $this->topicmap->getTopicBySubject($href);
+                
+                    if (strlen($topic_id) > 0)
+                        return $topic_id;
+                        
+                    return $href;
+                }
             }
         }
         

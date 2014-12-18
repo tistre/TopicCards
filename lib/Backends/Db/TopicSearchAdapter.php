@@ -95,7 +95,7 @@ trait TopicSearchAdapter
         static $search_field_type = false;
         
         if ($search_field_type === false)
-            $search_field_type = $this->topicmap->getTopicBySubjectIdentifier('http://www.strehle.de/schema/searchField');
+            $search_field_type = $this->topicmap->getTopicBySubject('http://www.strehle.de/schema/searchField');
         
         $type_topic = $this->topicmap->newTopic();
         $type_topic->load($type_id);
