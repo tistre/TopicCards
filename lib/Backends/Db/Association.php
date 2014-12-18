@@ -20,9 +20,34 @@ class Association extends Core implements \TopicBank\Interfaces\iAssociation
     }
 
 
-    public function getRoles()
+    public function getRoles(array $filters = [ ])
     {
-        return $this->roles;
+        if (count($filters) === 0)            
+            return $this->roles;
+        
+        $result = [ ];
+        
+        if (isset($filters[ 'type_subject' ]))
+            $filters[ 'type' ] = $this->getTopicMap()->getTopicBySubject($filters[ 'type_subject' ]);
+
+        if (isset($filters[ 'player_subject' ]))
+            $filters[ 'player' ] = $this->getTopicMap()->getTopicBySubject($filters[ 'player_subject' ]);
+
+        foreach ($this->roles as $role)
+        {
+            if (isset($filters[ 'type' ]))
+            {
+                if ($role->getType() === $filters[ 'type' ])
+                    $result[ ] = $role;
+            }
+            elseif (isset($filters[ 'player' ]))
+            {
+                if ($role->getPlayer() === $filters[ 'player' ])
+                    $result[ ] = $role;
+            }
+        }
+        
+        return $result;
     }
     
     
