@@ -84,7 +84,7 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     
     public function getReifier()
     {
-        return $this->getTopicBySubjectIdentifier($this->getUrl());
+        return $this->getTopicBySubject($this->getUrl());
     }
     
     
@@ -132,9 +132,23 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     }
     
 
-    public function getTopicBySubjectIdentifier($uri)
+    public function getTopicBySubject($uri)
     {
-        return $this->selectTopicBySubjectIdentifier($uri);
+        return $this->selectTopicBySubject($uri);
+    }
+    
+    
+    public function getTopicSubject($topic_id)
+    {
+        // XXX we might want to optimize this and not do 2 calls
+        // to get at the locator
+        
+        $result = $this->selectTopicSubjectIdentifier($topic_id);
+        
+        if ($result === false)
+            $result = $this->selectTopicSubjectLocator($topic_id);
+        
+        return $result;
     }
     
     
@@ -243,5 +257,59 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     public function getRolePlayers(array $filters)
     {
         return $this->selectRolePlayers($filters);
+    }
+    
+    
+    public function newFileTopic($filename)
+    {
+        $topic = $this->newTopic();
+
+        $name = $topic->newName();
+        
+        $name->setTypeSubject('http://www.strehle.de/schema/fileName');
+        $name->setValue(pathinfo($filename, PATHINFO_BASENAME));
+    
+        $topic->setSubjectLocators([ 'file://' . $filename ]);
+
+        $occurrence = $topic->newOccurrence();    
+        $occurrence->setTypeSubject('http://schema.org/contentSize');
+        $occurrence->setDatatypeSubject('http://www.strehle.de/schema/sizeInBytes');
+        $occurrence->setValue(filesize($filename));
+
+        $type_subject = 'http://www.strehle.de/schema/file';
+    
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);    
+        $mimetype = finfo_file($finfo, $filename);
+        finfo_close($finfo);
+
+        if (strlen($mimetype) > 0)
+        {
+            $occurrence = $topic->newOccurrence();    
+            $occurrence->setTypeSubject('http://www.strehle.de/schema/mimeType');
+            $occurrence->setDatatypeSubject('http://www.w3.org/2001/XMLSchema#string');
+            $occurrence->setValue($mimetype);
+        
+            if (substr($mimetype, 0, 6) === 'image/')
+                $type_subject = 'http://schema.org/ImageObject';
+        }
+
+        $topic->setTypeSubjects([ $type_subject ]);
+    
+        $size = getimagesize($filename);
+    
+        if (is_array($size))
+        {
+            $occurrence = $topic->newOccurrence();    
+            $occurrence->setTypeSubject('http://schema.org/width');
+            $occurrence->setDatatypeSubject('http://www.w3.org/2001/XMLSchema#nonNegativeInteger');
+            $occurrence->setValue($size[ 0 ]);
+
+            $occurrence = $topic->newOccurrence();    
+            $occurrence->setTypeSubject('http://schema.org/height');
+            $occurrence->setDatatypeSubject('http://www.w3.org/2001/XMLSchema#nonNegativeInteger');
+            $occurrence->setValue($size[ 1 ]);
+        }
+        
+        return $topic;
     }
 }

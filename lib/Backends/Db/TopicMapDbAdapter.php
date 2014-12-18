@@ -69,7 +69,7 @@ trait TopicMapDbAdapter
     }
     
     
-    public function selectTopicBySubjectIdentifier($uri)
+    public function selectTopicBySubject($uri)
     {
         $ok = $this->services->db_utils->connect();
         

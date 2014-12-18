@@ -19,7 +19,7 @@ if
     
     $topic_id = $topicmap->createId();
     
-    $dirname = sprintf('%s/%s', $topicmap->getUploadPath(), date('Y-m-d'));
+    $dirname = $topicmap->getUploadPath();
     
     if (! file_exists($dirname))
         mkdir($dirname);
@@ -38,54 +38,14 @@ if
     if (! $ok)
         die('Failed to copy file to ' . $filename);
 
-    $topic = $topicmap->newTopic();
+    $topic = $topicmap->newFileTopic($filename);
+    
     $topic->setId($topic_id);
 
-    $name = $topic->newName();
-        
-    $name->setType($topicmap->getTopicBySubjectIdentifier('http://www.strehle.de/schema/fileName'));
-    $name->setValue(pathinfo($file_arr[ 'name' ], PATHINFO_BASENAME));
+    // Fix the name: Use the name provided on upload, not the randomly generated name
     
-    $topic->setSubjectLocators([ 'file://' . $filename ]);
-
-    $occurrence = $topic->newOccurrence();    
-    $occurrence->setType($topicmap->getTopicBySubjectIdentifier('http://schema.org/contentSize'));
-    $occurrence->setDatatype($topicmap->getTopicBySubjectIdentifier('http://www.strehle.de/schema/sizeInBytes'));
-    $occurrence->setValue(filesize($filename));
-
-    $type_subject = 'http://www.strehle.de/schema/file';
-    
-    $finfo = finfo_open(FILEINFO_MIME_TYPE);    
-    $mimetype = finfo_file($finfo, $filename);
-    finfo_close($finfo);
-
-    if (strlen($mimetype) > 0)
-    {
-        $occurrence = $topic->newOccurrence();    
-        $occurrence->setType($topicmap->getTopicBySubjectIdentifier('http://www.strehle.de/schema/mimeType'));
-        $occurrence->setDatatype($topicmap->getTopicBySubjectIdentifier('http://www.w3.org/2001/XMLSchema#string'));
-        $occurrence->setValue($mimetype);
-        
-        if (substr($mimetype, 0, 6) === 'image/')
-            $type_subject = 'http://schema.org/ImageObject';
-    }
-
-    $topic->setTypes([ $topicmap->getTopicBySubjectIdentifier($type_subject) ]);
-    
-    $size = getimagesize($filename);
-    
-    if (is_array($size))
-    {
-        $occurrence = $topic->newOccurrence();    
-        $occurrence->setType($topicmap->getTopicBySubjectIdentifier('http://schema.org/width'));
-        $occurrence->setDatatype($topicmap->getTopicBySubjectIdentifier('http://www.w3.org/2001/XMLSchema#nonNegativeInteger'));
-        $occurrence->setValue($size[ 0 ]);
-
-        $occurrence = $topic->newOccurrence();    
-        $occurrence->setType($topicmap->getTopicBySubjectIdentifier('http://schema.org/height'));
-        $occurrence->setDatatype($topicmap->getTopicBySubjectIdentifier('http://www.w3.org/2001/XMLSchema#nonNegativeInteger'));
-        $occurrence->setValue($size[ 1 ]);
-    }
+    foreach ($topic->getNames([ 'type_subject' => 'http://www.strehle.de/schema/fileName' ]) as $name)
+        $name->setValue(pathinfo($file_arr[ 'name' ], PATHINFO_BASENAME));
     
     $ok = $topic->save();
 
@@ -93,7 +53,7 @@ if
     {
         $edit_topic_url = sprintf
         (
-            '%sedit_topic/%s',
+            '%stopic/%s',
             TOPICBANK_BASE_URL,
             $topic_id
         );

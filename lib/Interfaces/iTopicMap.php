@@ -17,10 +17,13 @@ interface iTopicMap
     
     public function newTopic();
     public function newAssociation();
+    
+    public function newFileTopic($filename);
 
     public function getTopics(array $filters);
     // XXX rename to ...TopicIdBy...?
-    public function getTopicBySubjectIdentifier($uri);
+    public function getTopicBySubject($uri);
+    public function getTopicSubject($topic_id);
     public function getTopicSubjectIdentifier($topic_id);
     public function getTopicSubjectLocator($topic_id);
     public function getTopicLabel($topic_id);

@@ -27,7 +27,7 @@ $topicmap = $services->getTopicMapSystem()->newTopicMap('default');
 $topicmap->setUrl('http://example.com/topicmaps/topicbank');
 $topicmap->setDbTablePrefix('topicbank_');
 $topicmap->setSearchIndex('topicbank');
-$topicmap->setUploadPath('/var/opt/topicbank');
+$topicmap->setUploadPath('/var/opt/topicbank/' . date('Y-m-d'));
 
 $config_topicmap = $services->getTopicMapSystem()->newTopicMap('config');
 $config_topicmap->setUrl('http://example.com/topicmaps/topicbank_config');
