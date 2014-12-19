@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topicMap xmlns="http://www.topicmaps.org/xtm/" version="2.0">
+  <topic id="88193c5b-3ecc-46c4-b4cf-4eb9a12bf1e1">
+    <subjectIdentifier href="http://www.strehle.de/schema/fileName"/>
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>File name</value>
+    </name>
+  </topic>
+  <topic id="59ab3b52-a61e-4bc9-82b7-e587d6b78ab7">
+    <subjectIdentifier href="http://www.strehle.de/schema/sizeInBytes"/>
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>Size in bytes</value>
+    </name>
+  </topic>
+  <topic id="88227c2f-a020-4dce-a643-cb92a9bb96a6">
+    <subjectIdentifier href="http://schema.org/contentSize"/>
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>File size</value>
+    </name>
+  </topic>
+  <topic id="dcb5a7f8-c77d-496d-b75e-0c70806bde06">
+    <subjectIdentifier href="http://www.strehle.de/schema/file"/>
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>File</value>
+    </name>
+  </topic>
+  <topic id="509c5505-4f29-474c-aa82-20dfb42bfbdd">
+    <subjectIdentifier href="http://www.strehle.de/schema/mimeType"/>
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>MIME Type</value>
+    </name>
+  </topic>
+  <topic id="ae372d68-e6d8-4b73-84ca-0969193e3bb7">
+    <subjectIdentifier href="http://schema.org/ImageObject"/>
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>Image file</value>
+    </name>
+  </topic>
+  <topic id="1b3ff175-d0b6-425a-a16e-11320a854cd1">
+    <subjectIdentifier href="http://schema.org/width"/>
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>Width</value>
+    </name>
+  </topic>
+  <topic id="7a4a6bf7-9e71-4c82-9016-4409250fc709">
+    <subjectIdentifier href="http://schema.org/height"/>
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>Height</value>
+    </name>
+  </topic>
+</topicMap>
