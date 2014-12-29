@@ -1,16 +1,45 @@
 <?php
 
+use Ulrichsg\Getopt\Getopt;
+use Ulrichsg\Getopt\Option;
+
 require_once dirname(__DIR__) . '/include/config.php';
 
-$services->db_utils->connect();
+$getopt = new Getopt(
+[
+    new Option('h', 'help')
+]);
 
-$filenames = $argv;
+$getopt->parse();
 
-unset($filenames[ 0 ]);
-
-foreach ($filenames as $filename)
+if ($getopt->getOperand(0) === '-')
 {
+    while (! feof(STDIN))
+    {
+        $filename = trim(fgets(STDIN));
+        
+        if ($filename === '')
+            continue;
+            
+        importFile($filename);
+    }
+}
+else
+{
+    foreach ($getopt->getOperands() as $filename)
+    {
+        importFile($filename);
+    }
+}
+
+function importFile($filename)
+{
+    global $topicmap;
+    global $services;
+    
     $objects = new \TopicBank\Utils\XtmReader($filename, $topicmap);
+
+    $services->db_utils->connect();
 
     $services->db_utils->beginTransaction();
 
