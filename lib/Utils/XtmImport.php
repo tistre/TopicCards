@@ -240,24 +240,12 @@ class XtmImport
                 
             if 
             (
-                ($subnode->tagName === 'subjectIdentifierRef') 
+                (($subnode->tagName === 'subjectIdentifierRef') || ($subnode->tagName === 'subjectLocatorRef'))
                 && $subnode->hasAttribute('href') 
                 && (strlen($subnode->getAttribute('href')) > 0)
             )
             {
                 $topic_id = $this->topicmap->getTopicBySubject($subnode->getAttribute('href'));
-                
-                if (strlen($topic_id) > 0)
-                    return $topic_id;
-            }
-            elseif 
-            (
-                ($subnode->tagName === 'subjectLocatorRef') 
-                && $subnode->hasAttribute('href') 
-                && (strlen($subnode->getAttribute('href')) > 0)
-            )
-            {
-                $topic_id = $this->topicmap->getTopicBySubjectLocator($subnode->getAttribute('href'));
                 
                 if (strlen($topic_id) > 0)
                     return $topic_id;
