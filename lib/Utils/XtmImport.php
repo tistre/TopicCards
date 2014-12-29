@@ -163,7 +163,12 @@ class XtmImport
             {
                 $datatype = $subnode->getAttribute('datatype');
                 
-                $occurrence->setValue(\TopicBank\Utils\DatatypeUtils::getValueFromDomNode($subnode, $datatype));
+                $value = \TopicBank\Utils\DatatypeUtils::getValueFromDomNode($subnode, $datatype);
+                
+                if (strlen($value) === 0)
+                    continue;
+                    
+                $occurrence->setValue($value);
                 
                 $occurrence->setDataType
                 (
