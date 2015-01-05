@@ -192,94 +192,104 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
           
             <h4>Names</h4>
             
-            <table>
+            <table width="100%">
           
             <?php $i = -1; foreach ($tpl[ 'topic' ][ 'names' ] as $i => $name) { ?>
 
               <tr>
-                <td>
+                <td width="25%" valign="top">
                   <?php button_choose_topic([ 'what' => 'name_type', 'label' => $tpl[ 'topic_names' ][ $name[ 'type' ] ] ]); ?>
                   <input type="hidden" name="names[<?=$i?>][type]" value="<?=htmlspecialchars($name[ 'type' ])?>" data-topicbank_element="id" />
                 </td>
-                <td>
-                  <input type="text" name="names[<?=$i?>][value]" value="<?=htmlspecialchars($name[ 'value' ])?>" />
+                <td width="70%" valign="top">
+                
+                  <input type="text" name="names[<?=$i?>][value]" value="<?=htmlspecialchars($name[ 'value' ])?>" style="width:100%;" />
                   <input type="hidden" name="names[<?=$i?>][id]" value="<?=htmlspecialchars($name[ 'id' ])?>" />
-                </td>
-                <td>
-                
-                  <table>
-              
-                  <?php $j = -1; foreach ($name[ 'scope' ] as $j => $scope) { ?>
-                    <tr>
-                      <td>
-                        <?php button_choose_topic([ 'what' => 'name_scope', 'label' => $tpl[ 'topic_names' ][ $scope ] ]); ?>
-                        <input type="hidden" name="names[<?=$i?>][scope][<?=$j?>]" value="<?=htmlspecialchars($scope)?>" data-topicbank_element="id" />
-                      </td>
-                      <td><?php button_remove(); ?></td>
-                    </tr>              
-                  <?php } $j++; ?>
-              
-                    <tr data-topicbank_template="new_name_scope" class="hidden" data-topicbank_counter_value="<?=$j?>" data-topicbank_counter_name="TOPICBANK_COUNTER2">
-                      <td>
-                        <?php button_choose_topic([ 'what' => 'name_scope', 'label' => '[Scope]' ]); ?>
-                        <input type="hidden" name="names[<?=$i?>][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
-                      </td>
-                      <td><?php button_remove(); ?></td>
-                    </tr>
-                
-                    <tr>
-                      <td>
-                        <?php button_add([ 'event' => 'new_name_scope', 'label' => 'Add Scope' ]); ?>
-                      </td>
-                    </tr>
-              
-                  </table>
                   
+                  <table>
+                    <tr>
+                      <td>
+                        <table>
+              
+                          <?php $j = -1; foreach ($name[ 'scope' ] as $j => $scope) { ?>
+                          <tr>
+                            <td>
+                              <?php button_choose_topic([ 'what' => 'name_scope', 'label' => $tpl[ 'topic_names' ][ $scope ] ]); ?>
+                              <input type="hidden" name="names[<?=$i?>][scope][<?=$j?>]" value="<?=htmlspecialchars($scope)?>" data-topicbank_element="id" />
+                            </td>
+                            <td><?php button_remove(); ?></td>
+                          </tr>              
+                          <?php } $j++; ?>
+              
+                          <tr data-topicbank_template="new_name_scope" class="hidden" data-topicbank_counter_value="<?=$j?>" data-topicbank_counter_name="TOPICBANK_COUNTER2">
+                            <td>
+                              <?php button_choose_topic([ 'what' => 'name_scope', 'label' => '[Scope]' ]); ?>
+                              <input type="hidden" name="names[<?=$i?>][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
+                            </td>
+                            <td><?php button_remove(); ?></td>
+                          </tr>
+                
+                          <tr>
+                            <td>
+                              <?php button_add([ 'event' => 'new_name_scope', 'label' => 'Add Scope' ]); ?>
+                            </td>
+                          </tr>
+              
+                        </table>
+                      </td>
+                      <td>
+                        <?php button_reify([ 'reifier' => $name[ 'reifier' ], 'reifies_type' => 'name', 'reifies_id' => $name[ 'id' ] ]); ?>
+                        <input type="hidden" name="names[<?=$i?>][reifier]" value="<?=htmlspecialchars($name[ 'reifier' ])?>" />
+                      </td>
+                    </tr>
+                  </table>
                 </td>
-                <td>
-                  <?php button_reify([ 'reifier' => $name[ 'reifier' ], 'reifies_type' => 'name', 'reifies_id' => $name[ 'id' ] ]); ?>
-                  <input type="hidden" name="names[<?=$i?>][reifier]" value="<?=htmlspecialchars($name[ 'reifier' ])?>" />
-                </td>
-                <td><?php button_remove(); ?></td>
+                <td width="5%" valign="top"><?php button_remove(); ?></td>
               </tr>
           
             <?php } $i++; ?>
 
               <tr data-topicbank_template="new_name" class="hidden" data-topicbank_counter_value="<?=$i?>" data-topicbank_counter_name="TOPICBANK_COUNTER1">
-                <td>
+                <td width="25%" valign="top">
+                
                   <?php button_choose_topic([ 'what' => 'name_type', 'label' => '[Type]' ]); ?>
                   <input type="hidden" name="names[TOPICBANK_COUNTER1][type]" value="" data-topicbank_element="id" />
                 </td>
-                <td>
-                  <input type="text" name="names[TOPICBANK_COUNTER1][value]" value="" />
+                <td width="70%" valign="top">
+                
+                  <input type="text" name="names[TOPICBANK_COUNTER1][value]" value="" style="width:100%;" />
                   <input type="hidden" name="names[TOPICBANK_COUNTER1][id]" value="" />
-                </td>
-                <td>
                 
                   <table>
-                  
-                    <tr data-topicbank_template="new_name_scope" class="hidden" data-topicbank_counter_value="0" data-topicbank_counter_name="TOPICBANK_COUNTER2">
-                      <td>
-                        <?php button_choose_topic([ 'what' => 'name_scope', 'label' => '[Scope]' ]); ?>
-                        <input type="hidden" name="names[TOPICBANK_COUNTER1][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
-                      </td>
-                      <td><?php button_remove(); ?></td>
-                    </tr>
-                
                     <tr>
                       <td>
-                        <?php button_add([ 'event' => 'new_name_scope', 'label' => 'Add Scope' ]); ?>
+                        <table>
+                  
+                          <tr data-topicbank_template="new_name_scope" class="hidden" data-topicbank_counter_value="0" data-topicbank_counter_name="TOPICBANK_COUNTER2">
+                            <td>
+                              <?php button_choose_topic([ 'what' => 'name_scope', 'label' => '[Scope]' ]); ?>
+                              <input type="hidden" name="names[TOPICBANK_COUNTER1][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
+                            </td>
+                            <td><?php button_remove(); ?></td>
+                          </tr>
+                
+                          <tr>
+                            <td>
+                              <?php button_add([ 'event' => 'new_name_scope', 'label' => 'Add Scope' ]); ?>
+                            </td>
+                          </tr>
+
+                        </table>
+                      </td>
+                      <td>
+                        <?php button_reify([ 'reifies_type' => 'name' ]); ?>
+                        <input type="hidden" name="names[TOPICBANK_COUNTER1][reifier]" value="" />
                       </td>
                     </tr>
-              
-                  </table>                
-                
+                  </table>
+
                 </td>
-                <td>
-                  <?php button_reify([ 'reifies_type' => 'name' ]); ?>
-                  <input type="hidden" name="names[TOPICBANK_COUNTER1][reifier]" value="" />
-                </td>
-                <td><?php button_remove(); ?></td>
+                <td width="5%" valign="top"><?php button_remove(); ?></td>
               </tr>
 
               <tr>
@@ -388,14 +398,14 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               
                 <!-- Occurrence type -->
                 
-                <td>
+                <td valign="top">
                   <?php button_choose_topic([ 'what' => 'occurrence_type', 'label' => $tpl[ 'topic_names' ][ $occurrence[ 'type' ] ] ]); ?>
                   <input type="hidden" name="occurrences[<?=$i?>][type]" value="<?=htmlspecialchars($occurrence[ 'type' ])?>" data-topicbank_element="id" />
                 </td>
                 
                 <!-- Occurrence value and datatype -->
                 
-                <td>
+                <td valign="top">
                   <textarea name="occurrences[<?=$i?>][value]" <?php if ($occurrence[ 'datatype' ] === $tpl[ 'id_xhtml' ]) { ?>data-topicbank_html_editor="enabled"<?php } ?>><?=htmlspecialchars($occurrence[ 'value' ])?></textarea>
                   <br />
                   <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => $tpl[ 'topic_names' ][ $occurrence[ 'datatype' ] ] ]); ?>
@@ -404,7 +414,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 <!-- Occurrence scope -->
                 
-                <td>
+                <td valign="top">
                 
                   <table>
               
@@ -435,11 +445,11 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   </table>
                 
                 </td>
-                <td>
+                <td valign="top">
                   <?php button_reify([ 'reifier' => $occurrence[ 'reifier' ], 'reifies_type' => 'occurrence', 'reifies_id' => $occurrence[ 'id' ] ]); ?>
                   <input type="hidden" name="occurrences[<?=$i?>][reifier]" value="<?=htmlspecialchars($occurrence[ 'reifier' ])?>" />
                 </td>
-                <td><?php button_remove(); ?></td>
+                <td valign="top"><?php button_remove(); ?></td>
               </tr>
           
             <?php } $i++; ?>
@@ -448,14 +458,14 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
                 <!-- New occurrence type -->
                 
-                <td>
+                <td valign="top">
                   <?php button_choose_topic([ 'what' => 'occurrence_type', 'label' => '[Property]' ]); ?>
                   <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][type]" value="" data-topicbank_element="id" />
                 </td>
 
                 <!-- New occurrence value and datatype -->
                 
-                <td>
+                <td valign="top">
                   <textarea name="occurrences[TOPICBANK_COUNTER1][value]"></textarea>
                   <br />
                   <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => '[Datatype]' ]); ?>
@@ -464,7 +474,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 <!-- New occurrence scopes -->
                 
-                <td>
+                <td valign="top">
                   
                   <table>
                   
@@ -485,11 +495,11 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   </table>
                   
                 </td>
-                <td>
+                <td valign="top">
                   <?php button_reify([ 'reifies_type' => 'occurrence' ]); ?>
                   <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][reifier]" value="" />
                 </td>
-                <td><?php button_remove(); ?></td>
+                <td valign="top"><?php button_remove(); ?></td>
               </tr>
 
               <tr>
@@ -810,15 +820,28 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         
         _private.addFormSection = function($elem_to_clone)
         {
-            var $clone, counter_value, counter_name, counter_pattern;
+            var $choose_topic_buttons, $clone, counter_value, counter_name, counter_pattern;
             
             $clone = $elem_to_clone.clone();
             
             $clone
                 .attr('id', '')
                 .insertBefore($elem_to_clone)
-                .removeClass('hidden')
-                .find('input').first().focus();
+                .removeClass('hidden');
+                
+            // If there's a "Choose topic" button, click the first one to open the dialog.
+            // If there is none (e.g. with subject identifiers), focus the first input field.
+            
+            $choose_topic_buttons = $clone.find('button[data-topicbank_event="show_choose_topic_dialog"]');
+            
+            if ($choose_topic_buttons.length > 0)
+            {
+                $choose_topic_buttons.first().trigger('click');
+            }
+            else
+            {
+                $clone.find('input').first().focus();
+            }
                 
             counter_value = $elem_to_clone.data('topicbank_counter_value');
             counter_name = $elem_to_clone.data('topicbank_counter_name');
