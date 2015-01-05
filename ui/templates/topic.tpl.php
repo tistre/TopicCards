@@ -11,8 +11,9 @@ function printReifierSummary(array $reifier, array $tpl)
             echo ' ';
 
         $first_type = false;
-            
-        echo htmlspecialchars($tpl[ 'topic_names' ][ $occurrence_type ]) . ': ';
+        
+        if ($occurrence_type !== $tpl[ 'id_text' ])
+            echo htmlspecialchars($tpl[ 'topic_names' ][ $occurrence_type ]) . ': ';
     
         $first_value = true;
         
@@ -24,8 +25,15 @@ function printReifierSummary(array $reifier, array $tpl)
                 echo ' / ';
 
             $first_value = false;
-                
-            echo htmlspecialchars($occurrence[ 'value' ]);
+
+            if ($occurrence[ 'datatype' ] === $tpl[ 'id_xhtml' ])
+            {
+                echo $occurrence[ 'value' ];
+            }
+            else
+            {
+                echo htmlspecialchars($occurrence[ 'value' ]);
+            }
         }
     }
 }
