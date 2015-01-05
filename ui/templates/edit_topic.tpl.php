@@ -316,10 +316,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             {
                 ?>
                 <tr>
-                  <td>
-                    <input type="text" name="subject_identifiers[]" value="<?=htmlspecialchars($url)?>" style="width: 400px;" />
+                  <td width="95%" valign="top">
+                    <input type="text" name="subject_identifiers[]" value="<?=htmlspecialchars($url)?>" style="width: 100%;" />
                   </td>
-                  <td><?php button_remove(); ?></td>
+                  <td width="5%" valign="top"><?php button_remove(); ?></td>
                 </tr>
                 <?php
             }
@@ -327,14 +327,14 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             ?>
             
               <tr data-topicbank_template="new_subject_identifier" class="hidden">
-                <td>
-                  <input type="text" name="subject_identifiers[]" value="" style="width: 400px;" />
+                <td width="95%" valign="top">
+                  <input type="text" name="subject_identifiers[]" value="" style="width: 100%;" />
                 </td>
-                <td><?php button_remove(); ?></td>
+                <td width="5%" valign="top"><?php button_remove(); ?></td>
               </tr>
               
               <tr>
-                <td>
+                <td valign="top">
                   <?php button_add([ 'event' => 'new_subject_identifier', 'label' => 'Add Identifier URL' ]); ?>
                 </td>
               </tr>
@@ -357,10 +357,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             {
                 ?>
                 <tr>
-                  <td>
-                    <input type="text" name="subject_locators[]" value="<?=htmlspecialchars($url)?>" style="width: 400px;" />
+                  <td width="95%" valign="top">
+                    <input type="text" name="subject_locators[]" value="<?=htmlspecialchars($url)?>" style="width: 100%;" />
                   </td>
-                  <td><?php button_remove(); ?></td>
+                  <td width="5%" valign="top"><?php button_remove(); ?></td>
                 </tr>
                 <?php
             }
@@ -368,14 +368,14 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             ?>
             
               <tr data-topicbank_template="new_subject_locator" class="hidden">
-                <td>
-                  <input type="text" name="subject_locators[]" value="" style="width: 400px;" />
+                <td width="95%" valign="top">
+                  <input type="text" name="subject_locators[]" value="" style="width: 100%;" />
                 </td>
-                <td><?php button_remove(); ?></td>
+                <td width="5%" valign="top"><?php button_remove(); ?></td>
               </tr>
                 
               <tr>
-                <td>
+                <td valign="top">
                   <?php button_add([ 'event' => 'new_subject_locator', 'label' => 'Add Resource URL' ]); ?>
                 </td>
               </tr>
@@ -398,58 +398,64 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               
                 <!-- Occurrence type -->
                 
-                <td valign="top">
+                <td width="25%" valign="top">
                   <?php button_choose_topic([ 'what' => 'occurrence_type', 'label' => $tpl[ 'topic_names' ][ $occurrence[ 'type' ] ] ]); ?>
                   <input type="hidden" name="occurrences[<?=$i?>][type]" value="<?=htmlspecialchars($occurrence[ 'type' ])?>" data-topicbank_element="id" />
                 </td>
                 
                 <!-- Occurrence value and datatype -->
                 
-                <td valign="top">
-                  <textarea name="occurrences[<?=$i?>][value]" <?php if ($occurrence[ 'datatype' ] === $tpl[ 'id_xhtml' ]) { ?>data-topicbank_html_editor="enabled"<?php } ?>><?=htmlspecialchars($occurrence[ 'value' ])?></textarea>
-                  <br />
-                  <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => $tpl[ 'topic_names' ][ $occurrence[ 'datatype' ] ] ]); ?>
-                  <input type="hidden" name="occurrences[<?=$i?>][datatype]" value="<?=htmlspecialchars($occurrence[ 'datatype' ])?>" data-topicbank_element="id" />
-                </td>
-                
-                <!-- Occurrence scope -->
-                
-                <td valign="top">
-                
+                <td width="70%" valign="top">
+                  <textarea name="occurrences[<?=$i?>][value]" style="width:100%;" <?php if ($occurrence[ 'datatype' ] === $tpl[ 'id_xhtml' ]) { ?>data-topicbank_html_editor="enabled"<?php } ?>><?=htmlspecialchars($occurrence[ 'value' ])?></textarea>
                   <table>
-              
-                  <?php $j = -1; foreach ($occurrence[ 'scope' ] as $j => $scope) { ?>
                     <tr>
-                      <td>
-                        <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => $tpl[ 'topic_names' ][ $scope ] ]); ?>
-                        <input type="hidden" name="occurrences[<?=$i?>][scope][<?=$j?>]" value="<?=htmlspecialchars($scope)?>" data-topicbank_element="id" />
+                      <td valign="top">
+                        <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => $tpl[ 'topic_names' ][ $occurrence[ 'datatype' ] ] ]); ?>
+                        <input type="hidden" name="occurrences[<?=$i?>][datatype]" value="<?=htmlspecialchars($occurrence[ 'datatype' ])?>" data-topicbank_element="id" />
                       </td>
-                      <td><?php button_remove(); ?></td>
-                    </tr>              
-                  <?php } $j++; ?>
-              
-                    <tr data-topicbank_template="new_occurrence_scope" class="hidden" data-topicbank_counter_value="<?=$j?>" data-topicbank_counter_name="TOPICBANK_COUNTER2">
-                      <td>
-                        <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => '[Scope]' ]); ?>
-                        <input type="hidden" name="occurrences[<?=$i?>][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
-                      </td>
-                      <td><?php button_remove(); ?></td>
-                    </tr>
+                                  
+                      <!-- Occurrence scope -->
                 
-                    <tr>
-                      <td>
-                        <?php button_add([ 'event' => 'new_occurrence_scope', 'label' => 'Add Scope' ]); ?>
+                      <td valign="top">
+                
+                        <table>
+              
+                        <?php $j = -1; foreach ($occurrence[ 'scope' ] as $j => $scope) { ?>
+                          <tr>
+                            <td>
+                              <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => $tpl[ 'topic_names' ][ $scope ] ]); ?>
+                              <input type="hidden" name="occurrences[<?=$i?>][scope][<?=$j?>]" value="<?=htmlspecialchars($scope)?>" data-topicbank_element="id" />
+                            </td>
+                            <td><?php button_remove(); ?></td>
+                          </tr>              
+                        <?php } $j++; ?>
+              
+                          <tr data-topicbank_template="new_occurrence_scope" class="hidden" data-topicbank_counter_value="<?=$j?>" data-topicbank_counter_name="TOPICBANK_COUNTER2">
+                            <td>
+                              <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => '[Scope]' ]); ?>
+                              <input type="hidden" name="occurrences[<?=$i?>][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
+                            </td>
+                            <td><?php button_remove(); ?></td>
+                          </tr>
+                
+                          <tr>
+                            <td>
+                              <?php button_add([ 'event' => 'new_occurrence_scope', 'label' => 'Add Scope' ]); ?>
+                            </td>
+                          </tr>
+              
+                        </table>
+                
+                      </td>
+                      
+                      <td valign="top">
+                        <?php button_reify([ 'reifier' => $occurrence[ 'reifier' ], 'reifies_type' => 'occurrence', 'reifies_id' => $occurrence[ 'id' ] ]); ?>
+                        <input type="hidden" name="occurrences[<?=$i?>][reifier]" value="<?=htmlspecialchars($occurrence[ 'reifier' ])?>" />
                       </td>
                     </tr>
-              
                   </table>
-                
                 </td>
-                <td valign="top">
-                  <?php button_reify([ 'reifier' => $occurrence[ 'reifier' ], 'reifies_type' => 'occurrence', 'reifies_id' => $occurrence[ 'id' ] ]); ?>
-                  <input type="hidden" name="occurrences[<?=$i?>][reifier]" value="<?=htmlspecialchars($occurrence[ 'reifier' ])?>" />
-                </td>
-                <td valign="top"><?php button_remove(); ?></td>
+                <td width="5%" valign="top"><?php button_remove(); ?></td>
               </tr>
           
             <?php } $i++; ?>
@@ -458,52 +464,58 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
                 <!-- New occurrence type -->
                 
-                <td valign="top">
+                <td width="25%" valign="top">
                   <?php button_choose_topic([ 'what' => 'occurrence_type', 'label' => '[Property]' ]); ?>
                   <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][type]" value="" data-topicbank_element="id" />
                 </td>
 
                 <!-- New occurrence value and datatype -->
                 
-                <td valign="top">
-                  <textarea name="occurrences[TOPICBANK_COUNTER1][value]"></textarea>
-                  <br />
-                  <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => '[Datatype]' ]); ?>
-                  <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][datatype]" value="" data-topicbank_element="id" />
-                </td>
-                
-                <!-- New occurrence scopes -->
-                
-                <td valign="top">
+                <td width="70%" valign="top">
+                  <textarea name="occurrences[TOPICBANK_COUNTER1][value]" style="width:100%;"></textarea>
                   
                   <table>
-                  
-                    <tr data-topicbank_template="new_occurrence_scope" class="hidden" data-topicbank_counter_value="0" data-topicbank_counter_name="TOPICBANK_COUNTER2">
-                      <td>
-                        <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => '[Scope]' ]); ?>
-                        <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
-                      </td>
-                      <td><?php button_remove(); ?></td>
-                    </tr>
-                
                     <tr>
-                      <td>
-                        <?php button_add([ 'event' => 'new_occurrence_scope', 'label' => 'Add Scope' ]); ?>
+                      <td valign="top">
+                        <?php button_choose_topic([ 'what' => 'occurrence_datatype', 'label' => '[Datatype]' ]); ?>
+                        <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][datatype]" value="" data-topicbank_element="id" />
+                      </td>
+                
+                      <!-- New occurrence scopes -->
+                
+                      <td valign="top">
+                  
+                        <table>
+                  
+                          <tr data-topicbank_template="new_occurrence_scope" class="hidden" data-topicbank_counter_value="0" data-topicbank_counter_name="TOPICBANK_COUNTER2">
+                            <td>
+                              <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => '[Scope]' ]); ?>
+                              <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
+                            </td>
+                            <td><?php button_remove(); ?></td>
+                          </tr>
+                
+                          <tr>
+                            <td>
+                              <?php button_add([ 'event' => 'new_occurrence_scope', 'label' => 'Add Scope' ]); ?>
+                            </td>
+                          </tr>
+              
+                        </table>
+                  
+                      </td>
+                      <td valign="top">
+                        <?php button_reify([ 'reifies_type' => 'occurrence' ]); ?>
+                        <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][reifier]" value="" />
                       </td>
                     </tr>
-              
                   </table>
-                  
                 </td>
-                <td valign="top">
-                  <?php button_reify([ 'reifies_type' => 'occurrence' ]); ?>
-                  <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][reifier]" value="" />
-                </td>
-                <td valign="top"><?php button_remove(); ?></td>
+                <td width="5%" valign="top"><?php button_remove(); ?></td>
               </tr>
 
               <tr>
-                <td>
+                <td valign="top">
                   <?php button_add([ 'event' => 'new_occurrence', 'label' => 'Add Property' ]); ?>
                 </td>
               </tr>
