@@ -131,9 +131,17 @@ class Topic extends Core implements iTopic
         {
             if (isset($filters[ 'type' ]))
             {
-                if ($name->getType() === $filters[ 'type' ])
-                    $result[ ] = $name;
+                if ($name->getType() !== $filters[ 'type' ])
+                    continue;
             }
+
+            if (isset($filters[ 'reifier' ]))
+            {
+                if ($name->getReifier() !== $filters[ 'reifier' ])
+                    continue;
+            }
+
+            $result[ ] = $name;
         }
         
         return $result;
