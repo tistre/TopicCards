@@ -64,13 +64,19 @@ catch (\Exception $e)
 $tpl[ 'fulltext_query' ] = $fulltext_query;
 
 $tpl[ 'topics' ] = [ ];
+$type_labels = [ ];
 
 foreach ($response[ 'hits' ][ 'hits' ] as $hit)
 {
     $types = [ ];
     
     foreach ($hit[ '_source' ][ 'type_id' ] as $type)
-        $types[ ] = $topicmap->getTopicLabel($type);
+    {
+        if (! isset($type_labels[ $type ]))
+            $type_labels[ $type ] = $topicmap->getTopicLabel($type);
+        
+        $types[ ] = $type_labels[ $type ];
+    }
 
     $label = $hit[ '_source' ][ 'label' ];
     
@@ -116,6 +122,7 @@ $tpl[ 'pages' ] =
 
 $tpl[ 'topic_types' ] = [ ];
 
+// XXX slow
 foreach ($topicmap->getTopicTypes([ 'get_mode' => 'all' ]) as $id)
 {
     $tpl[ 'topic_types' ][ ] = 
@@ -125,6 +132,5 @@ foreach ($topicmap->getTopicTypes([ 'get_mode' => 'all' ]) as $id)
         'selected' => ($id === $type_query)
     ];
 }
-
 
 include TOPICBANK_BASE_DIR . '/ui/templates/topics.tpl.php';

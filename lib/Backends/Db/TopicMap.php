@@ -276,6 +276,11 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
         $occurrence->setDatatypeSubject('http://www.strehle.de/schema/sizeInBytes');
         $occurrence->setValue(filesize($filename));
 
+        $occurrence = $topic->newOccurrence();    
+        $occurrence->setTypeSubject('http://www.strehle.de/schema/fileContentChecksum');
+        $occurrence->setDatatypeSubject('http://www.w3.org/2001/XMLSchema#string');
+        $occurrence->setValue(md5_file($filename));
+
         $type_subject = 'http://www.strehle.de/schema/file';
     
         $finfo = finfo_open(FILEINFO_MIME_TYPE);    

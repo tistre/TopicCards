@@ -163,7 +163,12 @@ class XtmImport
             {
                 $datatype = $subnode->getAttribute('datatype');
                 
-                $occurrence->setValue(\TopicBank\Utils\DatatypeUtils::getValueFromDomNode($subnode, $datatype));
+                $value = \TopicBank\Utils\DatatypeUtils::getValueFromDomNode($subnode, $datatype);
+                
+                if (strlen($value) === 0)
+                    continue;
+                    
+                $occurrence->setValue($value);
                 
                 $occurrence->setDataType
                 (
@@ -240,24 +245,12 @@ class XtmImport
                 
             if 
             (
-                ($subnode->tagName === 'subjectIdentifierRef') 
+                (($subnode->tagName === 'subjectIdentifierRef') || ($subnode->tagName === 'subjectLocatorRef'))
                 && $subnode->hasAttribute('href') 
                 && (strlen($subnode->getAttribute('href')) > 0)
             )
             {
                 $topic_id = $this->topicmap->getTopicBySubject($subnode->getAttribute('href'));
-                
-                if (strlen($topic_id) > 0)
-                    return $topic_id;
-            }
-            elseif 
-            (
-                ($subnode->tagName === 'subjectLocatorRef') 
-                && $subnode->hasAttribute('href') 
-                && (strlen($subnode->getAttribute('href')) > 0)
-            )
-            {
-                $topic_id = $this->topicmap->getTopicBySubjectLocator($subnode->getAttribute('href'));
                 
                 if (strlen($topic_id) > 0)
                     return $topic_id;

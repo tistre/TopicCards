@@ -371,6 +371,13 @@ foreach ($association_ids as $association_id)
 // Fill topic_names array (names of all related topics needed for display)
 
 foreach (array_keys($tpl[ 'topic_names' ]) as $helper_topic_id)
-    $tpl[ 'topic_names' ][ $helper_topic_id ] = $topicmap->getTopicLabel($helper_topic_id);
+{
+    $label = $topicmap->getTopicLabel($helper_topic_id);
+    
+    if (strlen($label) === 0)
+        $label = $helper_topic_id;
+        
+    $tpl[ 'topic_names' ][ $helper_topic_id ] = $label;
+}
 
 include TOPICBANK_BASE_DIR . '/ui/templates/edit_topic.tpl.php';
