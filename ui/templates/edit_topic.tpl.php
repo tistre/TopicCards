@@ -538,6 +538,11 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
           <!-- Save button -->
           
           <div>
+            
+            <br />
+            
+            <small class="text-muted">Last modified: <?=htmlspecialchars($tpl[ 'topic' ][ 'updated' ])?></small>
+            
             <p class="pull-right">
             
               <a href="<?=htmlspecialchars($tpl[ 'cancel_url' ])?>" class="btn btn-link">Cancel</a>

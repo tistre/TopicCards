@@ -287,6 +287,10 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
             header('Location: ' . $topic_url);
             exit;
         }
+        
+        // Load freshly, to make sure everything we're seeing is in the database
+        
+        $topic->load($topic_id);
     }
 }
 
