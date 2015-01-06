@@ -297,6 +297,7 @@ $tpl[ 'topic' ] = $topic->getAll();
 foreach ($tpl[ 'topic' ][ 'types' ] as $helper_topic_id)
     $tpl[ 'topic_names' ][ $helper_topic_id ] = false;
 
+$tpl[ 'id_text' ] = $topicmap->getTopicBySubject('http://schema.org/text');
 $tpl[ 'id_xhtml' ] = $topicmap->getTopicBySubject('http://www.w3.org/1999/xhtml');
 
 foreach ($tpl[ 'topic' ][ 'occurrences' ] as $i => $occurrence_arr)

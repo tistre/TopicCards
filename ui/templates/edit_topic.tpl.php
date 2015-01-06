@@ -398,14 +398,25 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
               
                 <!-- Occurrence type -->
                 
+                <?php if ($occurrence[ 'type' ] === $tpl[ 'id_text' ]) { ?>                
+                <td colspan="2" width="95%" valign="top">
+                <?php } else { ?>
                 <td width="25%" valign="top">
+                <?php } ?>
+                
                   <?php button_choose_topic([ 'what' => 'occurrence_type', 'label' => $tpl[ 'topic_names' ][ $occurrence[ 'type' ] ] ]); ?>
                   <input type="hidden" name="occurrences[<?=$i?>][type]" value="<?=htmlspecialchars($occurrence[ 'type' ])?>" data-topicbank_element="id" />
+
+                <?php if ($occurrence[ 'type' ] !== $tpl[ 'id_text' ]) { ?>                
                 </td>
+                <?php } ?>
                 
                 <!-- Occurrence value and datatype -->
                 
+                <?php if ($occurrence[ 'type' ] !== $tpl[ 'id_text' ]) { ?>
                 <td width="70%" valign="top">
+                <?php } ?>
+                
                   <textarea name="occurrences[<?=$i?>][value]" style="width:100%;" <?php if ($occurrence[ 'datatype' ] === $tpl[ 'id_xhtml' ]) { ?>data-topicbank_html_editor="enabled"<?php } ?>><?=htmlspecialchars($occurrence[ 'value' ])?></textarea>
                   <table>
                     <tr>
