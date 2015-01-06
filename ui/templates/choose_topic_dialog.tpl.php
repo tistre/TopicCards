@@ -31,13 +31,17 @@
   <div class="col-md-4">
     <h4>Create new</h4>
     <form id="topicbank_choose_topic_dialog_createform">
+      Type:
       <select size="1" name="create_type" data-topicbank_element="create_type">
         <option value="">(No type)</option>
         <?php foreach ($tpl[ 'topic_types' ] as $topic_arr) { ?>
         <option value="<?=htmlspecialchars($topic_arr[ 'id' ])?>"><?=htmlspecialchars($topic_arr[ 'label' ])?></option>
         <?php } ?>
       </select>
+      Name:
       <input type="text" name="create_name" data-topicbank_element="create_name" />
+      Identifier URL:
+      <input type="text" name="create_subject_identifier" data-topicbank_element="create_subject" />
       <button class="btn btn-default" type="submit">Create</button>
     </form>
   </div>

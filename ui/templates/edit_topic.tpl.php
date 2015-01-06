@@ -993,7 +993,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
         $('#choose_topic_dialog').on('submit', '#topicbank_choose_topic_dialog_createform', function(e)
         {
-            var new_name, new_type, $new_name_input, $new_type_input, $target, $target_id, $target_name;
+            var new_name, new_type, new_subject;
+            var $new_name_input, $new_type_input, $new_subject_input, $target, $target_id, $target_name;
             
             if (_private.choose_topic_dialog_opener === undefined)
             {
@@ -1006,6 +1007,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             $new_type_input = $('#choose_topic_dialog').find('select[data-topicbank_element="create_type"]');            
             new_type = $new_type_input.val();
 
+            $new_subject_input = $('#choose_topic_dialog').find('input[data-topicbank_element="create_subject"]');
+            new_subject = $new_subject_input.val();
+            
             $.ajax(
             {
                 url: topicbank_base_url + 'ajax_create_topic',
@@ -1013,7 +1017,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 data:
                 {
                     name: new_name,
-                    type: new_type
+                    type: new_type,
+                    subject_identifier: new_subject
                 },
                 dataType: 'json'
             }).done(function(data)

@@ -7,7 +7,7 @@ $topic = $topicmap->newTopic();
 $topic->setId($topicmap->createId());
 
 $name = $topic->newName();
-$name->setType('basename');
+$name->setTypeSubject('http://schema.org/name');
 $name->setValue(trim($_REQUEST[ 'name' ]));
 
 if (! empty($_REQUEST[ 'type' ]))
@@ -18,6 +18,11 @@ if (! empty($_REQUEST[ 'type' ]))
         $type_ids = [ $type_ids ];
         
     $topic->setTypes($type_ids);
+}
+
+if (! empty($_REQUEST[ 'subject_identifier' ]))
+{
+    $topic->setSubjectIdentifiers([ $_REQUEST[ 'subject_identifier' ] ]);
 }
 
 $ok = $topic->save();
