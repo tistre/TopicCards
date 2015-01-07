@@ -80,4 +80,26 @@ trait Scoped
         
         return $this->setScope($data[ 'scope' ]);
     }
+    
+    
+    public function matchesScope(array $match_topic_ids)
+    {
+        $my_topic_ids = $this->getScope();
+
+        $my_count = count($my_topic_ids);
+        $match_count = count($match_topic_ids);
+        
+        // Short cut: If counts differ, scopes cannot match
+        
+        if ($my_count !== $match_count)
+            return false;
+        
+        // Exact match, independent of order
+        
+        return
+        (
+            (count(array_diff($my_topic_ids, $match_topic_ids)) === 0)
+            && (count(array_diff($match_topic_ids, $my_topic_ids)) === 0)
+        );
+    }
 }

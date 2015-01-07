@@ -15,6 +15,9 @@ class Services implements \TopicBank\Interfaces\iServices
     protected $db_params = [ ];
     protected $search_params = [ ];
     
+    // Preferred scopes for name display = labels. Used to set preferred display language.
+    protected $preferred_label_scopes = [ [ ], '*' ];
+    
     
     public function __construct()
     {
@@ -62,6 +65,19 @@ class Services implements \TopicBank\Interfaces\iServices
         // See include/config-sample.php for the $params format
                 
         $this->search_params = $params;
+        return 1;
+    }
+    
+    
+    public function getPreferredLabelScopes()
+    {
+        return $this->preferred_label_scopes;
+    }
+    
+    
+    public function setPreferredLabelScopes(array $scopes)
+    {
+        $this->preferred_label_scopes = $scopes;
         return 1;
     }
 }

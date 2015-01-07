@@ -155,30 +155,54 @@ class Topic extends Core implements iTopic
     }
     
 
-    public function getLabel()
+    public function getLabel($preferred_scopes = false)
     {
-        $result = '';
+        if (! is_array($preferred_scopes))
+            $preferred_scopes = $this->getServices()->getPreferredLabelScopes();
+            
+        // Preferred scopes in ascending order.
+        // Prefer http://schema.org/name ("default"), otherwise use first name
 
-        // Prefer basename, otherwise use first name without scope
-        
-        $basename = '';
+        $by_scope = array_fill_keys
+        (
+            array_keys($preferred_scopes), 
+            [ 'default' => [ ], 'other' => [ ] ]
+        );
 
         foreach ($this->getNames([ ]) as $name)
         {
-            if (count($name->getScope()) > 0)
-                continue;
-    
-            if ($name->getType() === 'basename')
-                $basename = $name->getValue();
+            // XXX make http://schema.org/name a constant (DEFAULT_NAME_SUBJECT)
+            $type_key = 
+            (
+                ($name->getTypeSubject() === 'http://schema.org/name')
+                ? 'default'
+                : 'other'
+            );
 
-            if (strlen($result) === 0)    
-                $result = $name->getValue();
+            foreach ($preferred_scopes as $scope_key => $scope)
+            {
+                if (($scope !== '*') && (! $name->matchesScope($scope)))
+                    continue;
+                
+                $value = $name->getValue();
+                
+                if (strlen($value) === 0)
+                    continue;
+                    
+                $by_scope[ $scope_key ][ $type_key ][ ] = $value;
+            }
         }
 
-        if (strlen($basename) > 0)
-            $result = $basename;
+        foreach ($by_scope as $scope_key => $by_type)
+        {
+            foreach ($by_type as $values)
+            {
+                if (isset($values[ 0 ]))
+                    return $values[ 0 ];
+            }
+        }
                 
-        return $result;
+        return '';
     }
 
     

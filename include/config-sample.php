@@ -29,6 +29,14 @@ $topicmap->setDbTablePrefix('topicbank_');
 $topicmap->setSearchIndex('topicbank');
 $topicmap->setUploadPath('/var/opt/topicbank/' . date('Y-m-d'));
 
+$services->setPreferredLabelScopes(
+[
+    // XXX use a constant for the subject
+    [ $topicmap->getTopicBySubject('http://en.wikipedia.org/wiki/English_language') ],
+    [ ], 
+    '*'
+]);
+
 $config_topicmap = $services->getTopicMapSystem()->newTopicMap('config');
 $config_topicmap->setUrl('http://example.com/topicmaps/topicbank_config');
 $config_topicmap->setDbTablePrefix('topicbank_config_');
