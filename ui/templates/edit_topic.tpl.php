@@ -417,7 +417,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <td width="70%" valign="top">
                 <?php } ?>
                 
-                  <textarea name="occurrences[<?=$i?>][value]" style="width:100%;" <?php if ($occurrence[ 'datatype' ] === $tpl[ 'id_xhtml' ]) { ?>data-topicbank_html_editor="enabled"<?php } ?>><?=htmlspecialchars($occurrence[ 'value' ])?></textarea>
+                  <textarea name="occurrences[<?=$i?>][value]" style="width:100%; <?php if ($occurrence[ 'datatype' ] === $tpl[ 'id_xhtml' ]) { ?>height: 300px;<?php } ?>" <?php if ($occurrence[ 'datatype' ] === $tpl[ 'id_xhtml' ]) { ?>data-topicbank_html_editor="enabled"<?php } ?>><?=htmlspecialchars($occurrence[ 'value' ])?></textarea>
                   <table>
                     <tr>
                       <td valign="top">
@@ -1097,7 +1097,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             plugins: [ 'link' ],
             relative_urls: false,
             selector: 'textarea[data-topicbank_html_editor="enabled"]',
-            toolbar_items_size: 'small'
+            toolbar_items_size: 'small',
+            content_css: '<?=$tpl[ "topicbank_base_url" ]?>static/tinymce_content.css'
         });
 
     });
