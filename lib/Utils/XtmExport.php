@@ -12,7 +12,7 @@ class XtmExport
     {
         $result = 
             '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
-            . '<topicMap xmlns="http://www.topicmaps.org/xtm/" version="2.0">' . "\n";
+            . '<topicMap xmlns="http://www.topicmaps.org/xtm/" version="2.1">' . "\n";
         
         foreach ($objects as $object)
         {
