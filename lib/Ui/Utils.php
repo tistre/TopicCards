@@ -36,7 +36,7 @@ class Utils
             $result = sprintf
             (
                 'Property “%s: %s” of <a href="%stopic/%s">%s</a>',
-                htmlspecialchars($topicmap->getTopicLabel($objects[ 'occurrence' ]->getType())),
+                htmlspecialchars($topicmap->getTopicLabel($objects[ 'occurrence' ]->getTypeId())),
                 htmlspecialchars($objects[ 'occurrence' ]->getValue()),
                 TOPICBANK_BASE_URL,
                 htmlspecialchars(urlencode($objects[ 'topic' ]->getId())),
@@ -53,15 +53,15 @@ class Utils
                 (
                     '<a href="%stopic/%s">%s</a>',
                     TOPICBANK_BASE_URL,
-                    htmlspecialchars(urlencode($role->getPlayer())),
-                    htmlspecialchars($topicmap->getTopicLabel($role->getPlayer()))
+                    htmlspecialchars(urlencode($role->getPlayerId())),
+                    htmlspecialchars($topicmap->getTopicLabel($role->getPlayerId()))
                 );
             }
             
             $result = sprintf
             (
                 'A “%s” association between %s',
-                htmlspecialchars($topicmap->getTopicLabel($objects[ 'association' ]->getType())),
+                htmlspecialchars($topicmap->getTopicLabel($objects[ 'association' ]->getTypeId())),
                 implode(' and ', $players)
             );
         }
@@ -71,26 +71,26 @@ class Utils
         
             foreach ($objects[ 'association' ]->getRoles() as $role)
             {
-                if ($role->getPlayer() === $objects[ 'role' ]->getPlayer())
+                if ($role->getPlayerId() === $objects[ 'role' ]->getPlayerId())
                     continue;
                 
                 $other_players[ ] = sprintf
                 (
                     '<a href="%stopic/%s">%s</a>',
                     TOPICBANK_BASE_URL,
-                    htmlspecialchars(urlencode($role->getPlayer())),
-                    htmlspecialchars($topicmap->getTopicLabel($role->getPlayer()))
+                    htmlspecialchars(urlencode($role->getPlayerId())),
+                    htmlspecialchars($topicmap->getTopicLabel($role->getPlayerId()))
                 );
             }
             
             $result = sprintf
             (
                 'Role “%s: <a href="%stopic/%s">%s</a>” in a “%s” association with %s',
-                htmlspecialchars($topicmap->getTopicLabel($objects[ 'role' ]->getType())),
+                htmlspecialchars($topicmap->getTopicLabel($objects[ 'role' ]->getTypeId())),
                 TOPICBANK_BASE_URL,
-                htmlspecialchars($objects[ 'role' ]->getPlayer()),
-                htmlspecialchars($topicmap->getTopicLabel($objects[ 'role' ]->getPlayer())),
-                htmlspecialchars($topicmap->getTopicLabel($objects[ 'association' ]->getType())),
+                htmlspecialchars($objects[ 'role' ]->getPlayerId()),
+                htmlspecialchars($topicmap->getTopicLabel($objects[ 'role' ]->getPlayerId())),
+                htmlspecialchars($topicmap->getTopicLabel($objects[ 'association' ]->getTypeId())),
                 implode(' and ', $other_players)
             );
         }

@@ -7,13 +7,13 @@ $tpl = [ ];
 $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
 
 $tpl[ 'topicmap' ] = [ ];
-$tpl[ 'topicmap' ][ 'label' ] = $topicmap->getTopicLabel($topicmap->getReifier());
+$tpl[ 'topicmap' ][ 'label' ] = $topicmap->getTopicLabel($topicmap->getReifierId());
 
 $request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(TOPICBANK_BASE_URL));
 
 list(, $topic_identifier_or_id) = explode('/', $request_path);
 
-$topic_id = $topicmap->getTopicBySubject($topic_identifier_or_id);
+$topic_id = $topicmap->getTopicIdBySubject($topic_identifier_or_id);
 
 if (strlen($topic_id) === 0)
     $topic_id = $topic_identifier_or_id;
@@ -60,9 +60,9 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
             $name = $topic->newName();
         }
         
-        $name->setType($name_arr[ 'type' ]);
+        $name->setTypeId($name_arr[ 'type' ]);
         $name->setValue($name_arr[ 'value' ]);
-        $name->setReifier($name_arr[ 'reifier' ]);
+        $name->setReifierId($name_arr[ 'reifier' ]);
         
         $scopes = [ ];
         
@@ -80,7 +80,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
         }
         
         if (count($scopes) > 0)
-            $name->setScope($scopes);
+            $name->setScopeIds($scopes);
             
         $new_names[ ] = $name;
     }
@@ -101,7 +101,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
         $type_ids[ ] = $type_id;
     }
     
-    $topic->setTypes($type_ids);
+    $topic->setTypeIds($type_ids);
     
     // Subject identifiers
     
@@ -149,10 +149,10 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
             
         $occurrence = $topic->newOccurrence();
         
-        $occurrence->setType($occ_arr[ 'type' ]);
+        $occurrence->setTypeId($occ_arr[ 'type' ]);
         $occurrence->setValue($occ_arr[ 'value' ]);
-        $occurrence->setDatatype($occ_arr[ 'datatype' ]);
-        $occurrence->setReifier($occ_arr[ 'reifier' ]);
+        $occurrence->setDatatypeId($occ_arr[ 'datatype' ]);
+        $occurrence->setReifierId($occ_arr[ 'reifier' ]);
         
         $scopes = [ ];
         
@@ -167,7 +167,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
         }
         
         if (count($scopes) > 0)
-            $occurrence->setScope($scopes);
+            $occurrence->setScopeIds($scopes);
     }
 
     // Validate
@@ -185,6 +185,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
     {
         foreach ($_REQUEST[ 'associations' ] as $assoc_arr)
         {
+error_log(print_r($assoc_arr, true));
             $assoc_arr[ 'type' ] = trim($assoc_arr[ 'type' ]);
         
             if ($assoc_arr[ 'type' ] === '')
@@ -218,8 +219,8 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
                 $association->setId($topicmap->createId());
             }
     
-            $association->setType($assoc_arr[ 'type' ]);
-            $association->setReifier($assoc_arr[ 'reifier' ]);
+            $association->setTypeId($assoc_arr[ 'type' ]);
+            $association->setReifierId($assoc_arr[ 'reifier' ]);
 
             $scopes = [ ];
         
@@ -233,7 +234,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
                 $scopes[ ] = $scope;
             }
         
-            $association->setScope($scopes);
+            $association->setScopeIds($scopes);
     
             // XXX don't re-add all the roles, losing their IDs
             $association->setRoles([ ]);
@@ -251,9 +252,9 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
                 
                 $role = $association->newRole();
         
-                $role->setType($role_arr[ 'type' ]);
-                $role->setPlayer($role_arr[ 'player' ]);
-                $role->setReifier($role_arr[ 'reifier' ]);
+                $role->setTypeId($role_arr[ 'type' ]);
+                $role->setPlayerId($role_arr[ 'player' ]);
+                $role->setReifierId($role_arr[ 'reifier' ]);
             }
         
             $ok = $association->validate($msg_html);
@@ -301,8 +302,8 @@ $tpl[ 'topic' ] = $topic->getAll();
 foreach ($tpl[ 'topic' ][ 'types' ] as $helper_topic_id)
     $tpl[ 'topic_names' ][ $helper_topic_id ] = false;
 
-$tpl[ 'id_text' ] = $topicmap->getTopicBySubject('http://schema.org/text');
-$tpl[ 'id_xhtml' ] = $topicmap->getTopicBySubject('http://www.w3.org/1999/xhtml');
+$tpl[ 'id_text' ] = $topicmap->getTopicIdBySubject('http://schema.org/text');
+$tpl[ 'id_xhtml' ] = $topicmap->getTopicIdBySubject('http://www.w3.org/1999/xhtml');
 
 foreach ($tpl[ 'topic' ][ 'occurrences' ] as $i => $occurrence_arr)
 {
@@ -321,7 +322,7 @@ if (count($tpl[ 'topic' ][ 'names' ]) === 0)
 {
     $dummy_name = $topic->newName();
     
-    $dummy_name->setType('basename');
+    $dummy_name->setType('http://schema.org/name');
     
     $tpl[ 'topic' ][ 'names' ][ ] = $dummy_name->getAll();
 }
@@ -338,7 +339,7 @@ $tpl[ 'topic' ][ 'reifies_summary_html' ] = \TopicBank\Ui\Utils::getReifiesSumma
 
 // Fill associations
 
-$association_ids = $topicmap->getAssociations([ 'role_player' => $topic_id ]);
+$association_ids = $topicmap->getAssociationIds([ 'role_player_id' => $topic_id ]);
 
 $tpl[ 'associations' ] = [ ];
 

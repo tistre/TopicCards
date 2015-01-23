@@ -10,13 +10,13 @@ trait Reified
     protected $reifier;
     
     
-    public function getReifier()
+    public function getReifierId()
     {
         return $this->reifier;
     }
     
     
-    public function setReifier($topic_id)
+    public function setReifierId($topic_id)
     {
         $this->reifier = $topic_id;
         return 1;
@@ -27,7 +27,7 @@ trait Reified
     {
         return
         [
-            'reifier' => $this->getReifier()
+            'reifier' => $this->getReifierId()
         ];
     }
 
@@ -39,7 +39,7 @@ trait Reified
             'reifier' => false
         ], $data);
         
-        return $this->setReifier($data[ 'reifier' ]);
+        return $this->setReifierId($data[ 'reifier' ]);
     }
     
     
@@ -69,7 +69,7 @@ trait Reified
         
         $reifier_topic->setIsReifier($is_reifier);
         
-        $this->setReifier($reifier_id);
+        $this->setReifierId($reifier_id);
         
         return $reifier_topic;
     }

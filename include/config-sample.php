@@ -32,7 +32,7 @@ $topicmap->setUploadPath('/var/opt/topicbank/' . date('Y-m-d'));
 $services->setPreferredLabelScopes(
 [
     // XXX use a constant for the subject
-    [ $topicmap->getTopicBySubject('http://en.wikipedia.org/wiki/English_language') ],
+    [ $topicmap->getTopicIdBySubject('http://en.wikipedia.org/wiki/English_language') ],
     [ ], 
     '*'
 ]);

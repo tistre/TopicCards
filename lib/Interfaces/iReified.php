@@ -5,7 +5,7 @@ namespace TopicBank\Interfaces;
 
 interface iReified
 {
-    public function getReifier();
-    public function setReifier($topic_id);
+    public function getReifierId();
+    public function setReifierId($topic_id);
     public function newReifierTopic();
 }

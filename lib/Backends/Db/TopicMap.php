@@ -82,9 +82,9 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     }
         
     
-    public function getReifier()
+    public function getReifierId()
     {
-        return $this->getTopicBySubject($this->getUrl());
+        return $this->getTopicIdBySubject($this->getUrl());
     }
     
     
@@ -125,14 +125,13 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     }
     
     
-    // XXX rename to getTopicIds()
-    public function getTopics(array $filters)
+    public function getTopicIds(array $filters)
     {
         return $this->selectTopics($filters);
     }
     
 
-    public function getTopicBySubject($uri)
+    public function getTopicIdBySubject($uri)
     {
         return $this->selectTopicBySubject($uri);
     }
@@ -194,67 +193,67 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     }
     
     
-    public function getAssociations(array $filters)
+    public function getAssociationIds(array $filters)
     {
         return $this->selectAssociations($filters);
     }
 
 
-    public function getTopicTypes(array $filters)
+    public function getTopicTypeIds(array $filters)
     {
         return $this->selectTopicTypes($filters);
     }
 
 
-    public function getNameTypes(array $filters)
+    public function getNameTypeIds(array $filters)
     {
         return $this->selectNameTypes($filters);
     }
 
 
-    public function getNameScopes(array $filters)
+    public function getNameScopeIds(array $filters)
     {
         return $this->selectNameScopes($filters);
     }
 
 
-    public function getOccurrenceTypes(array $filters)
+    public function getOccurrenceTypeIds(array $filters)
     {
         return $this->selectOccurrenceTypes($filters);
     }
 
 
-    public function getOccurrenceDatatypes(array $filters)
+    public function getOccurrenceDatatypeIds(array $filters)
     {
         return $this->selectOccurrenceDatatypes($filters);
     }
 
 
-    public function getOccurrenceScopes(array $filters)
+    public function getOccurrenceScopeIds(array $filters)
     {
         return $this->selectOccurrenceScopes($filters);
     }
 
 
-    public function getAssociationTypes(array $filters)
+    public function getAssociationTypeIds(array $filters)
     {
         return $this->selectAssociationTypes($filters);
     }
 
 
-    public function getAssociationScopes(array $filters)
+    public function getAssociationScopeIds(array $filters)
     {
         return $this->selectAssociationScopes($filters);
     }
 
 
-    public function getRoleTypes(array $filters)
+    public function getRoleTypeIds(array $filters)
     {
         return $this->selectRoleTypes($filters);
     }
 
 
-    public function getRolePlayers(array $filters)
+    public function getRolePlayerIds(array $filters)
     {
         return $this->selectRolePlayers($filters);
     }
@@ -266,22 +265,22 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
 
         $name = $topic->newName();
         
-        $name->setTypeSubject('http://www.strehle.de/schema/fileName');
+        $name->setType('http://www.strehle.de/schema/fileName');
         $name->setValue(pathinfo($filename, PATHINFO_BASENAME));
     
         $topic->setSubjectLocators([ 'file://' . $filename ]);
 
         $occurrence = $topic->newOccurrence();    
-        $occurrence->setTypeSubject('http://schema.org/contentSize');
-        $occurrence->setDatatypeSubject('http://www.strehle.de/schema/sizeInBytes');
+        $occurrence->setType('http://schema.org/contentSize');
+        $occurrence->setDatatype('http://www.strehle.de/schema/sizeInBytes');
         $occurrence->setValue(filesize($filename));
 
         $occurrence = $topic->newOccurrence();    
-        $occurrence->setTypeSubject('http://www.strehle.de/schema/fileContentChecksum');
-        $occurrence->setDatatypeSubject('http://www.w3.org/2001/XMLSchema#string');
+        $occurrence->setType('http://www.strehle.de/schema/fileContentChecksum');
+        $occurrence->setDatatype('http://www.w3.org/2001/XMLSchema#string');
         $occurrence->setValue(md5_file($filename));
 
-        $type_subject = 'http://www.strehle.de/schema/file';
+        $type = 'http://www.strehle.de/schema/file';
     
         $finfo = finfo_open(FILEINFO_MIME_TYPE);    
         $mimetype = finfo_file($finfo, $filename);
@@ -290,28 +289,28 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
         if (strlen($mimetype) > 0)
         {
             $occurrence = $topic->newOccurrence();    
-            $occurrence->setTypeSubject('http://www.strehle.de/schema/mimeType');
-            $occurrence->setDatatypeSubject('http://www.w3.org/2001/XMLSchema#string');
+            $occurrence->setType('http://www.strehle.de/schema/mimeType');
+            $occurrence->setDatatype('http://www.w3.org/2001/XMLSchema#string');
             $occurrence->setValue($mimetype);
         
             if (substr($mimetype, 0, 6) === 'image/')
-                $type_subject = 'http://schema.org/ImageObject';
+                $type = 'http://schema.org/ImageObject';
         }
 
-        $topic->setTypeSubjects([ $type_subject ]);
+        $topic->setTypes([ $type ]);
     
         $size = getimagesize($filename);
     
         if (is_array($size))
         {
             $occurrence = $topic->newOccurrence();    
-            $occurrence->setTypeSubject('http://schema.org/width');
-            $occurrence->setDatatypeSubject('http://www.w3.org/2001/XMLSchema#nonNegativeInteger');
+            $occurrence->setType('http://schema.org/width');
+            $occurrence->setDatatype('http://www.w3.org/2001/XMLSchema#nonNegativeInteger');
             $occurrence->setValue($size[ 0 ]);
 
             $occurrence = $topic->newOccurrence();    
-            $occurrence->setTypeSubject('http://schema.org/height');
-            $occurrence->setDatatypeSubject('http://www.w3.org/2001/XMLSchema#nonNegativeInteger');
+            $occurrence->setType('http://schema.org/height');
+            $occurrence->setDatatype('http://www.w3.org/2001/XMLSchema#nonNegativeInteger');
             $occurrence->setValue($size[ 1 ]);
         }
         

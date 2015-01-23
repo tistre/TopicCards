@@ -27,22 +27,22 @@ class Association extends Core implements \TopicBank\Interfaces\iAssociation
         
         $result = [ ];
         
-        if (isset($filters[ 'type_subject' ]))
-            $filters[ 'type' ] = $this->getTopicMap()->getTopicBySubject($filters[ 'type_subject' ]);
+        if (isset($filters[ 'type' ]))
+            $filters[ 'type_id' ] = $this->getTopicMap()->getTopicIdBySubject($filters[ 'type' ]);
 
-        if (isset($filters[ 'player_subject' ]))
-            $filters[ 'player' ] = $this->getTopicMap()->getTopicBySubject($filters[ 'player_subject' ]);
+        if (isset($filters[ 'player' ]))
+            $filters[ 'player_id' ] = $this->getTopicMap()->getTopicIdBySubject($filters[ 'player' ]);
 
         foreach ($this->roles as $role)
         {
-            if (isset($filters[ 'type' ]))
+            if (isset($filters[ 'type_id' ]))
             {
-                if ($role->getType() === $filters[ 'type' ])
+                if ($role->getTypeId() === $filters[ 'type_id' ])
                     $result[ ] = $role;
             }
-            elseif (isset($filters[ 'player' ]))
+            elseif (isset($filters[ 'player_id' ]))
             {
-                if ($role->getPlayer() === $filters[ 'player' ])
+                if ($role->getPlayerId() === $filters[ 'player_id' ])
                     $result[ ] = $role;
             }
         }

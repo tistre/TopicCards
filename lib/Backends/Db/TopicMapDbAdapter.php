@@ -160,18 +160,18 @@ trait TopicMapDbAdapter
         $where = [ ];
         $bind = [ ];
 
-        if (! empty($filters[ 'type' ]))
+        if (! empty($filters[ 'type_id' ]))
         {
             $where[ ] = 'association_type = :association_type';
             
             $bind[ ] = 
             [
                 'bind_param' => ':association_type', 
-                'value' => $filters[ 'type' ] 
+                'value' => $filters[ 'type_id' ] 
             ];
         }
 
-        if (! empty($filters[ 'role_player' ]))
+        if (! empty($filters[ 'role_player_id' ]))
         {
             $where[ ] = sprintf
             (
@@ -183,7 +183,7 @@ trait TopicMapDbAdapter
             $bind[ ] = 
             [
                 'bind_param' => ':role_player', 
-                'value' => $filters[ 'role_player' ]
+                'value' => $filters[ 'role_player_id' ]
             ];
         }
 

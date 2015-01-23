@@ -11,7 +11,7 @@ interface iTopicMap
     public function setUrl($url);
     public function getUrl();
 
-    public function getReifier();
+    public function getReifierId();
     
     public function createId();
     
@@ -20,22 +20,21 @@ interface iTopicMap
     
     public function newFileTopic($filename);
 
-    public function getTopics(array $filters);
-    // XXX rename to ...TopicIdBy...?
-    public function getTopicBySubject($uri);
+    public function getTopicIds(array $filters);
+    public function getTopicIdBySubject($uri);
     public function getTopicSubject($topic_id);
     public function getTopicSubjectIdentifier($topic_id);
     public function getTopicSubjectLocator($topic_id);
     public function getTopicLabel($topic_id);
-    public function getAssociations(array $filters);
-    public function getTopicTypes(array $filters);
-    public function getNameTypes(array $filters);
-    public function getNameScopes(array $filters);
-    public function getOccurrenceTypes(array $filters);
-    public function getOccurrenceDatatypes(array $filters);
-    public function getOccurrenceScopes(array $filters);
-    public function getAssociationTypes(array $filters);
-    public function getAssociationScopes(array $filters);
-    public function getRoleTypes(array $filters);
-    public function getRolePlayers(array $filters);
+    public function getAssociationIds(array $filters);
+    public function getTopicTypeIds(array $filters);
+    public function getNameTypeIds(array $filters);
+    public function getNameScopeIds(array $filters);
+    public function getOccurrenceTypeIds(array $filters);
+    public function getOccurrenceDatatypeIds(array $filters);
+    public function getOccurrenceScopeIds(array $filters);
+    public function getAssociationTypeIds(array $filters);
+    public function getAssociationScopeIds(array $filters);
+    public function getRoleTypeIds(array $filters);
+    public function getRolePlayerIds(array $filters);
 }

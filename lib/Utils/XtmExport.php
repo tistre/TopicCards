@@ -45,7 +45,7 @@ class XtmExport
         
         $result .= $this->exportSubjectIdentifiers($topic->getSubjectIdentifiers(), ($indent + 1));        
         $result .= $this->exportSubjectLocators($topic->getSubjectLocators(), ($indent + 1));
-        $result .= $this->exportTypes($topic->getTypes(), ($indent + 1));
+        $result .= $this->exportTypes($topic->getTypeIds(), ($indent + 1));
         $result .= $this->exportNames($topic->getNames([ ]), ($indent + 1));
         $result .= $this->exportOccurrences($topic->getOccurrences([ ]), ($indent + 1));
                     
@@ -69,9 +69,9 @@ class XtmExport
             str_repeat('  ', $indent)
         );
 
-        $result .= $this->exportReifier($association->getReifier(), ($indent + 1));
-        $result .= $this->exportType($association->getType(), ($indent + 1));
-        $result .= $this->exportScope($association->getScope(), ($indent + 1));
+        $result .= $this->exportReifier($association->getReifierId(), ($indent + 1));
+        $result .= $this->exportType($association->getTypeId(), ($indent + 1));
+        $result .= $this->exportScope($association->getScopeIds(), ($indent + 1));
         $result .= $this->exportRoles($association->getRoles([ ]), ($indent + 1));
 
         $result .= sprintf
@@ -160,9 +160,9 @@ class XtmExport
                 str_repeat('  ', $indent)
             );
             
-            $result .= $this->exportReifier($name->getReifier(), ($indent + 1));
-            $result .= $this->exportType($name->getType(), ($indent + 1));
-            $result .= $this->exportScope($name->getScope(), ($indent + 1));
+            $result .= $this->exportReifier($name->getReifierId(), ($indent + 1));
+            $result .= $this->exportType($name->getTypeId(), ($indent + 1));
+            $result .= $this->exportScope($name->getScopeIds(), ($indent + 1));
             
             $result .= sprintf
             (
@@ -194,9 +194,9 @@ class XtmExport
                 str_repeat('  ', $indent)
             );
 
-            $result .= $this->exportReifier($role->getReifier(), ($indent + 1));
-            $result .= $this->exportType($role->getType(), ($indent + 1));
-            $result .= $this->exportTopicRef($role->getPlayer(), ($indent + 1));
+            $result .= $this->exportReifier($role->getReifierId(), ($indent + 1));
+            $result .= $this->exportType($role->getTypeId(), ($indent + 1));
+            $result .= $this->exportTopicRef($role->getPlayerId(), ($indent + 1));
             
             $result .= sprintf
             (
@@ -221,14 +221,14 @@ class XtmExport
                 str_repeat('  ', $indent)
             );
             
-            $result .= $this->exportReifier($occurrence->getReifier(), ($indent + 1));
-            $result .= $this->exportType($occurrence->getType(), ($indent + 1));
-            $result .= $this->exportScope($occurrence->getScope(), ($indent + 1));
+            $result .= $this->exportReifier($occurrence->getReifierId(), ($indent + 1));
+            $result .= $this->exportType($occurrence->getTypeId(), ($indent + 1));
+            $result .= $this->exportScope($occurrence->getScopeIds(), ($indent + 1));
             
-            $datatype = $occurrence->getDatatypeSubject();
+            $datatype = $occurrence->getDatatype();
             
             if (strlen($datatype) === 0)
-                $datatype = '#' . $occurrence->getDatatype();
+                $datatype = '#' . $occurrence->getDatatypeId();
                             
             $result .= sprintf
             (

@@ -16,7 +16,7 @@ if ($what === 'topic_type')
 {
     // Most recently used
     
-    $recent = $topicmap->getTopicTypes([ 'get_mode' => 'recent' ]);
+    $recent = $topicmap->getTopicTypeIds([ 'get_mode' => 'recent' ]);
 }
 
 // Name types
@@ -25,7 +25,7 @@ elseif ($what === 'name_type')
 {
     // Most recently used
     
-    $recent = $topicmap->getNameTypes([ 'get_mode' => 'recent' ]);
+    $recent = $topicmap->getNameTypeIds([ 'get_mode' => 'recent' ]);
 }
 
 // Name scopes
@@ -34,7 +34,7 @@ elseif ($what === 'name_scope')
 {
     // Most recently used
     
-    $recent = $topicmap->getNameScopes([ 'get_mode' => 'recent' ]);
+    $recent = $topicmap->getNameScopeIds([ 'get_mode' => 'recent' ]);
 }
 
 // Occurrence types
@@ -43,7 +43,7 @@ elseif ($what === 'occurrence_type')
 {
     // Most recently used
     
-    $recent = $topicmap->getOccurrenceTypes([ 'get_mode' => 'recent' ]);
+    $recent = $topicmap->getOccurrenceTypeIds([ 'get_mode' => 'recent' ]);
 }
 
 // Occurrence datatypes
@@ -52,7 +52,7 @@ elseif ($what === 'occurrence_datatype')
 {
     // Most recently used
     
-    $recent = $topicmap->getOccurrenceDatatypes([ 'get_mode' => 'recent' ]);
+    $recent = $topicmap->getOccurrenceDatatypeIds([ 'get_mode' => 'recent' ]);
 }
 
 // Occurrence scopes
@@ -61,7 +61,7 @@ elseif ($what === 'occurrence_scope')
 {
     // Most recently used
     
-    $recent = $topicmap->getOccurrenceScopes([ 'get_mode' => 'recent' ]);
+    $recent = $topicmap->getOccurrenceScopeIds([ 'get_mode' => 'recent' ]);
 }
 
 // Association types
@@ -70,7 +70,7 @@ elseif ($what === 'association_type')
 {
     // Most recently used
     
-    $recent = $topicmap->getAssociationTypes([ 'get_mode' => 'recent' ]);
+    $recent = $topicmap->getAssociationTypeIds([ 'get_mode' => 'recent' ]);
 }
 
 // Association scopes
@@ -79,7 +79,7 @@ elseif ($what === 'association_scope')
 {
     // Most recently used
     
-    $recent = $topicmap->getAssociationScopes([ 'get_mode' => 'recent' ]);
+    $recent = $topicmap->getAssociationScopeIds([ 'get_mode' => 'recent' ]);
 }
 
 // Role types
@@ -88,7 +88,7 @@ elseif ($what === 'role_type')
 {
     // Most recently used
     
-    $recent = $topicmap->getRoleTypes([ 'get_mode' => 'recent' ]);
+    $recent = $topicmap->getRoleTypeIds([ 'get_mode' => 'recent' ]);
 }
 
 // Role players
@@ -97,7 +97,7 @@ elseif ($what === 'role_player')
 {
     // Most recently used
     
-    $recent = $topicmap->getRolePlayers([ 'get_mode' => 'recent' ]);
+    $recent = $topicmap->getRolePlayerIds([ 'get_mode' => 'recent' ]);
 }
 
 // Add labels
@@ -111,7 +111,7 @@ foreach ($recent as $id)
     
     $types = [ ];
     
-    foreach ($topic->getTypes() as $type)
+    foreach ($topic->getTypeIds() as $type)
         $types[ ] = $topicmap->getTopicLabel($type);
 
     $tpl[ 'recent' ][ ] = 
@@ -127,7 +127,7 @@ TopicBank\Utils\StringUtils::usortByKey($tpl[ 'recent' ], 'label');
 
 $tpl[ 'topic_types' ] = [ ];
 
-foreach ($topicmap->getTopicTypes([ 'get_mode' => 'recent' ]) as $id)
+foreach ($topicmap->getTopicTypeIds([ 'get_mode' => 'recent' ]) as $id)
 {
     $tpl[ 'topic_types' ][ ] = 
     [

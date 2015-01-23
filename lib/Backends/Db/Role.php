@@ -10,33 +10,33 @@ class Role extends Core implements \TopicBank\Interfaces\iRole
     protected $player = false;
     
     
-    public function getPlayer()
+    public function getPlayerId()
     {
         return $this->player;
     }
     
     
-    public function setPlayer($topic_id)
+    public function setPlayerId($topic_id)
     {
         $this->player = $topic_id;
         return 1;
     }
 
 
-    public function getPlayerSubject()
+    public function getPlayer()
     {
-        return $this->getTopicMap()->getTopicSubject($this->getPlayer());
+        return $this->getTopicMap()->getTopicSubject($this->getPlayerId());
     }
 
 
-    public function setPlayerSubject($topic_subject)
+    public function setPlayer($topic_subject)
     {
-        $topic_id = $this->getTopicMap()->getTopicBySubject($topic_subject);
+        $topic_id = $this->getTopicMap()->getTopicIdBySubject($topic_subject);
         
         if (strlen($topic_id) === 0)
             return -1;
             
-        return $this->setPlayer($topic_id);
+        return $this->setPlayerId($topic_id);
     }
     
     
@@ -44,7 +44,7 @@ class Role extends Core implements \TopicBank\Interfaces\iRole
     {
         $result =
         [
-            'player' => $this->getPlayer()
+            'player' => $this->getPlayerId()
         ];
         
         $result = array_merge($result, $this->getAllId());
@@ -64,7 +64,7 @@ class Role extends Core implements \TopicBank\Interfaces\iRole
             'player' => false
         ], $data);
         
-        $ok = $this->setPlayer($data[ 'player' ]);
+        $ok = $this->setPlayerId($data[ 'player' ]);
         
         if ($ok >= 0)
             $ok = $this->setAllId($data);

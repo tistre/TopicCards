@@ -69,9 +69,9 @@ class XtmImport
         if ($context_node->hasAttribute('id'))
             $association->setId($this->generateGuid($context_node->getAttribute('id')));
 
-        $association->setReifier($this->getReifier($context_node));
-        $association->setType($this->getType($context_node));
-        $association->setScope($this->getScope($context_node));
+        $association->setReifierId($this->getReifier($context_node));
+        $association->setTypeId($this->getType($context_node));
+        $association->setScopeIds($this->getScope($context_node));
 
         $this->importRoles($context_node, $association);
         
@@ -91,7 +91,7 @@ class XtmImport
                 $topic_refs[ ] = $topic_ref;
         }
         
-        $topic->setTypes($topic_refs);
+        $topic->setTypeIds($topic_refs);
     }
     
     
@@ -133,9 +133,9 @@ class XtmImport
         {
             $name = $topic->newName();
             
-            $name->setReifier($this->getReifier($node));
-            $name->setType($this->getType($node));
-            $name->setScope($this->getScope($node));
+            $name->setReifierId($this->getReifier($node));
+            $name->setTypeId($this->getType($node));
+            $name->setScopeIds($this->getScope($node));
             
             foreach ($node->getElementsByTagName('value') as $subnode)
                 $name->setValue($subnode->nodeValue);
@@ -155,9 +155,9 @@ class XtmImport
         {
             $occurrence = $topic->newOccurrence();
             
-            $occurrence->setReifier($this->getReifier($node));
-            $occurrence->setType($this->getType($node));
-            $occurrence->setScope($this->getScope($node));
+            $occurrence->setReifierId($this->getReifier($node));
+            $occurrence->setTypeId($this->getType($node));
+            $occurrence->setScopeIds($this->getScope($node));
             
             foreach ($node->getElementsByTagName('resourceData') as $subnode)
             {
@@ -168,12 +168,8 @@ class XtmImport
                 if (strlen($value) === 0)
                     continue;
                     
-                $occurrence->setValue($value);
-                
-                $occurrence->setDataType
-                (
-                    $topic->getTopicMap()->getTopicBySubject($datatype)
-                );
+                $occurrence->setValue($value);                
+                $occurrence->setDataType($datatype);
             }
                 
             $occurrences[ ] = $occurrence;
@@ -191,9 +187,9 @@ class XtmImport
         {
             $role = $association->newRole();
             
-            $role->setReifier($this->getReifier($node));
-            $role->setType($this->getType($node));
-            $role->setPlayer($this->getTopicRef($node));
+            $role->setReifierId($this->getReifier($node));
+            $role->setTypeId($this->getType($node));
+            $role->setPlayerId($this->getTopicRef($node));
             
             $roles[ ] = $role;
         }
@@ -250,7 +246,7 @@ class XtmImport
                 && (strlen($subnode->getAttribute('href')) > 0)
             )
             {
-                $topic_id = $this->topicmap->getTopicBySubject($subnode->getAttribute('href'));
+                $topic_id = $this->topicmap->getTopicIdBySubject($subnode->getAttribute('href'));
                 
                 if (strlen($topic_id) > 0)
                     return $topic_id;
@@ -275,7 +271,7 @@ class XtmImport
                 {
                     // Subject identifier or locator
                     
-                    $topic_id = $this->topicmap->getTopicBySubject($href);
+                    $topic_id = $this->topicmap->getTopicIdBySubject($href);
                 
                     if (strlen($topic_id) > 0)
                         return $topic_id;

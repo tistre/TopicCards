@@ -15,12 +15,12 @@ interface iTopic extends iPersistent
     public function setSubjectIdentifiers(array $strings);
     public function getSubjectLocators();
     public function setSubjectLocators(array $strings);
+    public function getTypeIds();
+    public function setTypeIds(array $topic_ids);
     public function getTypes();
-    public function setTypes(array $topic_ids);
-    public function getTypeSubjects();
-    public function setTypeSubjects(array $topic_subjects);
-    public function hasType($topic_id);
-    public function hasTypeSubject($topic_subject);
+    public function setTypes(array $topic_subjects);
+    public function hasTypeId($topic_id);
+    public function hasType($topic_subject);
     public function newName();
     public function getNames(array $filters = [ ]);
     public function getFirstName(array $filters = [ ]);

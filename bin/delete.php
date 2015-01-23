@@ -51,7 +51,7 @@ function deleteAssociation($association_id)
     
     $association->load($association_id);
         
-    $reifier_id = $association->getReifier();
+    $reifier_id = $association->getReifierId();
  
     $ok = $association->delete();
             

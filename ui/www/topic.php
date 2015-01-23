@@ -88,7 +88,7 @@ function getTopicVars($topic_id, &$result, &$topic_names)
 
     // Fill associations and associations_type_index, group by type and role
 
-    $association_ids = $topicmap->getAssociations([ 'role_player' => $topic_id ]);
+    $association_ids = $topicmap->getAssociationIds([ 'role_player_id' => $topic_id ]);
 
     $result[ 'associations' ] = [ ];
 
@@ -167,13 +167,13 @@ $tpl = [ ];
 $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
 
 $tpl[ 'topicmap' ] = [ ];
-$tpl[ 'topicmap' ][ 'label' ] = $topicmap->getTopicLabel($topicmap->getReifier());
+$tpl[ 'topicmap' ][ 'label' ] = $topicmap->getTopicLabel($topicmap->getReifierId());
 
 $request_path = substr($_SERVER[ 'REDIRECT_URL' ], strlen(TOPICBANK_BASE_URL));
 
 list(, $topic_identifier_or_id) = explode('/', $request_path);
 
-$topic_id = $topicmap->getTopicBySubject($topic_identifier_or_id);
+$topic_id = $topicmap->getTopicIdBySubject($topic_identifier_or_id);
 
 if (strlen($topic_id) === 0)
     $topic_id = $topic_identifier_or_id;
@@ -181,8 +181,8 @@ if (strlen($topic_id) === 0)
 $tpl[ 'edit_url' ] = sprintf('%sedit_topic/%s', TOPICBANK_BASE_URL, $topic_id);
 $tpl[ 'delete_url' ] = sprintf('%sdelete_topic/%s', TOPICBANK_BASE_URL, $topic_id);
 
-$tpl[ 'id_text' ] = $topicmap->getTopicBySubject('http://schema.org/text');
-$tpl[ 'id_xhtml' ] = $topicmap->getTopicBySubject('http://www.w3.org/1999/xhtml');
+$tpl[ 'id_text' ] = $topicmap->getTopicIdBySubject('http://schema.org/text');
+$tpl[ 'id_xhtml' ] = $topicmap->getTopicIdBySubject('http://www.w3.org/1999/xhtml');
 
 getTopicVars($topic_id, $topic_vars, $tpl[ 'topic_names' ]);
 

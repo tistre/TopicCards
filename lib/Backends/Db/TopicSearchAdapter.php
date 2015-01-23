@@ -68,12 +68,12 @@ trait TopicSearchAdapter
             'type_id' => [ ] 
         ];
         
-        foreach ($this->getTypes([ ]) as $type_id)
+        foreach ($this->getTypeIds([ ]) as $type_id)
             $result[ 'type_id' ][ ] = $type_id;
         
         foreach ($this->getNames([ ]) as $name)
         {
-            $search_fields = $this->getSearchFieldsByType($name->getType());
+            $search_fields = $this->getSearchFieldsByType($name->getTypeId());
             
             foreach ($search_fields as $search_field)
             {
@@ -95,7 +95,7 @@ trait TopicSearchAdapter
         static $search_field_type = false;
         
         if ($search_field_type === false)
-            $search_field_type = $this->topicmap->getTopicBySubject('http://www.strehle.de/schema/searchField');
+            $search_field_type = $this->topicmap->getTopicIdBySubject('http://www.strehle.de/schema/searchField');
         
         $type_topic = $this->topicmap->newTopic();
         $type_topic->load($type_id);
@@ -104,7 +104,7 @@ trait TopicSearchAdapter
         
         foreach ($type_topic->getNames([ ]) as $name)
         {
-            if ($name->getType() !== $search_field_type)
+            if ($name->getTypeId() !== $search_field_type)
                 continue;
                 
             $result[ ] = $name->getValue();

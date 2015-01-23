@@ -10,38 +10,38 @@ trait Scoped
     protected $scope = [ ];
     
     
-    public function getScope()
+    public function getScopeIds()
     {
         return $this->scope;
     }
     
     
-    public function setScope(array $topic_ids)
+    public function setScopeIds(array $topic_ids)
     {
         $this->scope = $topic_ids;
         return 1;
     }
 
 
-    public function getScopeSubjects()
+    public function getScope()
     {
         $result = [ ];
         
-        foreach ($this->getScope() as $topic_id)
+        foreach ($this->getScopeIds() as $topic_id)
             $result[ ] = $this->getTopicMap()->getTopicSubject($topic_id);
             
         return $result;
     }
 
 
-    public function setScopeSubjects(array $topic_subjects)
+    public function setScope(array $topic_subjects)
     {
         $topic_ids = [ ];
         $result = 1;
         
         foreach ($topic_subjects as $topic_subject)
         {
-            $topic_id = $this->getTopicMap()->getTopicBySubject($topic_subject);
+            $topic_id = $this->getTopicMap()->getTopicIdBySubject($topic_subject);
             
             if (strlen($topic_id) === 0)
             {
@@ -53,7 +53,7 @@ trait Scoped
             }   
         }
         
-        $ok = $this->setScope($topic_ids);
+        $ok = $this->setScopeIds($topic_ids);
         
         if ($ok < 0)
             $result = $ok;
@@ -66,7 +66,7 @@ trait Scoped
     {
         return
         [
-            'scope' => $this->getScope()
+            'scope' => $this->getScopeIds()
         ];
     }
 
@@ -78,13 +78,13 @@ trait Scoped
             'scope' => [ ]
         ], $data);
         
-        return $this->setScope($data[ 'scope' ]);
+        return $this->setScopeIds($data[ 'scope' ]);
     }
     
     
     public function matchesScope(array $match_topic_ids)
     {
-        $my_topic_ids = $this->getScope();
+        $my_topic_ids = $this->getScopeIds();
 
         $my_count = count($my_topic_ids);
         $match_count = count($match_topic_ids);

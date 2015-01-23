@@ -63,7 +63,7 @@ $services->db_utils->connect();
 
 $topic = $topicmap->newTopic();
 
-foreach ($topicmap->getTopics([ ]) as $topic_id)
+foreach ($topicmap->getTopicIds([ ]) as $topic_id)
 {
     $ok = $topic->load($topic_id);
     

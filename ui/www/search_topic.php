@@ -9,7 +9,7 @@ $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
 $name_like = '%' . $_REQUEST[ 'name' ] . '%';
 $type = $_REQUEST[ 'type' ];
 
-$results = $topicmap->getTopics([ 'name_like' => $name_like, 'type' => $type ]);
+$results = $topicmap->getTopicIds([ 'name_like' => $name_like, 'type' => $type ]);
 
 $tpl[ 'results' ] = [ ];
 

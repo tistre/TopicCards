@@ -44,7 +44,7 @@ if
 
     // Fix the name: Use the name provided on upload, not the randomly generated name
     
-    foreach ($topic->getNames([ 'type_subject' => 'http://www.strehle.de/schema/fileName' ]) as $name)
+    foreach ($topic->getNames([ 'type' => 'http://www.strehle.de/schema/fileName' ]) as $name)
         $name->setValue(pathinfo($file_arr[ 'name' ], PATHINFO_BASENAME));
     
     $ok = $topic->save();
@@ -67,6 +67,6 @@ $tpl = [ ];
 $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
 
 $tpl[ 'topicmap' ] = [ ];
-$tpl[ 'topicmap' ][ 'label' ] = $topicmap->getTopicLabel($topicmap->getReifier());
+$tpl[ 'topicmap' ][ 'label' ] = $topicmap->getTopicLabel($topicmap->getReifierId());
 
 include TOPICBANK_BASE_DIR . '/ui/templates/upload_file.tpl.php';

@@ -34,7 +34,7 @@ function addTopic($topic_id)
     
     if ($getopt[ 'with_associations' ])
     {
-        foreach ($topicmap->getAssociations([ 'role_player' => $topic_id ]) as $association_id)
+        foreach ($topicmap->getAssociationIds([ 'role_player_id' => $topic_id ]) as $association_id)
             addAssociation($association_id);
     }    
 }
@@ -51,7 +51,7 @@ function addAssociation($association_id)
     
     $association->load($association_id);
         
-    $reifier_id = $association->getReifier();
+    $reifier_id = $association->getReifierId();
  
     if ($getopt[ 'with_reifiers' ] && (strlen($reifier_id) > 0))
     {

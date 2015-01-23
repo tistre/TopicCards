@@ -49,12 +49,12 @@ function getPhpClass($id)
     
     $class_file = $class_name = $class_topic = false;
     
-    foreach ($association->getRoles([ 'type_subject' => 'http://www.strehle.de/schema/actionCode' ]) as $role)
+    foreach ($association->getRoles([ 'type' => 'http://www.strehle.de/schema/actionCode' ]) as $role)
     {
         $class_topic = $topicmap->newTopic();
-        $class_topic->load($role->getPlayer());
+        $class_topic->load($role->getPlayerId());
         
-        if (! $class_topic->hasTypeSubject('http://www.strehle.de/schema/PhpClass'))
+        if (! $class_topic->hasType('http://www.strehle.de/schema/PhpClass'))
             continue;
         
         // Get the file that contains (or is able to autoload) the PHP class
@@ -78,9 +78,9 @@ function getPhpClass($id)
         
         // Get the class name
         
-        foreach ($class_topic->getNames([ 'type_subject' => 'http://www.strehle.de/schema/phpClassName' ]) as $name)
+        foreach ($class_topic->getNames([ 'type' => 'http://www.strehle.de/schema/phpClassName' ]) as $name)
         {
-            if (count($name->getScope()) > 0)
+            if (count($name->getScopeIds()) > 0)
                 continue;
                 
             $class_name = $name->getValue();

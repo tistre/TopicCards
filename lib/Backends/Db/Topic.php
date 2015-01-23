@@ -43,38 +43,38 @@ class Topic extends Core implements iTopic
     }
     
     
-    public function getTypes()
+    public function getTypeIds()
     {
         return $this->types;
     }
     
     
-    public function setTypes(array $topic_ids)
+    public function setTypeIds(array $topic_ids)
     {
         $this->types = $topic_ids;        
         return 1;
     }
     
 
-    public function getTypeSubjects()
+    public function getTypes()
     {
         $result = [ ];
         
-        foreach ($this->getTypes() as $topic_id)
+        foreach ($this->getTypeIds() as $topic_id)
             $result[ ] = $this->getTopicMap()->getTopicSubject($topic_id);
             
         return $result;
     }
     
     
-    public function setTypeSubjects(array $topic_subjects)
+    public function setTypes(array $topic_subjects)
     {
         $topic_ids = [ ];
         $result = 1;
         
         foreach ($topic_subjects as $topic_subject)
         {
-            $topic_id = $this->getTopicMap()->getTopicBySubject($topic_subject);
+            $topic_id = $this->getTopicMap()->getTopicIdBySubject($topic_subject);
             
             if (strlen($topic_id) === 0)
             {
@@ -86,7 +86,7 @@ class Topic extends Core implements iTopic
             }   
         }
         
-        $ok = $this->setTypes($topic_ids);
+        $ok = $this->setTypeIds($topic_ids);
         
         if ($ok < 0)
             $result = $ok;
@@ -95,15 +95,15 @@ class Topic extends Core implements iTopic
     }
     
         
-    public function hasType($topic_id)
+    public function hasTypeId($topic_id)
     {
         return in_array($topic_id, $this->types);
     }
     
     
-    public function hasTypeSubject($topic_subject)
+    public function hasType($topic_subject)
     {
-        return $this->hasType($this->getTopicMap()->getTopicBySubject($topic_subject));
+        return $this->hasTypeId($this->getTopicMap()->getTopicIdBySubject($topic_subject));
     }
     
 
@@ -124,20 +124,20 @@ class Topic extends Core implements iTopic
         
         $result = [ ];
         
-        if (isset($filters[ 'type_subject' ]))
-            $filters[ 'type' ] = $this->getTopicMap()->getTopicBySubject($filters[ 'type_subject' ]);
+        if (isset($filters[ 'type' ]))
+            $filters[ 'type_id' ] = $this->getTopicMap()->getTopicIdBySubject($filters[ 'type' ]);
 
         foreach ($this->names as $name)
         {
-            if (isset($filters[ 'type' ]))
+            if (isset($filters[ 'type_id' ]))
             {
-                if ($name->getType() !== $filters[ 'type' ])
+                if ($name->getTypeId() !== $filters[ 'type_id' ])
                     continue;
             }
 
             if (isset($filters[ 'reifier' ]))
             {
-                if ($name->getReifier() !== $filters[ 'reifier' ])
+                if ($name->getReifierId() !== $filters[ 'reifier' ])
                     continue;
             }
 
@@ -157,13 +157,13 @@ class Topic extends Core implements iTopic
 
         $name = $this->newName();
         
-        if (isset($filters[ 'type_subject' ]))
-        {
-            $name->setTypeSubject($filters[ 'type_subject' ]);
-        }
-        elseif (isset($filters[ 'type' ]))
+        if (isset($filters[ 'type' ]))
         {
             $name->setType($filters[ 'type' ]);
+        }
+        elseif (isset($filters[ 'type_id' ]))
+        {
+            $name->setTypeId($filters[ 'type_id' ]);
         }
         
         return $name;
@@ -196,7 +196,7 @@ class Topic extends Core implements iTopic
             // XXX make http://schema.org/name a constant (DEFAULT_NAME_SUBJECT)
             $type_key = 
             (
-                ($name->getTypeSubject() === 'http://schema.org/name')
+                ($name->getType() === 'http://schema.org/name')
                 ? 'default'
                 : 'other'
             );
@@ -243,14 +243,14 @@ class Topic extends Core implements iTopic
         if (count($filters) === 0)
             return $this->occurrences;
             
-        if (isset($filters[ 'type_subject' ]))
-            $filters[ 'type' ] = $this->getTopicMap()->getTopicBySubject($filters[ 'type_subject' ]);
+        if (isset($filters[ 'type' ]))
+            $filters[ 'type_id' ] = $this->getTopicMap()->getIdTopicBySubject($filters[ 'type' ]);
 
         $result = [ ];
         
         foreach ($this->occurrences as $occurrence)
         {
-            if (isset($filters[ 'type' ]) && ($occurrence->getType() !== $filters[ 'type' ]))
+            if (isset($filters[ 'type_id' ]) && ($occurrence->getTypeId() !== $filters[ 'type_id' ]))
                 continue;
                 
             $result[ ] = $occurrence;
@@ -269,13 +269,13 @@ class Topic extends Core implements iTopic
 
         $occurrence = $this->newOccurrence();
         
-        if (isset($filters[ 'type_subject' ]))
-        {
-            $occurrence->setTypeSubject($filters[ 'type_subject' ]);
-        }
-        elseif (isset($filters[ 'type' ]))
+        if (isset($filters[ 'type' ]))
         {
             $occurrence->setType($filters[ 'type' ]);
+        }
+        elseif (isset($filters[ 'type_id' ]))
+        {
+            $occurrence->setTypeId($filters[ 'type_id' ]);
         }
         
         return $occurrence;
@@ -381,7 +381,7 @@ class Topic extends Core implements iTopic
     {   
         $result = 
         [
-            'types' => $this->getTypes(), 
+            'types' => $this->getTypeIds(), 
             'subject_identifiers' => $this->getSubjectIdentifiers(), 
             'subject_locators' => $this->getSubjectLocators(), 
             'names' => [ ], 
@@ -418,7 +418,7 @@ class Topic extends Core implements iTopic
 
         $this->setAllPersistent($data);
         
-        $this->setTypes($data[ 'types' ]);
+        $this->setTypeIds($data[ 'types' ]);
 
         $this->setSubjectIdentifiers($data[ 'subject_identifiers' ]);
 

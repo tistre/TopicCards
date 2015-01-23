@@ -25,13 +25,13 @@ class Occurrence extends Core implements \TopicBank\Interfaces\iOccurrence
     }
     
     
-    public function getDatatype()
+    public function getDatatypeId()
     {
         return $this->datatype;
     }
     
 
-    public function setDatatype($topic_id)
+    public function setDatatypeId($topic_id)
     {
         $this->datatype = $topic_id;
         
@@ -39,20 +39,20 @@ class Occurrence extends Core implements \TopicBank\Interfaces\iOccurrence
     }
     
 
-    public function getDatatypeSubject()
+    public function getDatatype()
     {
-        return $this->getTopicMap()->getTopicSubject($this->getDatatype());
+        return $this->getTopicMap()->getTopicSubject($this->getDatatypeId());
     }
     
     
-    public function setDatatypeSubject($topic_subject)
+    public function setDatatype($topic_subject)
     {
-        $topic_id = $this->getTopicMap()->getTopicBySubject($topic_subject);
+        $topic_id = $this->getTopicMap()->getTopicIdBySubject($topic_subject);
         
         if (strlen($topic_id) === 0)
             return -1;
             
-        return $this->setDatatype($topic_id);
+        return $this->setDatatypeId($topic_id);
     }
 
     
@@ -61,7 +61,7 @@ class Occurrence extends Core implements \TopicBank\Interfaces\iOccurrence
         $ok = \TopicBank\Utils\DatatypeUtils::validate
         (
             $this->value, 
-            $this->getDatatypeSubject(), 
+            $this->getDatatype(), 
             $msg_txt
         );
         
@@ -76,7 +76,7 @@ class Occurrence extends Core implements \TopicBank\Interfaces\iOccurrence
         $result = 
         [
             'value' => $this->getValue(),
-            'datatype' => $this->getDatatype()
+            'datatype' => $this->getDatatypeId()
         ];
 
         $result = array_merge($result, $this->getAllId());
@@ -100,7 +100,7 @@ class Occurrence extends Core implements \TopicBank\Interfaces\iOccurrence
         ], $data);
         
         $ok = $this->setValue($data[ 'value' ]);
-        $ok = $this->setDatatype($data[ 'datatype' ]);
+        $ok = $this->setDatatypeId($data[ 'datatype' ]);
         
         if ($ok >= 0)
             $ok = $this->setAllId($data);

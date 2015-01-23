@@ -9,7 +9,7 @@ $tpl = [ ];
 $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
 
 $tpl[ 'topicmap' ] = [ ];
-$tpl[ 'topicmap' ][ 'label' ] = $topicmap->getTopicLabel($topicmap->getReifier());
+$tpl[ 'topicmap' ][ 'label' ] = $topicmap->getTopicLabel($topicmap->getReifierId());
 
 
 $fulltext_query = '';
@@ -123,7 +123,7 @@ $tpl[ 'pages' ] =
 $tpl[ 'topic_types' ] = [ ];
 
 // XXX slow
-foreach ($topicmap->getTopicTypes([ 'get_mode' => 'all' ]) as $id)
+foreach ($topicmap->getTopicTypeIds([ 'get_mode' => 'all' ]) as $id)
 {
     $tpl[ 'topic_types' ][ ] = 
     [

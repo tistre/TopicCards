@@ -10,45 +10,45 @@ trait Typed
     protected $type = false;
     
     
-    public function getType()
+    public function getTypeId()
     {
         return $this->type;
     }
     
 
-    public function setType($topic_id)
+    public function setTypeId($topic_id)
     {
         $this->type = $topic_id;
         return 1;
     }
 
 
-    public function getTypeSubject()
+    public function getType()
     {
         return $this->getTopicMap()->getTopicSubject($this->type);
     }
 
     
-    public function setTypeSubject($topic_subject)
+    public function setType($topic_subject)
     {
-        $topic_id = $this->getTopicMap()->getTopicBySubject($topic_subject);
+        $topic_id = $this->getTopicMap()->getTopicIdBySubject($topic_subject);
         
         if (strlen($topic_id) === 0)
             return -1;
             
-        return $this->setType($topic_id);
+        return $this->setTypeId($topic_id);
     }
 
 
-    public function hasType($topic_id)
+    public function hasTypeId($topic_id)
     {
-        return ($this->getType() === $topic_id);
+        return ($this->getTypeId() === $topic_id);
     }
     
     
-    public function hasTypeSubject($topic_subject)
+    public function hasType($topic_subject)
     {
-        return ($this->getTypeSubject() === $topic_subject);
+        return ($this->getType() === $topic_subject);
     }
     
 
@@ -56,7 +56,7 @@ trait Typed
     {
         return
         [
-            'type' => $this->getType()
+            'type' => $this->getTypeId()
         ];
     }
 
@@ -68,6 +68,6 @@ trait Typed
             'type' => false
         ], $data);
         
-        return $this->setType($data[ 'type' ]);
+        return $this->setTypeId($data[ 'type' ]);
     }
 }
