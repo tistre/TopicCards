@@ -148,6 +148,28 @@ class Topic extends Core implements iTopic
     }
     
     
+    public function getFirstName(array $filters = [ ])
+    {
+        $names = $this->getNames($filters);
+        
+        if (count($names) > 0)
+            return $names[ 0 ];
+
+        $name = $this->newName();
+        
+        if (isset($filters[ 'type_subject' ]))
+        {
+            $name->setTypeSubject($filters[ 'type_subject' ]);
+        }
+        elseif (isset($filters[ 'type' ]))
+        {
+            $name->setType($filters[ 'type' ]);
+        }
+        
+        return $name;
+    }
+    
+    
     public function setNames(array $names)
     {
         $this->names = $names;
@@ -221,6 +243,9 @@ class Topic extends Core implements iTopic
         if (count($filters) === 0)
             return $this->occurrences;
             
+        if (isset($filters[ 'type_subject' ]))
+            $filters[ 'type' ] = $this->getTopicMap()->getTopicBySubject($filters[ 'type_subject' ]);
+
         $result = [ ];
         
         foreach ($this->occurrences as $occurrence)
@@ -232,6 +257,28 @@ class Topic extends Core implements iTopic
         }
         
         return $result;
+    }
+    
+    
+    public function getFirstOccurrence(array $filters = [ ])
+    {
+        $occurrences = $this->getOccurrences($filters);
+        
+        if (count($occurrences) > 0)
+            return $occurrences[ 0 ];
+
+        $occurrence = $this->newOccurrence();
+        
+        if (isset($filters[ 'type_subject' ]))
+        {
+            $occurrence->setTypeSubject($filters[ 'type_subject' ]);
+        }
+        elseif (isset($filters[ 'type' ]))
+        {
+            $occurrence->setType($filters[ 'type' ]);
+        }
+        
+        return $occurrence;
     }
     
     

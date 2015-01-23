@@ -23,9 +23,11 @@ interface iTopic extends iPersistent
     public function hasTypeSubject($topic_subject);
     public function newName();
     public function getNames(array $filters = [ ]);
+    public function getFirstName(array $filters = [ ]);
     public function setNames(array $names);
     public function newOccurrence();
     public function getOccurrences(array $filters = [ ]);
+    public function getFirstOccurrence(array $filters = [ ]);
     public function setOccurrences(array $occurrences);
     public function getIsReifier();
     public function setIsReifier($is_reifier);
