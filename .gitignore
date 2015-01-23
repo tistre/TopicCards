@@ -7,3 +7,17 @@ include/config.php
 components/
 composer.phar
 vendor/
+
+# Experimental
+
+bin/getopt-test.php
+bin/test.php
+bin/xmlreader.php
+bin/xtm-20-schema.dtd
+bin/xtm-20-schema.relax
+tests/config.php
+ui/templates/association.tpl.php
+ui/templates/topic.tpl.php.association_link
+ui/www/association.php
+ui/www/phpinfo.php
+
