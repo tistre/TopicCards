@@ -244,14 +244,17 @@ class Topic extends Core implements iTopic
             return $this->occurrences;
             
         if (isset($filters[ 'type' ]))
-            $filters[ 'type_id' ] = $this->getTopicMap()->getIdTopicBySubject($filters[ 'type' ]);
+            $filters[ 'type_id' ] = $this->getTopicMap()->getTopicIdBySubject($filters[ 'type' ]);
 
         $result = [ ];
         
         foreach ($this->occurrences as $occurrence)
         {
-            if (isset($filters[ 'type_id' ]) && ($occurrence->getTypeId() !== $filters[ 'type_id' ]))
-                continue;
+            if (isset($filters[ 'type_id' ]))
+            {
+                if ($occurrence->getTypeId() !== $filters[ 'type_id' ])
+                    continue;
+            }
                 
             $result[ ] = $occurrence;
         }
