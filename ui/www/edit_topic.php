@@ -185,7 +185,6 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
     {
         foreach ($_REQUEST[ 'associations' ] as $assoc_arr)
         {
-error_log(print_r($assoc_arr, true));
             $assoc_arr[ 'type' ] = trim($assoc_arr[ 'type' ]);
         
             if ($assoc_arr[ 'type' ] === '')
