@@ -9,6 +9,7 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
      
     protected $url;
     protected $services;
+    protected $listeners = [ ];
     protected $db_table_prefix;
     protected $search_index;
     protected $upload_path;
@@ -25,6 +26,38 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
         return $this->services;
     }
         
+    
+    public function on($event, callable $callback)
+    {
+        if (! isset($this->listeners[ $event ]))
+            $this->listeners[ $event ] = [ ];
+            
+        $this->listeners[ $event ][ ] = $callback;
+        
+        return 1;
+    }
+    
+    
+    public function trigger($event, array $params)
+    {
+        $result = 0;
+        
+        if (! isset($this->listeners[ $event ]))
+            return $result;
+            
+        foreach ($this->listeners[ $event ] as $callback)
+        {
+            $ok = $callback($this, $event, $params);
+            
+            if ($ok < 0)
+                return $ok;
+                
+            $result++;
+        }
+        
+        return $result;
+    }
+    
     
     public function setUrl($url)
     {

@@ -40,3 +40,18 @@ $services->setPreferredLabelScopes(
 $config_topicmap = $services->getTopicMapSystem()->newTopicMap('config');
 $config_topicmap->setUrl('http://example.com/topicmaps/topicbank_config');
 $config_topicmap->setDbTablePrefix('topicbank_config_');
+
+/*
+    How to run your own code on TopicBank events:
+    
+function helloWorld(\TopicBank\Interfaces\iTopicMap $topicmap, $event, array $params)
+{
+    error_log($event);
+    
+    // A negative return code cancels saving, rolls back the database transaction
+    return 0;
+}
+
+$topicmap->on(\TopicBank\Interfaces\iTopic::EVENT_SAVING, 'helloWorld');
+
+*/

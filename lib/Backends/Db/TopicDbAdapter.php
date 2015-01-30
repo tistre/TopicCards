@@ -344,6 +344,9 @@ trait TopicDbAdapter
             $ok = $occurrence->insertAll($data[ 'id' ], $data[ 'occurrences' ]);
         }
 
+        if ($ok >= 0)
+            $ok = $this->topicmap->trigger(iTopic::EVENT_SAVING, [ 'topic' => $this, 'dml' => 'insert' ]);
+            
         if ($ok < 0)
         {
             $this->services->db_utils->rollBack();
@@ -537,6 +540,9 @@ trait TopicDbAdapter
             $ok = $occurrence->updateAll($data[ 'id' ], $data[ 'occurrences' ]);
         }
 
+        if ($ok >= 0)
+            $ok = $this->topicmap->trigger(iTopic::EVENT_SAVING, [ 'topic' => $this, 'dml' => 'update' ]);            
+
         if ($ok < 0)
         {
             $this->services->db_utils->rollBack();
@@ -615,6 +621,8 @@ trait TopicDbAdapter
         if ($ok < 0)
             return $ok;
 
+        $this->services->db_utils->beginTransaction();
+
         $prefix = $this->topicmap->getDbTablePrefix();
 
         $sql = $this->services->db_utils->prepareDeleteSql
@@ -626,11 +634,22 @@ trait TopicDbAdapter
             ]
         );
     
-        $ok = $sql->execute();
+        $ret = $sql->execute();
     
-        if ($ok === false)
-            return -1;
-        
+        if ($ret === false)
+            $ok = -1;
+            
+        if ($ok >= 0)                
+            $ok = $this->topicmap->trigger(iTopic::EVENT_DELETING, [ 'topic_id' => $id ]);
+            
+        if ($ok < 0)
+        {
+            $this->services->db_utils->rollBack();
+            return $ok;
+        }
+
+        $this->services->db_utils->commit();            
+
         return 1;
     }
 }

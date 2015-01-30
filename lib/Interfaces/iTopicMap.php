@@ -7,6 +7,9 @@ interface iTopicMap
 {    
     public function __construct(iServices $services);
     public function getServices();
+    
+    public function on($event, callable $callback);
+    public function trigger($event, array $params);
 
     public function setUrl($url);
     public function getUrl();

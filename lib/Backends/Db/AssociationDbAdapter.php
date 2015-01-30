@@ -2,6 +2,8 @@
 
 namespace TopicBank\Backends\Db;
 
+use \TopicBank\Interfaces\iAssociation;
+
 
 trait AssociationDbAdapter
 {
@@ -121,6 +123,9 @@ trait AssociationDbAdapter
             $ok = $role->insertAll($data[ 'id' ], $data[ 'roles' ]);
         }
 
+        if ($ok >= 0)
+            $ok = $this->topicmap->trigger(iAssociation::EVENT_SAVING, [ 'association' => $this, 'dml' => 'insert' ]);
+
         if ($ok < 0)
         {
             $this->services->db_utils->rollBack();
@@ -205,6 +210,9 @@ trait AssociationDbAdapter
             $ok = $role->updateAll($data[ 'id' ], $data[ 'roles' ]);
         }
 
+        if ($ok >= 0)
+            $ok = $this->topicmap->trigger(iAssociation::EVENT_SAVING, [ 'association' => $this, 'dml' => 'update' ]);            
+
         if ($ok < 0)
         {
             $this->services->db_utils->rollBack();
@@ -224,6 +232,8 @@ trait AssociationDbAdapter
         if ($ok < 0)
             return $ok;
 
+        $this->services->db_utils->beginTransaction();
+
         $prefix = $this->topicmap->getDbTablePrefix();
 
         $sql = $this->services->db_utils->prepareDeleteSql
@@ -235,10 +245,21 @@ trait AssociationDbAdapter
             ]
         );
     
-        $ok = $sql->execute();
+        $ret = $sql->execute();
     
-        if ($ok === false)
-            return -1;
+        if ($ret === false)
+            $ok = -1;
+            
+        if ($ok >= 0)                
+            $ok = $this->topicmap->trigger(iAssociation::EVENT_DELETING, [ 'association_id' => $id ]);
+            
+        if ($ok < 0)
+        {
+            $this->services->db_utils->rollBack();
+            return $ok;
+        }
+
+        $this->services->db_utils->commit();            
         
         return 1;
     }

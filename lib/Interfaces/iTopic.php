@@ -11,6 +11,9 @@ interface iTopic extends iPersistent
     const REIFIES_ASSOCIATION = 3;
     const REIFIES_ROLE = 4;
     
+    const EVENT_SAVING = 'topic_saving';
+    const EVENT_DELETING = 'topic_deleting';
+    
     public function getSubjectIdentifiers();
     public function setSubjectIdentifiers(array $strings);
     public function getSubjectLocators();
