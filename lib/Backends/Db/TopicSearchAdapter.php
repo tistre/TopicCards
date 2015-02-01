@@ -43,49 +43,24 @@ trait TopicSearchAdapter
         $result = 
         [ 
             'label' => $this->getLabel(),
-            'type_id' => [ ] 
+            'name' => [ ],
+            'has_name_type' => [ ],
+            'topic_type' => $this->getTypes([ ]),
+            'subject' => array_merge($this->getSubjectIdentifiers(), $this->getSubjectLocators()),
+            'occurrence' => [ ],
+            'has_occurrence_type' => [ ]
         ];
-        
-        foreach ($this->getTypeIds([ ]) as $type_id)
-            $result[ 'type_id' ][ ] = $type_id;
         
         foreach ($this->getNames([ ]) as $name)
         {
-            $search_fields = $this->getSearchFieldsByType($name->getTypeId());
-            
-            foreach ($search_fields as $search_field)
-            {
-                if (! isset($result[ $search_field ]))
-                    $result[ $search_field ] = [ ];
-                    
-                $result[ $search_field ][ ] = $name->getValue();
-            }
+            $result[ 'name' ][ ] = $name->getValue();
+            $result[ 'has_name_type' ][ ] = $name->getType();
         }
 
-        // XXX add occurrences here
-        
-        return $result;
-    }
-    
-    
-    protected function getSearchFieldsByType($type_id)
-    {
-        static $search_field_type = false;
-        
-        if ($search_field_type === false)
-            $search_field_type = $this->topicmap->getTopicIdBySubject('http://www.strehle.de/schema/searchField');
-        
-        $type_topic = $this->topicmap->newTopic();
-        $type_topic->load($type_id);
-        
-        $result = [ ];
-        
-        foreach ($type_topic->getNames([ ]) as $name)
+        foreach ($this->getOccurrences([ ]) as $occurrence)
         {
-            if ($name->getTypeId() !== $search_field_type)
-                continue;
-                
-            $result[ ] = $name->getValue();
+            $result[ 'occurrence' ][ ] = $occurrence->getValue();
+            $result[ 'has_occurrence_type' ][ ] = $occurrence->getType();
         }
         
         return $result;

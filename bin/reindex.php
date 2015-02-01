@@ -40,7 +40,26 @@ $params =
                     [ 
                         'type' => 'string'
                     ],
-                    'type_id' => 
+                    'has_name_type' => 
+                    [ 
+                        'type' => 'string',
+                        'index' => 'not_analyzed'
+                    ],
+                    'topic_type' => 
+                    [ 
+                        'type' => 'string',
+                        'index' => 'not_analyzed'
+                    ],
+                    'subject' => 
+                    [ 
+                        'type' => 'string',
+                        'index' => 'not_analyzed'
+                    ],
+                    'occurrence' => 
+                    [ 
+                        'type' => 'string'
+                    ],
+                    'has_occurrence_type' => 
                     [ 
                         'type' => 'string',
                         'index' => 'not_analyzed'

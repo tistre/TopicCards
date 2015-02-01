@@ -38,10 +38,10 @@ $query =
 ];
 
 if (strlen($fulltext_query) > 0)
-    $query[ 'query' ][ 'filtered' ][ 'query' ][ 'match' ][ 'name' ] = $fulltext_query;
+    $query[ 'query' ][ 'filtered' ][ 'query' ][ 'match' ][ '_all' ] = $fulltext_query;
 
 if (strlen($type_query) > 0)
-    $query[ 'query' ][ 'filtered' ][ 'filter' ][ 'term' ][ 'type_id' ] = $type_query;
+    $query[ 'query' ][ 'filtered' ][ 'filter' ][ 'term' ][ 'topic_type' ] = $type_query;
     
 $response = [ ];
     
@@ -60,12 +60,14 @@ foreach ($response[ 'hits' ][ 'hits' ] as $hit)
 {
     $types = [ ];
     
-    foreach ($hit[ '_source' ][ 'type_id' ] as $type)
+    foreach ($hit[ '_source' ][ 'topic_type' ] as $type)
     {
-        if (! isset($type_labels[ $type ]))
-            $type_labels[ $type ] = $topicmap->getTopicLabel($type);
+        $type_id = $topicmap->getTopicIdBySubject($type);
         
-        $types[ ] = $type_labels[ $type ];
+        if (! isset($type_labels[ $type_id ]))
+            $type_labels[ $type_id ] = $topicmap->getTopicLabel($type_id);
+        
+        $types[ ] = $type_labels[ $type_id ];
     }
 
     $label = $hit[ '_source' ][ 'label' ];
@@ -115,11 +117,13 @@ $tpl[ 'topic_types' ] = [ ];
 // XXX slow
 foreach ($topicmap->getTopicTypeIds([ 'get_mode' => 'all' ]) as $id)
 {
+    $subject = $topicmap->getTopicSubject($id);
+    
     $tpl[ 'topic_types' ][ ] = 
     [
-        'id' => $id,
+        'subject' => $subject,
         'label' => $topicmap->getTopicLabel($id),
-        'selected' => ($id === $type_query)
+        'selected' => ($subject === $type_query)
     ];
 }
 
