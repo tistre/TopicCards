@@ -5,7 +5,7 @@ namespace TopicBank\Backends\Db;
 
 class Association extends Core implements \TopicBank\Interfaces\iAssociation
 {
-    use Id, Persistent, Reified, Scoped, Typed, AssociationDbAdapter;
+    use Id, Persistent, Reified, Scoped, Typed, AssociationDbAdapter, AssociationSearchAdapter, Searchable;
     
     protected $roles = [ ];
     

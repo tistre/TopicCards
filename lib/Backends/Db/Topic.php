@@ -7,7 +7,7 @@ use \TopicBank\Interfaces\iTopic;
 
 class Topic extends Core implements iTopic
 {
-    use Id, Persistent, TopicDbAdapter, TopicSearchAdapter;
+    use Id, Persistent, TopicDbAdapter, TopicSearchAdapter, Searchable;
     
     protected $subject_identifiers = [ ];
     protected $subject_locators = [ ];

@@ -3,45 +3,19 @@
 namespace TopicBank\Backends\Db;
 
 
-// XXX reuse for associations
-
 trait TopicSearchAdapter
 {
-    public function index()
+    protected function getSearchType()
     {
-        $response = $this->services->search->index($this->topicmap, 
-        [
-            'type' => 'topic',
-            'id' => $this->getId(),
-            'body' => $this->getIndexFields()
-        ]);
-
-        if ($response === false)
-            return -1;
-        
-        return 1;
+        return 'topic';
     }
     
-    
-    public function removeFromIndex()
-    {
-        $response = $this->services->search->delete($this->topicmap,
-        [
-            'type' => 'topic',
-            'id' => $this->getId()
-        ]);
-
-        if ($response === false)
-            return -1;
-        
-        return 1;
-    }
-
     
     protected function getIndexFields()
     {
         $result = 
         [ 
+            // XXX add sort date
             'label' => $this->getLabel(),
             'name' => [ ],
             'has_name_type' => [ ],
@@ -65,14 +39,4 @@ trait TopicSearchAdapter
         
         return $result;
     }
-    
-    
-    public function getIndexedData()
-    {
-        return $this->services->search->get($this->topicmap,
-        [
-            'type' => 'topic',
-            'id' => $this->getId()
-        ]);
-    }    
 }

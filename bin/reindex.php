@@ -65,6 +65,28 @@ $params =
                         'index' => 'not_analyzed'
                     ]
                 ]
+            ],
+            'association' => 
+            [
+                '_source' => [ 'enabled' => true ],
+                'properties' => 
+                [
+                    'association_type' => 
+                    [ 
+                        'type' => 'string',
+                        'index' => 'not_analyzed'
+                    ],
+                    'has_role_type' => 
+                    [ 
+                        'type' => 'string',
+                        'index' => 'not_analyzed'
+                    ],
+                    'has_player_id' => 
+                    [ 
+                        'type' => 'string',
+                        'index' => 'not_analyzed'
+                    ]
+                ]
             ]
         ]
     ]
@@ -76,9 +98,7 @@ $response = $services->search->getElasticSearchClient()->indices()->create($para
 
 print_r($response);
 
-echo "Indexing documents...\n";
-
-$services->db_utils->connect();
+echo "Indexing topics...\n";
 
 $topic = $topicmap->newTopic();
 
@@ -90,6 +110,20 @@ foreach ($topicmap->getTopicIds([ ]) as $topic_id)
         $ok = $topic->index();
     
     printf("%s (%s)\n", $topic->getId(), $ok);
+}
+
+echo "Indexing associations...\n";
+
+$association = $topicmap->newAssociation();
+
+foreach ($topicmap->getAssociationIds([ ]) as $association_id)
+{
+    $ok = $association->load($association_id);
+    
+    if ($ok >= 0)
+        $ok = $association->index();
+    
+    printf("%s (%s)\n", $association->getId(), $ok);
 }
 
 echo "Done.\n";
