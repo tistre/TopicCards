@@ -34,7 +34,8 @@ $query =
 [ 
     'size' => $page_size,
     'from' => ($page_size * ($page_num - 1)),
-    'sort' => 'label.raw'
+    // XXX add date sorting
+    'sort' => (strlen($fulltext_query) > 0 ? '_score' : 'label.raw')
 ];
 
 if (strlen($fulltext_query) > 0)
