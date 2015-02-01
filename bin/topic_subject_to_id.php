@@ -15,7 +15,7 @@ $getopt->parse();
 
 if ($getopt[ 'help' ])
 {
-    $getopt->setBanner("\nTopicBank topic ID to subject identifier\n\n");
+    $getopt->setBanner("\nTopicBank topic subject identifier/locator to ID\n\n");
     
     echo $getopt->getHelpText();
     exit;
@@ -25,18 +25,18 @@ if ($getopt->getOperand(0) === '-')
 {
     while (! feof(STDIN))
     {
-        $id = trim(fgets(STDIN));
+        $subject = trim(fgets(STDIN));
         
-        if ($id === '')
+        if ($subject === '')
             continue;
             
-        echo $topicmap->getTopicSubject($id) . "\n";
+        echo $topicmap->getTopicIdBySubject($subject) . "\n";
     }
 }
 else
 {
-    foreach ($getopt->getOperands() as $id)
+    foreach ($getopt->getOperands() as $subject)
     {
-        echo $topicmap->getTopicSubject($id) . "\n";
+        echo $topicmap->getTopicIdBySubject($subject) . "\n";
     }
 }
