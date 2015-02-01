@@ -45,21 +45,11 @@ if (strlen($type_query) > 0)
     
 $response = [ ];
     
-$services->search_utils->init();
-
-try
-{
-    $response = $services->search->search(array
-    (
-        'index' => $topicmap->getSearchIndex(),
-        'type' => 'topic',
-        'body' => $query
-    ));
-}
-catch (\Exception $e)
-{
-    trigger_error(sprintf("%s: %s", __METHOD__, $e->getMessage()), E_USER_WARNING);
-}
+$response = $services->search->search($topicmap,
+[
+    'type' => 'topic',
+    'body' => $query
+]);
 
 $tpl[ 'fulltext_query' ] = $fulltext_query;
 

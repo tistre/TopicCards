@@ -9,26 +9,15 @@ trait TopicSearchAdapter
 {
     public function index()
     {
-        $ok = $this->services->search_utils->init();
-        
-        if ($ok < 0)
-            return $ok;
+        $response = $this->services->search->index($this->topicmap, 
+        [
+            'type' => 'topic',
+            'id' => $this->getId(),
+            'body' => $this->getIndexFields()
+        ]);
 
-        try
-        {
-            $response = $this->services->search->index(array
-            (
-                'index' => $this->topicmap->getSearchIndex(),
-                'type' => 'topic',
-                'id' => $this->getId(),
-                'body' => $this->getIndexFields()
-            ));
-        }
-        catch (\Exception $e)
-        {
-            trigger_error(sprintf("%s: %s", __METHOD__, $e->getMessage()), E_USER_WARNING);
+        if ($response === false)
             return -1;
-        }
         
         return 1;
     }
@@ -36,25 +25,14 @@ trait TopicSearchAdapter
     
     public function removeFromIndex()
     {
-        $ok = $this->services->search_utils->init();
-        
-        if ($ok < 0)
-            return $ok;
+        $response = $this->services->search->delete($this->topicmap,
+        [
+            'type' => 'topic',
+            'id' => $this->getId()
+        ]);
 
-        try
-        {
-            $response = $this->services->search->delete(array
-            (
-                'index' => $this->topicmap->getSearchIndex(),
-                'type' => 'topic',
-                'id' => $this->getId()
-            ));
-        }
-        catch (\Exception $e)
-        {
-            trigger_error(sprintf("%s: %s", __METHOD__, $e->getMessage()), E_USER_WARNING);
+        if ($response === false)
             return -1;
-        }
         
         return 1;
     }
@@ -116,16 +94,10 @@ trait TopicSearchAdapter
     
     public function getIndexedData()
     {
-        $ok = $this->services->search_utils->init();
-        
-        if ($ok < 0)
-            return $ok;
-
-        return $this->services->search->get(array
-        (
-            'index' => $this->topicmap->getSearchIndex(),
+        return $this->services->search->get($this->topicmap,
+        [
             'type' => 'topic',
             'id' => $this->getId()
-        ));
+        ]);
     }    
 }

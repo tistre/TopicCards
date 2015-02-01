@@ -34,22 +34,14 @@ $query =
     'query' => [ 'query_string' => [ 'query' => $qstring ] ]
 ];
 
-$services->search_utils->init();
+$response = $services->search->search($topicmap,
+[
+    'type' => 'topic',
+    'body' => $query
+]);
 
-try
-{
-    $response = $services->search->search(array
-    (
-        'index' => $topicmap->getSearchIndex(),
-        'type' => 'topic',
-        'body' => $query
-    ));
-}
-catch (\Exception $e)
-{
-    trigger_error(sprintf("%s: %s", __METHOD__, $e->getMessage()), E_USER_WARNING);
+if ($response === false)
     exit;
-}
 
 foreach ($response[ 'hits' ][ 'hits' ] as $hit)
     echo $hit[ '_id' ] . "\n";

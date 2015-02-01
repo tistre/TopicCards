@@ -5,10 +5,10 @@ namespace TopicBank\Backends\Db;
 
 class Services implements \TopicBank\Interfaces\iServices
 {
+    // XXX replace with private + accessor methods?
     public $db_utils;
     public $db = false;
-    public $search_utils;
-    public $search = false;
+    public $search;
     
     protected $tm_system;
     
@@ -22,7 +22,7 @@ class Services implements \TopicBank\Interfaces\iServices
     public function __construct()
     {
         $this->db_utils = new DbUtils($this);
-        $this->search_utils = new SearchUtils($this);
+        $this->search = new Search($this);
         $this->tm_system = new TopicMapSystem($this);
     }
     

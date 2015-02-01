@@ -2,13 +2,13 @@
 
 require_once dirname(__DIR__) . '/include/config.php';
 
-$services->search_utils->init();
+$services->search->init();
 
 // Recreate index (XXX make this optional)
 
 printf("Deleting index %s...\n", $topicmap->getSearchIndex());
 
-$response = $services->search->indices()->delete([ 'index' => $topicmap->getSearchIndex() ]);
+$response = $services->search->getElasticSearchClient()->indices()->delete([ 'index' => $topicmap->getSearchIndex() ]);
 
 print_r($response);
 
@@ -53,7 +53,7 @@ $params =
 
 printf("Creating index %s...\n", $topicmap->getSearchIndex());
 
-$response = $services->search->indices()->create($params);
+$response = $services->search->getElasticSearchClient()->indices()->create($params);
 
 print_r($response);
 
