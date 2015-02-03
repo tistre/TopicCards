@@ -124,7 +124,16 @@ trait AssociationDbAdapter
         }
 
         if ($ok >= 0)
-            $ok = $this->topicmap->trigger(iAssociation::EVENT_SAVING, [ 'association' => $this, 'dml' => 'insert' ]);
+        {
+            $callback_result = [ ];
+
+            $ok = $this->topicmap->trigger
+            (
+                iAssociation::EVENT_SAVING, 
+                [ 'association' => $this, 'dml' => 'insert' ],
+                $callback_result
+            );
+        }
 
         if ($ok < 0)
         {
@@ -211,7 +220,16 @@ trait AssociationDbAdapter
         }
 
         if ($ok >= 0)
-            $ok = $this->topicmap->trigger(iAssociation::EVENT_SAVING, [ 'association' => $this, 'dml' => 'update' ]);            
+        {
+            $callback_result = [ ];
+
+            $ok = $this->topicmap->trigger
+            (
+                iAssociation::EVENT_SAVING, 
+                [ 'association' => $this, 'dml' => 'update' ],
+                $callback_result
+            );
+        }
 
         if ($ok < 0)
         {
@@ -250,8 +268,17 @@ trait AssociationDbAdapter
         if ($ret === false)
             $ok = -1;
             
-        if ($ok >= 0)                
-            $ok = $this->topicmap->trigger(iAssociation::EVENT_DELETING, [ 'association_id' => $id ]);
+        if ($ok >= 0)
+        {
+            $callback_result = [ ];
+
+            $ok = $this->topicmap->trigger
+            (
+                iAssociation::EVENT_DELETING, 
+                [ 'association_id' => $id ],
+                $callback_result
+            );
+        }
             
         if ($ok < 0)
         {

@@ -345,7 +345,16 @@ trait TopicDbAdapter
         }
 
         if ($ok >= 0)
-            $ok = $this->topicmap->trigger(iTopic::EVENT_SAVING, [ 'topic' => $this, 'dml' => 'insert' ]);
+        {
+            $callback_result = [ ];
+            
+            $ok = $this->topicmap->trigger
+            (
+                iTopic::EVENT_SAVING, 
+                [ 'topic' => $this, 'dml' => 'insert' ],
+                $callback_result
+            );
+        }
             
         if ($ok < 0)
         {
@@ -541,7 +550,16 @@ trait TopicDbAdapter
         }
 
         if ($ok >= 0)
-            $ok = $this->topicmap->trigger(iTopic::EVENT_SAVING, [ 'topic' => $this, 'dml' => 'update' ]);            
+        {
+            $callback_result = [ ];
+
+            $ok = $this->topicmap->trigger
+            (
+                iTopic::EVENT_SAVING, 
+                [ 'topic' => $this, 'dml' => 'update' ],
+                $callback_result
+            );
+        }
 
         if ($ok < 0)
         {
@@ -639,8 +657,17 @@ trait TopicDbAdapter
         if ($ret === false)
             $ok = -1;
             
-        if ($ok >= 0)                
-            $ok = $this->topicmap->trigger(iTopic::EVENT_DELETING, [ 'topic_id' => $id ]);
+        if ($ok >= 0)              
+        {  
+            $callback_result = [ ];
+
+            $ok = $this->topicmap->trigger
+            (
+                iTopic::EVENT_DELETING, 
+                [ 'topic_id' => $id ],
+                $callback_result
+            );
+        }
             
         if ($ok < 0)
         {

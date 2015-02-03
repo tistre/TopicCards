@@ -38,24 +38,24 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
     }
     
     
-    public function trigger($event, array $params)
-    {
-        $result = 0;
-        
+    public function trigger($event, array $params, array &$result)
+    {        
         if (! isset($this->listeners[ $event ]))
-            return $result;
+            return 0;
+
+        $cnt = 0;
             
         foreach ($this->listeners[ $event ] as $callback)
         {
-            $ok = $callback($this, $event, $params);
+            $callback_ok = $callback($this, $event, $params, $result);
             
-            if ($ok < 0)
-                return $ok;
+            if ($callback_ok < 0)
+                return $callback_ok;
                 
-            $result++;
+            $cnt++;
         }
         
-        return $result;
+        return $cnt;
     }
     
     

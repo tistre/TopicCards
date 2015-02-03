@@ -44,7 +44,7 @@ $config_topicmap->setDbTablePrefix('topicbank_config_');
 /*
     How to run your own code on TopicBank events:
     
-function helloWorld(\TopicBank\Interfaces\iTopicMap $topicmap, $event, array $params)
+function helloWorld(\TopicBank\Interfaces\iTopicMap $topicmap, $event, array $params, array &$result)
 {
     error_log($event);
     

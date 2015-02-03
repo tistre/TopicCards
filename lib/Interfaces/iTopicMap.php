@@ -9,7 +9,7 @@ interface iTopicMap
     public function getServices();
     
     public function on($event, callable $callback);
-    public function trigger($event, array $params);
+    public function trigger($event, array $params, array &$result);
 
     public function setUrl($url);
     public function getUrl();
