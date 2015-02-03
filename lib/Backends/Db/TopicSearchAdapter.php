@@ -36,6 +36,18 @@ trait TopicSearchAdapter
             $result[ 'occurrence' ][ ] = $occurrence->getValue();
             $result[ 'has_occurrence_type' ][ ] = $occurrence->getType();
         }
+
+        $callback_result = [ ];
+
+        $this->topicmap->trigger
+        (
+            \TopicBank\Interfaces\iTopic::EVENT_INDEXING, 
+            [ 'topic' => $this, 'index_fields' => $result ],
+            $callback_result
+        );
+        
+        if (isset($callback_result[ 'index_fields' ]) && is_array($callback_result[ 'index_fields' ]))
+            $result = $callback_result[ 'index_fields' ];
         
         return $result;
     }

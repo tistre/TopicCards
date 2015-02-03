@@ -5,8 +5,10 @@ namespace TopicBank\Backends\Db;
 
 class Search
 {
+    const EVENT_INDEX_PARAMS = 'search_index_params';
+
     protected $services;
-    protected $es_client = false;
+    protected $elasticsearch = false;
     
     
     public function __construct(\TopicBank\Interfaces\iServices $services)
@@ -17,10 +19,10 @@ class Search
     
     public function init()
     {
-        if ($this->es_client !== false)
+        if ($this->elasticsearch !== false)
             return 0;
         
-        $this->es_client = new \Elasticsearch\Client($this->services->getSearchParams());
+        $this->elasticsearch = new \Elasticsearch\Client($this->services->getSearchParams());
         
         return 1;
     }
@@ -28,7 +30,7 @@ class Search
     
     public function getElasticSearchClient()
     {
-        return $this->es_client;
+        return $this->elasticsearch;
     }
     
     
@@ -68,7 +70,7 @@ class Search
         
         try
         {
-            $result = $this->es_client->$method($params);
+            $result = $this->elasticsearch->$method($params);
         }
         catch (\Exception $e)
         {

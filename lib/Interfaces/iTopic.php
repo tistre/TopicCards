@@ -13,6 +13,7 @@ interface iTopic extends iPersistent
     
     const EVENT_SAVING = 'topic_saving';
     const EVENT_DELETING = 'topic_deleting';
+    const EVENT_INDEXING = 'topic_indexing';
     
     public function getSubjectIdentifiers();
     public function setSubjectIdentifiers(array $strings);

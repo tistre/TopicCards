@@ -4,13 +4,18 @@ require_once dirname(__DIR__) . '/include/config.php';
 
 $services->search->init();
 
+$elasticsearch = $services->search->getElasticSearchClient();
+
 // Recreate index (XXX make this optional)
 
-printf("Deleting index %s...\n", $topicmap->getSearchIndex());
+if ($elasticsearch->indices()->exists([ 'index' => $topicmap->getSearchIndex() ]))
+{
+    printf("Deleting index %s...\n", $topicmap->getSearchIndex());
 
-$response = $services->search->getElasticSearchClient()->indices()->delete([ 'index' => $topicmap->getSearchIndex() ]);
+    $response = $elasticsearch->indices()->delete([ 'index' => $topicmap->getSearchIndex() ]);
 
-print_r($response);
+    print_r($response);
+}
 
 $params =
 [
@@ -92,15 +97,31 @@ $params =
     ]
 ];
 
+$callback_result = [ ];
+
+$topicmap->trigger
+(
+    \TopicBank\Backends\Db\Search::EVENT_INDEX_PARAMS, 
+    [ 'index_params' => $params ],
+    $callback_result
+);
+
+if (isset($callback_result[ 'index_params' ]) && is_array($callback_result[ 'index_params' ]))
+    $params = $callback_result[ 'index_params' ];
+
 printf("Creating index %s...\n", $topicmap->getSearchIndex());
 
-$response = $services->search->getElasticSearchClient()->indices()->create($params);
+$response = $elasticsearch->indices()->create($params);
 
 print_r($response);
+
+$limit = 0;
 
 echo "Indexing topics...\n";
 
 $topic = $topicmap->newTopic();
+$cnt = 0;
+$topic_start_time = microtime(true);
 
 foreach ($topicmap->getTopicIds([ ]) as $topic_id)
 {
@@ -109,12 +130,34 @@ foreach ($topicmap->getTopicIds([ ]) as $topic_id)
     if ($ok >= 0)
         $ok = $topic->index();
     
-    printf("%s (%s)\n", $topic->getId(), $ok);
+    printf("#%d %s (%s)\n", ++$cnt, $topic->getId(), $ok);
+    
+    if (($limit > 0) && ($cnt >= $limit))
+        break;
+}
+
+$total_time = (microtime(true) - $topic_start_time);
+
+if ($cnt === 0)
+{
+    echo "No topics indexed.\n";
+}
+else
+{
+    $topic_summary = sprintf
+    (
+        "%d topics indexed in %.1f s (%.3f s per topic).\n",
+        $cnt,
+        $total_time,
+        ($total_time / $cnt)
+    );
 }
 
 echo "Indexing associations...\n";
 
 $association = $topicmap->newAssociation();
+$cnt = 0;
+$association_start_time = microtime(true);
 
 foreach ($topicmap->getAssociationIds([ ]) as $association_id)
 {
@@ -123,7 +166,31 @@ foreach ($topicmap->getAssociationIds([ ]) as $association_id)
     if ($ok >= 0)
         $ok = $association->index();
     
-    printf("%s (%s)\n", $association->getId(), $ok);
+    printf("#%d %s (%s)\n", ++$cnt, $association->getId(), $ok);
+    
+    if (($limit > 0) && ($cnt >= $limit))
+        break;
+}
+
+$total_time = (microtime(true) - $association_start_time);
+
+if ($cnt === 0)
+{
+    $association_summary = "No associations indexed.\n";
+}
+else
+{
+    $association_summary = sprintf
+    (
+        "%d associations indexed in %.1f s (%.3f s per association).\n",
+        $cnt,
+        $total_time,
+        ($total_time / $cnt)
+    );
 }
 
 echo "Done.\n";
+
+echo $topic_summary . $association_summary;
+
+printf("Total time: %d s\n", (microtime(true) - $topic_start_time));
