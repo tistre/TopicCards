@@ -31,6 +31,9 @@ create table <?=$prefix?>subject
     subject_islocator smallint not null
 );
 
+create index on <?=$prefix?>subject (subject_topic);
+create index on <?=$prefix?>subject (subject_islocator);
+
 
 create table <?=$prefix?>type
 (
@@ -38,6 +41,8 @@ create table <?=$prefix?>type
     type_topic varchar(64) not null references <?=$prefix?>topic (topic_id) on delete cascade, 
     type_type varchar(64) not null references <?=$prefix?>topic (topic_id)
 );
+
+create index on <?=$prefix?>type (type_topic);
 
 
 create table <?=$prefix?>name
@@ -49,6 +54,8 @@ create table <?=$prefix?>name
     name_reifier varchar(64) null references <?=$prefix?>topic (topic_id)
 );
 
+create index on <?=$prefix?>name (name_topic);
+
 
 create table <?=$prefix?>occurrence
 (
@@ -59,6 +66,8 @@ create table <?=$prefix?>occurrence
     occurrence_value text not null,
     occurrence_reifier varchar(64) null references <?=$prefix?>topic (topic_id)
 );
+
+create index on <?=$prefix?>occurrence (occurrence_topic);
 
 
 create table <?=$prefix?>association
@@ -80,6 +89,9 @@ create table <?=$prefix?>role
     role_type varchar(64) not null references <?=$prefix?>topic (topic_id), 
     role_reifier varchar(64) null references <?=$prefix?>topic (topic_id)
 );
+
+create index on <?=$prefix?>role (role_association);
+create index on <?=$prefix?>role (role_player);
 
 
 create table <?=$prefix?>scope
