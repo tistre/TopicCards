@@ -221,7 +221,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             }
             else
             {
-                echo '<p>' . htmlspecialchars($occurrence[ 'value' ]) . '</p>';
+                echo '<p>' . nl2br(htmlspecialchars($occurrence[ 'value' ])) . '</p>';
             }
 
             if (count($occurrence[ 'scope' ]) > 0)
@@ -275,7 +275,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 }
                 else
                 {                    
-                    echo htmlspecialchars($occurrence[ 'value' ]);
+                    echo nl2br(htmlspecialchars($occurrence[ 'value' ]));
                 }
                 
                 if (count($occurrence[ 'scope' ]) > 0)
