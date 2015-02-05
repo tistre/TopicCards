@@ -33,6 +33,7 @@ create table <?=$prefix?>subject
 
 create index on <?=$prefix?>subject (subject_topic);
 create index on <?=$prefix?>subject (subject_islocator);
+create index on <?=$prefix?>subject (subject_value);
 
 
 create table <?=$prefix?>type
@@ -80,6 +81,8 @@ create table <?=$prefix?>association
     association_reifier varchar(64) null references <?=$prefix?>topic (topic_id)
 );
 
+create index on <?=$prefix?>association (association_reifier);
+
 
 create table <?=$prefix?>role
 (
@@ -102,3 +105,5 @@ create table <?=$prefix?>scope
     scope_occurrence bigint null references <?=$prefix?>occurrence (occurrence_id) on delete cascade, 
     scope_scope varchar(64) not null references <?=$prefix?>topic (topic_id)
 );
+
+create index on <?=$prefix?>scope (scope_name);
