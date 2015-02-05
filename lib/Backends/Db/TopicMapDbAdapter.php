@@ -148,6 +148,9 @@ trait TopicMapDbAdapter
     
     public function selectAssociations(array $filters)
     {
+        if (! isset($filters[ 'limit' ]))
+            $filters[ 'limit' ] = 500;
+            
         $ok = $this->services->db_utils->connect();
         
         if ($ok < 0)
@@ -189,6 +192,9 @@ trait TopicMapDbAdapter
 
         if (count($where) > 0)
             $sql_str .= ' where ' . implode(' and ', $where);
+            
+        if ($filters[ 'limit' ] > 0)
+            $sql_str .= sprintf(' limit %d', $filters[ 'limit' ]);
 
         $sql = $this->services->db->prepare($sql_str);
         
@@ -289,6 +295,9 @@ trait TopicMapDbAdapter
     
     protected function selectWhat_all($table, $column, array $filters)
     {
+        if (! isset($filters[ 'limit' ]))
+            $filters[ 'limit' ] = 500;
+            
         $ok = $this->services->db_utils->connect();
         
         if ($ok < 0)
@@ -298,10 +307,11 @@ trait TopicMapDbAdapter
         
         $sql = $this->services->db->prepare(sprintf
         (
-            'select distinct %s from %s%s',
+            'select distinct %s from %s%s%s',
             $column,
             $prefix,
-            $table
+            $table,
+            ($filters[ 'limit' ] > 0 ? sprintf(' limit %d', $filters[ 'limit' ]) : '')
         ));
 
         $ok = $sql->execute();
