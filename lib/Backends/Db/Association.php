@@ -115,6 +115,13 @@ class Association extends Core implements \TopicBank\Interfaces\iAssociation
         {
             $ok = $this->updateAll($this->getAll());
         }
+
+        if ($ok >= 0)
+        {
+            $this->setVersion($this->getVersion() + 1);
+            
+            $this->index();
+        }
         
         return $ok;
     }
