@@ -133,6 +133,9 @@ trait AssociationDbAdapter
                 [ 'association' => $this, 'dml' => 'insert' ],
                 $callback_result
             );
+
+            if (isset($callback_result[ 'index_related' ]))
+                $this->addIndexRelated($callback_result[ 'index_related' ]);
         }
 
         if ($ok < 0)
@@ -229,6 +232,9 @@ trait AssociationDbAdapter
                 [ 'association' => $this, 'dml' => 'update' ],
                 $callback_result
             );
+
+            if (isset($callback_result[ 'index_related' ]))
+                $this->addIndexRelated($callback_result[ 'index_related' ]);
         }
 
         if ($ok < 0)
@@ -278,6 +284,9 @@ trait AssociationDbAdapter
                 [ 'association_id' => $id ],
                 $callback_result
             );
+
+            if (isset($callback_result[ 'index_related' ]))
+                $this->addIndexRelated($callback_result[ 'index_related' ]);
         }
             
         if ($ok < 0)

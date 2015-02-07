@@ -354,6 +354,9 @@ trait TopicDbAdapter
                 [ 'topic' => $this, 'dml' => 'insert' ],
                 $callback_result
             );
+            
+            if (isset($callback_result[ 'index_related' ]))
+                $this->addIndexRelated($callback_result[ 'index_related' ]);
         }
             
         if ($ok < 0)
@@ -559,6 +562,9 @@ trait TopicDbAdapter
                 [ 'topic' => $this, 'dml' => 'update' ],
                 $callback_result
             );
+
+            if (isset($callback_result[ 'index_related' ]))
+                $this->addIndexRelated($callback_result[ 'index_related' ]);
         }
 
         if ($ok < 0)
@@ -667,6 +673,9 @@ trait TopicDbAdapter
                 [ 'topic_id' => $id ],
                 $callback_result
             );
+
+            if (isset($callback_result[ 'index_related' ]))
+                $this->addIndexRelated($callback_result[ 'index_related' ]);
         }
             
         if ($ok < 0)
