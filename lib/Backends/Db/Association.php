@@ -78,55 +78,6 @@ class Association extends Core implements \TopicBank\Interfaces\iAssociation
     }
     
     
-    public function load($id)
-    {
-        $rows = $this->selectAll([ 'id' => $id ]);
-        
-        if (! is_array($rows))
-            return $rows;
-            
-        if (count($rows) === 0)
-            return -1;
-            
-        $ok = $this->setAll($rows[ 0 ]);
-        
-        if ($ok >= 0)
-            $this->loaded = true;
-            
-        return $ok;
-    }
-    
-    
-    public function save()
-    {
-        $ok = $this->validate($dummy);
-        
-        if ($ok < 0)
-            return $ok;
-            
-        if ($this->getVersion() === 0)
-        {
-            if (strlen($this->getId()) === 0)
-                $this->setId($this->getTopicmap()->createId());
-                
-            $ok = $this->insertAll($this->getAll());
-        }
-        else
-        {
-            $ok = $this->updateAll($this->getAll());
-        }
-
-        if ($ok >= 0)
-        {
-            $this->setVersion($this->getVersion() + 1);
-            
-            $this->index();
-        }
-        
-        return $ok;
-    }
-    
-    
     public function getAll()
     {
         $result = 
@@ -177,14 +128,5 @@ class Association extends Core implements \TopicBank\Interfaces\iAssociation
         }
         
         return 1;
-    }
-    
-    
-    public function delete()
-    {
-        if ($this->getVersion() === 0)
-            return 0;
-        
-        return $this->deleteById($this->getId(), $this->getVersion());
     }
 }

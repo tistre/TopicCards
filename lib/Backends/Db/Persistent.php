@@ -80,7 +80,20 @@ trait Persistent
     
     public function load($id)
     {
-        return -1;
+        $rows = $this->selectAll([ 'id' => $id ]);
+        
+        if (! is_array($rows))
+            return $rows;
+            
+        if (count($rows) === 0)
+            return -1;
+            
+        $ok = $this->setAll($rows[ 0 ]);
+        
+        if ($ok >= 0)
+            $this->loaded = true;
+            
+        return $ok;
     }
     
     
@@ -92,12 +105,48 @@ trait Persistent
     
     public function save()
     {
-        return -1;
+        $ok = $this->validate($dummy);
+        
+        if ($ok < 0)
+            return $ok;
+            
+        if ($this->getVersion() === 0)
+        {
+            if (strlen($this->getId()) === 0)
+                $this->setId($this->getTopicmap()->createId());
+                
+            $ok = $this->insertAll($this->getAll());
+        }
+        else
+        {
+            $ok = $this->updateAll($this->getAll());
+        }
+
+        if ($ok >= 0)
+        {
+            $this->setVersion($this->getVersion() + 1);
+            
+            $this->index();
+        }
+        
+        return $ok;
     }
     
     
     public function delete()
     {
-        return -1;
+        if ($this->getVersion() === 0)
+            return 0;
+
+        $this->removeFromIndex();
+        
+        $ok = $this->deleteById($this->getId(), $this->getVersion());
+        
+        // Sort of manual rollback: If deletion failed, re-add to index
+        
+        if ($ok < 0)
+            $this->index();
+            
+        return $ok;
     }
 }
