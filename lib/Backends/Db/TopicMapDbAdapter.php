@@ -148,6 +148,12 @@ trait TopicMapDbAdapter
     
     public function selectAssociations(array $filters)
     {
+        if (isset($filters[ 'type' ]))
+            $filters[ 'type_id' ] = $this->getTopicIdBySubject($filters[ 'type' ]);
+
+        if (isset($filters[ 'player' ]))
+            $filters[ 'player_id' ] = $this->getTopicIdBySubject($filters[ 'player' ]);
+        
         if (! isset($filters[ 'limit' ]))
             $filters[ 'limit' ] = 500;
             
@@ -155,7 +161,7 @@ trait TopicMapDbAdapter
         
         if ($ok < 0)
             return $ok;
-        
+
         $prefix = $this->getDbTablePrefix();
 
         $sql_str = sprintf('select association_id from %sassociation', $prefix);
@@ -174,7 +180,7 @@ trait TopicMapDbAdapter
             ];
         }
 
-        if (! empty($filters[ 'role_player_id' ]))
+        if (! empty($filters[ 'player_id' ]))
         {
             $where[ ] = sprintf
             (
@@ -186,7 +192,7 @@ trait TopicMapDbAdapter
             $bind[ ] = 
             [
                 'bind_param' => ':role_player', 
-                'value' => $filters[ 'role_player_id' ]
+                'value' => $filters[ 'player_id' ]
             ];
         }
 
