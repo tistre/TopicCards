@@ -28,7 +28,11 @@ function addTopic($topic_id)
     global $objects;
     
     $topic = $topicmap->newTopic();
-    $topic->load($topic_id);
+
+    $ok = $topic->load($topic_id);
+
+    if ($ok < 0)
+        return;
 
     $objects[ ] = $topic;
     
@@ -49,15 +53,19 @@ function addAssociation($association_id)
     $association = $topicmap->newAssociation();
     $reifier = $topicmap->newTopic();
     
-    $association->load($association_id);
+    $ok = $association->load($association_id);
+
+    if ($ok < 0)
+        return;
         
     $reifier_id = $association->getReifierId();
  
     if ($getopt[ 'with_reifiers' ] && (strlen($reifier_id) > 0))
     {
-        $reifier->load($reifier_id);
+        $ok = $reifier->load($reifier_id);
 
-        $objects[ ] = $reifier;
+        if ($ok >= 0)
+            $objects[ ] = $reifier;
     }
     
     $objects[ ] = $association;
