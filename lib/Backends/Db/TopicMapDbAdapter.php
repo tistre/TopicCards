@@ -279,7 +279,7 @@ trait TopicMapDbAdapter
     
     public function selectRolePlayers(array $filters)
     {
-        return $this->selectWhat('topic', 'topic_id', $filters);
+        return $this->selectWhat('role', 'role_player', $filters);
     }
     
     
@@ -288,36 +288,47 @@ trait TopicMapDbAdapter
         if (! isset($filters[ 'get_mode' ]))
             $filters[ 'get_mode' ] = 'all';
 
-        // XXX "recent" not implemented yet
-        
-        if ($filters[ 'get_mode' ] === 'recent')
-            $filters[ 'get_mode' ] = 'all';
-            
-        $method = 'selectWhat_' . $filters[ 'get_mode' ];
-        
-        return $this->$method($table, $column, $filters);
-    }
-    
-    
-    protected function selectWhat_all($table, $column, array $filters)
-    {
         if (! isset($filters[ 'limit' ]))
             $filters[ 'limit' ] = 500;
-            
+
         $ok = $this->services->db_utils->connect();
         
         if ($ok < 0)
             return $ok;
+
+        $sort_clause = '';
+        
+        if ($filters[ 'get_mode' ] === 'recent')
+        {            
+            $sort_field = '';
+            
+            $table_sortfield =
+            [
+                'association' => 'association_updated',
+                'name' => 'name_id',
+                'occurrence' => 'occurrence_id',
+                'role' => 'role_id',
+                'scope' => 'scope_id',
+                'type' => 'type_id'
+            ];
+            
+            if (isset($table_sortfield[ $table ]))
+                $sort_field = $table_sortfield[ $table ];
+                
+            if ($sort_field !== '')
+                $sort_clause = sprintf(' order by %s desc', $sort_field);
+        }
         
         $prefix = $this->getDbTablePrefix();
-        
+
         $sql = $this->services->db->prepare(sprintf
         (
-            'select distinct %s from %s%s%s',
+            'select distinct %s from %s%s%s limit %d',
             $column,
             $prefix,
             $table,
-            ($filters[ 'limit' ] > 0 ? sprintf(' limit %d', $filters[ 'limit' ]) : '')
+            $sort_clause,
+            $filters[ 'limit' ]
         ));
 
         $ok = $sql->execute();

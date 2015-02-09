@@ -19,14 +19,15 @@
       <select size="1" name="search_type" data-topicbank_element="search_type">
         <option value="">(Any type)</option>
         <?php foreach ($tpl[ 'topic_types' ] as $topic_arr) { ?>
-        <option value="<?=htmlspecialchars($topic_arr[ 'id' ])?>"><?=htmlspecialchars($topic_arr[ 'label' ])?></option>
+        <option value="<?=htmlspecialchars($topic_arr[ 'subject' ])?>"><?=htmlspecialchars($topic_arr[ 'label' ])?></option>
         <?php } ?>
       </select>
-      <input type="text" name="search_name" data-topicbank_element="search_name" />
+      <input type="text" name="search_name" data-topicbank_element="search_name" value="" />
+      <input type="hidden" name="p" data-topicbank_element="search_page" value="" />
       <button class="btn btn-default" type="submit">Search</button>
     </form>
-    <ul class="nav nav-pills nav-stacked" data-topicbank_element="search_results">
-    </ul>
+    <div class="nav nav-pills nav-stacked" data-topicbank_element="search_results">
+    </div>
   </div>
   <div class="col-md-4">
     <h4>Create new</h4>
@@ -35,7 +36,7 @@
       <select size="1" name="create_type" data-topicbank_element="create_type">
         <option value="">(No type)</option>
         <?php foreach ($tpl[ 'topic_types' ] as $topic_arr) { ?>
-        <option value="<?=htmlspecialchars($topic_arr[ 'id' ])?>"><?=htmlspecialchars($topic_arr[ 'label' ])?></option>
+        <option value="<?=htmlspecialchars($topic_arr[ 'subject' ])?>"><?=htmlspecialchars($topic_arr[ 'label' ])?></option>
         <?php } ?>
       </select>
       Name:

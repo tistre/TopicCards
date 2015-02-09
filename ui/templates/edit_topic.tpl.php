@@ -974,7 +974,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
         $('#choose_topic_dialog').on('submit', '#topicbank_choose_topic_dialog_searchform', function(e)
         {
-            var search_name, search_type, $search_name_input, $search_type_input, $search_results;
+            var search_name, search_page, search_type;
+            var $search_name_input, $search_page_input, $search_type_input, $search_results;
             
             e.preventDefault();
             
@@ -989,11 +990,30 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             $search_type_input = $('#choose_topic_dialog').find('select[data-topicbank_element="search_type"]');            
             search_type = $search_type_input.val();
             
-            $search_results = $('#choose_topic_dialog').find('ul[data-topicbank_element="search_results"]');
+            $search_page_input = $('#choose_topic_dialog').find('input[data-topicbank_element="search_page"]');
+            search_page = $search_page_input.val();
+            
+            $search_results = $('#choose_topic_dialog').find('div[data-topicbank_element="search_results"]');
 
-            $search_results.empty().load(topicbank_base_url + 'search_topic?name=' + encodeURIComponent(search_name) + '&type=' + encodeURIComponent(search_type));
+            $search_results.empty().load(topicbank_base_url + 'search_topic?name=' + encodeURIComponent(search_name) + '&type=' + encodeURIComponent(search_type) + '&p=' + encodeURIComponent(search_page));
             
             return false;
+        });
+        
+        $('#choose_topic_dialog').on('click', 'button[data-topicbank_event="choose_topic_go_to_page"]', function(e)
+        {
+            var page_num;
+            var $button, $search_form;
+            
+            $button = $(e.currentTarget);
+            
+            page_num = $button.data('topicbank_page_num');
+            
+            $search_form = $('#topicbank_choose_topic_dialog_searchform');
+            
+            $search_form.find('input[data-topicbank_element="search_page"]').val(page_num);
+            
+            $search_form.submit();
         });
 
         $('#choose_topic_dialog').on('submit', '#topicbank_choose_topic_dialog_createform', function(e)

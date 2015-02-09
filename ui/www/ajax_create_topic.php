@@ -12,12 +12,12 @@ $name->setValue(trim($_REQUEST[ 'name' ]));
 
 if (! empty($_REQUEST[ 'type' ]))
 {
-    $type_ids = $_REQUEST[ 'type' ];
+    $types = $_REQUEST[ 'type' ];
     
-    if (! is_array($type_ids))
-        $type_ids = [ $type_ids ];
+    if (! is_array($types))
+        $types = [ $types ];
         
-    $topic->setTypeIds($type_ids);
+    $topic->setTypes($types);
 }
 
 if (! empty($_REQUEST[ 'subject_identifier' ]))
