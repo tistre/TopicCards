@@ -128,4 +128,6 @@ foreach ($topicmap->getTopicTypeIds([ 'get_mode' => 'all' ]) as $id)
     ];
 }
 
+TopicBank\Utils\StringUtils::usortByKey($tpl[ 'topic_types' ], 'label');
+
 include TOPICBANK_BASE_DIR . '/ui/templates/topics.tpl.php';
