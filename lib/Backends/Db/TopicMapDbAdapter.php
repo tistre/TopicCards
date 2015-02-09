@@ -296,13 +296,11 @@ trait TopicMapDbAdapter
         if ($ok < 0)
             return $ok;
 
-        $sort_clause = '';
+        $sort_column = '';
         
         if ($filters[ 'get_mode' ] === 'recent')
-        {            
-            $sort_field = '';
-            
-            $table_sortfield =
+        {                        
+            $table_sortcolumn =
             [
                 'association' => 'association_updated',
                 'name' => 'name_id',
@@ -312,24 +310,39 @@ trait TopicMapDbAdapter
                 'type' => 'type_id'
             ];
             
-            if (isset($table_sortfield[ $table ]))
-                $sort_field = $table_sortfield[ $table ];
-                
-            if ($sort_field !== '')
-                $sort_clause = sprintf(' order by %s desc', $sort_field);
+            if (isset($table_sortcolumn[ $table ]))
+                $sort_column = $table_sortcolumn[ $table ];
         }
         
         $prefix = $this->getDbTablePrefix();
 
-        $sql = $this->services->db->prepare(sprintf
-        (
-            'select distinct %s from %s%s%s limit %d',
-            $column,
-            $prefix,
-            $table,
-            $sort_clause,
-            $filters[ 'limit' ]
-        ));
+        if ($sort_column === '')
+        {
+            $sql_stmt = sprintf
+            (
+                'select distinct %s from %s%s limit %d',
+                $column,
+                $prefix,
+                $table,
+                $filters[ 'limit' ]
+            );
+        }
+        else
+        {
+            $sql_stmt = sprintf
+            (
+                'select distinct a.%s from (select %s, %s from %s%s order by %s desc) a limit %d',
+                $column,
+                $column,
+                $sort_column,
+                $prefix,
+                $table,
+                $sort_column,
+                $filters[ 'limit' ]
+            );
+        }
+
+        $sql = $this->services->db->prepare($sql_stmt);
 
         $ok = $sql->execute();
         
