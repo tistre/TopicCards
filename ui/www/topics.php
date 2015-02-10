@@ -42,8 +42,14 @@ if (strlen($fulltext_query) > 0)
     $query[ 'query' ][ 'filtered' ][ 'query' ][ 'match' ][ '_all' ] = $fulltext_query;
 
 if (strlen($type_query) > 0)
+{
     $query[ 'query' ][ 'filtered' ][ 'filter' ][ 'term' ][ 'topic_type_id' ] = $type_query;
-    
+}
+else
+{
+    $query[ 'facets' ][ 'types' ] = [ 'terms' => [ 'field' => 'topic_type_id' ] ];
+}
+        
 $response = [ ];
     
 $response = $services->search->search($topicmap,
@@ -125,5 +131,26 @@ foreach ($topicmap->getTopicTypeIds([ 'get_mode' => 'all' ]) as $id)
 }
 
 TopicBank\Utils\StringUtils::usortByKey($tpl[ 'topic_types' ], 'label');
+
+$tpl[ 'type_facets' ] = [ ];
+
+if (isset($response[ 'facets' ][ 'types' ]))
+{
+    foreach ($response[ 'facets' ][ 'types' ][ 'terms' ] as $facet_term)
+    {
+        $tpl[ 'type_facets' ][ ] =
+        [
+            'label' => $topicmap->getTopicLabel($facet_term[ 'term' ]),
+            'count' => $facet_term[ 'count' ],
+            'search_url' => sprintf
+            (
+                '%stopics?q=%s&type=%s', 
+                TOPICBANK_BASE_URL,
+                urlencode($fulltext_query),
+                urlencode($facet_term[ 'term' ])
+            )
+        ];
+    }
+}
 
 include TOPICBANK_BASE_DIR . '/ui/templates/topics.tpl.php';

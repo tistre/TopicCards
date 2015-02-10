@@ -89,6 +89,17 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         <?=$tpl[ 'total_hits' ]?> topics found.
       </div>
       
+      <?php if (count($tpl[ 'type_facets' ]) > 0) { ?>
+      <div>
+        <?php foreach ($tpl[ 'type_facets' ] as $facet_term) { ?>
+        <a href="<?=htmlspecialchars($facet_term[ 'search_url' ])?>">
+          <?=htmlspecialchars($facet_term[ 'label' ])?>
+          (<?=htmlspecialchars($facet_term[ 'count' ])?>)
+        </a>
+        <?php } ?>
+      </div>
+      <?php } ?>
+      
       <?php pagination($tpl); ?>
       
       <div>
