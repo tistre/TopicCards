@@ -48,10 +48,16 @@ foreach ($response[ 'hits' ][ 'hits' ] as $hit)
     if (strlen($label) === 0)
         $label = $hit[ '_id' ];
 
+    $types = [ ];
+    
+    foreach ($hit[ '_source' ][ 'topic_type_id' ] as $type_id)
+        $types[ ] = $topicmap->getTopicLabel($type_id);
+
     $tpl[ 'results' ][ ] = 
     [
         'id' => $hit[ '_id' ],
-        'label' => $label
+        'label' => $label,
+        'type' => implode(', ', $types)
     ];
 }
 
