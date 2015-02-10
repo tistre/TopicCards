@@ -16,14 +16,14 @@ trait AssociationSearchAdapter
         $result = 
         [ 
             // XXX add sort date
-            'association_type' => $this->getType(),
-            'has_role_type' => [ ],
+            'association_type_id' => $this->getTypeId(),
+            'has_role_type_id' => [ ],
             'has_player_id' => [ ]
         ];
         
         foreach ($this->getRoles([ ]) as $role)
         {
-            $result[ 'has_role_type' ][ ] = $role->getType();
+            $result[ 'has_role_type_id' ][ ] = $role->getTypeId();
             $result[ 'has_player_id' ][ ] = $role->getPlayerId();
         }
 

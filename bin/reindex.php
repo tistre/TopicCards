@@ -96,12 +96,12 @@ class Reindex
                             [ 
                                 'type' => 'string'
                             ],
-                            'has_name_type' => 
+                            'has_name_type_id' => 
                             [ 
                                 'type' => 'string',
                                 'index' => 'not_analyzed'
                             ],
-                            'topic_type' => 
+                            'topic_type_id' => 
                             [ 
                                 'type' => 'string',
                                 'index' => 'not_analyzed'
@@ -115,7 +115,7 @@ class Reindex
                             [ 
                                 'type' => 'string'
                             ],
-                            'has_occurrence_type' => 
+                            'has_occurrence_type_id' => 
                             [ 
                                 'type' => 'string',
                                 'index' => 'not_analyzed'
@@ -127,12 +127,12 @@ class Reindex
                         '_source' => [ 'enabled' => true ],
                         'properties' => 
                         [
-                            'association_type' => 
+                            'association_type_id' => 
                             [ 
                                 'type' => 'string',
                                 'index' => 'not_analyzed'
                             ],
-                            'has_role_type' => 
+                            'has_role_type_id' => 
                             [ 
                                 'type' => 'string',
                                 'index' => 'not_analyzed'

@@ -72,7 +72,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
           <select name="type" size="1" class="form-control">
             <option value="">All types</option>
             <?php foreach ($tpl[ 'topic_types' ] as $topic_arr) { ?>
-            <option value="<?=htmlspecialchars($topic_arr[ 'subject' ])?>" <?=($topic_arr[ 'selected' ] ? 'selected="selected"' : '')?>><?=htmlspecialchars($topic_arr[ 'label' ])?></option>
+            <option value="<?=htmlspecialchars($topic_arr[ 'id' ])?>" <?=($topic_arr[ 'selected' ] ? 'selected="selected"' : '')?>><?=htmlspecialchars($topic_arr[ 'label' ])?></option>
             <?php } ?>
           </select>
         </div>

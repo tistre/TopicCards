@@ -18,23 +18,23 @@ trait TopicSearchAdapter
             // XXX add sort date
             'label' => $this->getLabel(),
             'name' => [ ],
-            'has_name_type' => [ ],
-            'topic_type' => $this->getTypes([ ]),
+            'has_name_type_id' => [ ],
+            'topic_type_id' => $this->getTypeIds([ ]),
             'subject' => array_merge($this->getSubjectIdentifiers(), $this->getSubjectLocators()),
             'occurrence' => [ ],
-            'has_occurrence_type' => [ ]
+            'has_occurrence_type_id' => [ ]
         ];
         
         foreach ($this->getNames([ ]) as $name)
         {
             $result[ 'name' ][ ] = $name->getValue();
-            $result[ 'has_name_type' ][ ] = $name->getType();
+            $result[ 'has_name_type_id' ][ ] = $name->getTypeId();
         }
 
         foreach ($this->getOccurrences([ ]) as $occurrence)
         {
             $result[ 'occurrence' ][ ] = $occurrence->getValue();
-            $result[ 'has_occurrence_type' ][ ] = $occurrence->getType();
+            $result[ 'has_occurrence_type_id' ][ ] = $occurrence->getTypeId();
         }
 
         $callback_result = [ ];

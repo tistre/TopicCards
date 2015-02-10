@@ -131,11 +131,9 @@ $tpl[ 'topic_types' ] = [ ];
 // XXX slow
 foreach ($topicmap->getTopicTypeIds([ 'get_mode' => 'all' ]) as $id)
 {
-    $subject = $topicmap->getTopicSubject($id);
-    
     $tpl[ 'topic_types' ][ ] = 
     [
-        'subject' => $subject,
+        'id' => $id,
         'label' => $topicmap->getTopicLabel($id)
     ];
 }
