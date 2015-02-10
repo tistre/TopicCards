@@ -1114,9 +1114,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             entity_encoding: 'raw',
             gecko_spellcheck: true,
             menubar: false,
-            plugins: [ 'link' ],
+            plugins: [ 'link', 'code' ],
             relative_urls: false,
             selector: 'textarea[data-topicbank_html_editor="enabled"]',
+            toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | code',
             toolbar_items_size: 'small',
             content_css: '<?=$tpl[ "topicbank_base_url" ]?>static/tinymce_content.css'
         });
