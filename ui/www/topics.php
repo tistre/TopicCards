@@ -61,10 +61,8 @@ foreach ($response[ 'hits' ][ 'hits' ] as $hit)
 {
     $types = [ ];
     
-    foreach ($hit[ '_source' ][ 'topic_type' ] as $type)
+    foreach ($hit[ '_source' ][ 'topic_type_id' ] as $type_id)
     {
-        $type_id = $topicmap->getTopicIdBySubject($type);
-        
         if (! isset($type_labels[ $type_id ]))
             $type_labels[ $type_id ] = $topicmap->getTopicLabel($type_id);
         
