@@ -202,7 +202,7 @@ class Reindex
         $cnt = 0;
         $start_time = microtime(true);
 
-        foreach ($this->topicmap->getTopicIds([ ]) as $topic_id)
+        foreach ($this->topicmap->getTopicIds([ 'limit' => $limit ]) as $topic_id)
         {
             $ok = $topic->load($topic_id);
     
@@ -232,7 +232,7 @@ class Reindex
         $cnt = 0;
         $start_time = microtime(true);
 
-        foreach ($this->topicmap->getAssociationIds([ ]) as $association_id)
+        foreach ($this->topicmap->getAssociationIds([ 'limit' => $limit ]) as $association_id)
         {
             $ok = $association->load($association_id);
     

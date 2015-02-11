@@ -7,12 +7,16 @@ trait TopicMapDbAdapter
 {
     public function selectTopics(array $filters)
     {
+        if (! isset($filters[ 'limit' ]))
+            $filters[ 'limit' ] = 500;
+            
         $ok = $this->services->db_utils->connect();
         
         if ($ok < 0)
             return $ok;
         
         $prefix = $this->getDbTablePrefix();
+        $limit_clause = ($filters[ 'limit' ] > 0 ? sprintf(' limit %d', $filters[ 'limit' ]) : '');
         
         if ((! empty($filters[ 'name_like' ])) && (! empty($filters[ 'type' ])))
         {
@@ -21,8 +25,8 @@ trait TopicMapDbAdapter
                 'select distinct name_topic as topic_id from %sname, %stype'
                 . ' where lower(name_value) like lower(:name_value)'
                 . ' and type_type = :type_type'
-                . ' and type_topic = name_topic', 
-                $prefix, $prefix
+                . ' and type_topic = name_topic%s', 
+                $prefix, $prefix, $limit_clause
             ));
 
             $sql->bindValue(':name_value', $filters[ 'name_like' ], \PDO::PARAM_STR);
@@ -33,8 +37,8 @@ trait TopicMapDbAdapter
             $sql = $this->services->db->prepare(sprintf
             (
                 'select distinct type_topic as topic_id from %stype'
-                . ' where type_type = :type_type', 
-                $prefix
+                . ' where type_type = :type_type%s', 
+                $prefix, $limit_clause
             ));
 
             $sql->bindValue(':type_type', $filters[ 'type' ], \PDO::PARAM_STR);
@@ -44,15 +48,19 @@ trait TopicMapDbAdapter
             $sql = $this->services->db->prepare(sprintf
             (
                 'select distinct name_topic as topic_id from %sname'
-                . ' where lower(name_value) like lower(:name_value)', 
-                $prefix
+                . ' where lower(name_value) like lower(:name_value)%s', 
+                $prefix, $limit_clause
             ));
 
             $sql->bindValue(':name_value', $filters[ 'name_like' ], \PDO::PARAM_STR);
         }
         else
         {
-            $sql = $this->services->db->prepare(sprintf('select topic_id from %stopic', $prefix));
+            $sql = $this->services->db->prepare(sprintf
+            (
+                'select topic_id from %stopic%s', 
+                $prefix, $limit_clause
+            ));
         }
         
         $ok = $sql->execute();
