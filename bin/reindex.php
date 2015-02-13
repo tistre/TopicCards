@@ -26,6 +26,10 @@ class Reindex
         [
             new Option('i', 'index', Getopt::REQUIRED_ARGUMENT),
             new Option('l', 'limit', Getopt::REQUIRED_ARGUMENT),
+            new Option(null, 'topics', Getopt::REQUIRED_ARGUMENT),
+            new Option(null, 'associations', Getopt::REQUIRED_ARGUMENT),
+            new Option(null, 'recreate'),
+            new Option(null, 'full'),
             new Option('h', 'help')
         ]);
 
@@ -46,11 +50,14 @@ class Reindex
         if ($this->getopt[ 'index' ])
             $index = $this->getopt[ 'index' ];
         
-        $this->recreateIndex
-        (
-            $index, 
-            $this->getIndexParams($index)
-        );
+        if ($this->getopt[ 'recreate' ])
+        {
+            $this->recreateIndex
+            (
+                $index, 
+                $this->getIndexParams($index)
+            );
+        }
         
         $this->indexTopics($topic_summary);
         $this->indexAssociations($association_summary);
@@ -191,18 +198,24 @@ class Reindex
 
     protected function indexTopics(&$summary)
     {
-        $limit = 0;
-        
-        if ($this->getopt[ 'limit' ])
-            $limit = $this->getopt[ 'limit' ];
-
         echo "Indexing topics...\n";
+
+        $start_time = microtime(true);
+
+        if ($this->getopt[ 'full' ])
+        {
+            $limit = 0;
+        
+            if ($this->getopt[ 'limit' ])
+                $limit = $this->getopt[ 'limit' ];
+                
+            $topic_ids = $this->topicmap->getTopicIds([ 'limit' => $limit ]);
+        }
 
         $topic = $this->topicmap->newTopic();
         $cnt = 0;
-        $start_time = microtime(true);
 
-        foreach ($this->topicmap->getTopicIds([ 'limit' => $limit ]) as $topic_id)
+        foreach ($topic_ids as $topic_id)
         {
             $ok = $topic->load($topic_id);
     
@@ -223,16 +236,21 @@ class Reindex
     {
         $limit = 0;
         
-        if ($this->getopt[ 'limit' ])
-            $limit = $this->getopt[ 'limit' ];
+        if ($this->getopt[ 'full' ])
+        {
+            if ($this->getopt[ 'limit' ])
+                $limit = $this->getopt[ 'limit' ];
 
+            $association_ids = $this->topicmap->getAssociationIds([ 'limit' => $limit ]);
+        }
+        
         echo "Indexing associations...\n";
 
         $association = $this->topicmap->newAssociation();
         $cnt = 0;
         $start_time = microtime(true);
 
-        foreach ($this->topicmap->getAssociationIds([ 'limit' => $limit ]) as $association_id)
+        foreach ($association_ids as $association_id)
         {
             $ok = $association->load($association_id);
     
