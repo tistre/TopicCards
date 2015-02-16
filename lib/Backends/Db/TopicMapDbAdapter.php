@@ -159,8 +159,11 @@ trait TopicMapDbAdapter
         if (isset($filters[ 'type' ]))
             $filters[ 'type_id' ] = $this->getTopicIdBySubject($filters[ 'type' ]);
 
-        if (isset($filters[ 'player' ]))
-            $filters[ 'player_id' ] = $this->getTopicIdBySubject($filters[ 'player' ]);
+        if (isset($filters[ 'role_player' ]))
+            $filters[ 'role_player_id' ] = $this->getTopicIdBySubject($filters[ 'role_player' ]);
+        
+        if (isset($filters[ 'role_type' ]))
+            $filters[ 'role_type_id' ] = $this->getTopicIdBySubject($filters[ 'role_type' ]);
         
         if (! isset($filters[ 'limit' ]))
             $filters[ 'limit' ] = 500;
@@ -188,7 +191,7 @@ trait TopicMapDbAdapter
             ];
         }
 
-        if (! empty($filters[ 'player_id' ]))
+        if (! empty($filters[ 'role_player_id' ]))
         {
             $where[ ] = sprintf
             (
@@ -200,7 +203,23 @@ trait TopicMapDbAdapter
             $bind[ ] = 
             [
                 'bind_param' => ':role_player', 
-                'value' => $filters[ 'player_id' ]
+                'value' => $filters[ 'role_player_id' ]
+            ];
+        }
+
+        if (! empty($filters[ 'role_type_id' ]))
+        {
+            $where[ ] = sprintf
+            (
+                'exists (select role_id from %srole where role_type = :role_type'
+                . ' and role_association = association_id)',
+                $prefix
+            );
+            
+            $bind[ ] = 
+            [
+                'bind_param' => ':role_type', 
+                'value' => $filters[ 'role_type_id' ]
             ];
         }
 

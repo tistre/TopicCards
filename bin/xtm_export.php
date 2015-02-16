@@ -38,7 +38,7 @@ function addTopic($topic_id)
     
     if ($getopt[ 'with_associations' ])
     {
-        foreach ($topicmap->getAssociationIds([ 'player_id' => $topic_id ]) as $association_id)
+        foreach ($topicmap->getAssociationIds([ 'role_player_id' => $topic_id ]) as $association_id)
             addAssociation($association_id);
     }    
 }

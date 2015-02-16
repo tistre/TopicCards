@@ -31,7 +31,7 @@ function deleteTopic($topic_id)
     
     if ($getopt[ 'with_associations' ])
     {
-        foreach ($topicmap->getAssociations([ 'role_player' => $topic_id ]) as $association_id)
+        foreach ($topicmap->getAssociations([ 'role_player_id' => $topic_id ]) as $association_id)
             deleteAssociation($association_id);
     }
     

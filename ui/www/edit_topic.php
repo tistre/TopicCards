@@ -338,7 +338,7 @@ $tpl[ 'topic' ][ 'reifies_summary_html' ] = \TopicBank\Ui\Utils::getReifiesSumma
 
 // Fill associations
 
-$association_ids = $topicmap->getAssociationIds([ 'player_id' => $topic_id ]);
+$association_ids = $topicmap->getAssociationIds([ 'role_player_id' => $topic_id ]);
 
 $tpl[ 'associations' ] = [ ];
 

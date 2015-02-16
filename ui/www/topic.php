@@ -88,7 +88,7 @@ function getTopicVars($topic_id, &$result, &$topic_names)
 
     // Fill associations and associations_type_index, group by type and role
 
-    $association_ids = $topicmap->getAssociationIds([ 'player_id' => $topic_id ]);
+    $association_ids = $topicmap->getAssociationIds([ 'role_player_id' => $topic_id ]);
 
     $result[ 'associations' ] = [ ];
 
