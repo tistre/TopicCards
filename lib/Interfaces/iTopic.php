@@ -29,6 +29,7 @@ interface iTopic extends iPersistent
     public function getNames(array $filters = [ ]);
     public function getFirstName(array $filters = [ ]);
     public function setNames(array $names);
+    public function getLabel();
     public function newOccurrence();
     public function getOccurrences(array $filters = [ ]);
     public function getFirstOccurrence(array $filters = [ ]);
