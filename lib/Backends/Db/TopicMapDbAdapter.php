@@ -326,7 +326,8 @@ trait TopicMapDbAdapter
         $sort_column = '';
         
         if ($filters[ 'get_mode' ] === 'recent')
-        {                        
+        {
+            // XXX not so nice: associations ordered by updated, others by created...
             $table_sortcolumn =
             [
                 'association' => 'association_updated',
