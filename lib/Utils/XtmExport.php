@@ -65,8 +65,9 @@ class XtmExport
 
         $result = sprintf
         (
-            "%s<association>\n",
-            str_repeat('  ', $indent)
+            '%s<association id="%s">' . "\n",
+            str_repeat('  ', $indent),
+            htmlspecialchars($association->getId())
         );
 
         $result .= $this->exportReifier($association->getReifierId(), ($indent + 1));
