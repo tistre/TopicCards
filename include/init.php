@@ -1,22 +1,16 @@
 <?php
 
-require_once(dirname(__DIR__) . '/vendor/autoload.php');
+if (PHP_SAPI === 'cli')
+{   
+    error_reporting(E_ALL);
+    ini_set('error_log', false);
+    ini_set('display_errors', 'stderr');
+}
 
-/**
- * An example of a project-specific implementation.
- * 
- * After registering this autoload function with SPL, the following line
- * would cause the function to attempt to load the \Foo\Bar\Baz\Qux class
- * from /path/to/project/src/Baz/Qux.php:
- * 
- *      new \Foo\Bar\Baz\Qux;
- *      
- * @param string $class The fully-qualified class name.
- * @return void
- */
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+
 spl_autoload_register(function($class) 
 {
-
     // project-specific namespace prefix
     $prefix = 'TopicBank\\';
 
@@ -46,5 +40,18 @@ spl_autoload_register(function($class)
         require $filename;
     }
 });
+
+define('TOPICBANK_BASE_DIR', dirname(__DIR__));
+define('TOPICBANK_CONFIG', getenv('TOPICBANK_CONFIG'));
+
+if (strlen(TOPICBANK_CONFIG) === 0)
+    exit("TOPICBANK_CONFIG environment variable not found.\n");
+
+$config_filename = sprintf('%s/config.%s.php', __DIR__, TOPICBANK_CONFIG);
+
+if (! file_exists($config_filename))
+    exit($config_filename . " file not found.\n");
+
+require_once $config_filename;
 
 ?>

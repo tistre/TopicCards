@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(dirname(__DIR__)) . '/include/config.php';
+require_once dirname(dirname(__DIR__)) . '/include/init.php';
 
 if (strlen($topicmap->getUploadPath()) === 0)
     die('Upload path not set');

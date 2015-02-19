@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(dirname(__DIR__)) . '/include/config.php';
+require_once dirname(dirname(__DIR__)) . '/include/init.php';
 
 // XXX add checksum in session to avoid CSRF
 

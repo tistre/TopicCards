@@ -2,7 +2,7 @@
 
 use TopicBank\Interfaces\iTopic;
 
-require_once dirname(dirname(__DIR__)) . '/include/config.php';
+require_once dirname(dirname(__DIR__)) . '/include/init.php';
 
 
 function getTopicVars($topic_id, &$result, &$topic_names)

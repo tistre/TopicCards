@@ -1,6 +1,7 @@
 # Config files
 
-include/config.php
+include/config.strehle_de.php
+users.htpasswd
 
 # Composer related
 

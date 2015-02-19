@@ -5,7 +5,7 @@ namespace TopicBank\Bin;
 use \Ulrichsg\Getopt\Getopt;
 use \Ulrichsg\Getopt\Option;
 
-require_once dirname(__DIR__) . '/include/config.php';
+require_once dirname(__DIR__) . '/include/init.php';
 
 
 class Reindex
