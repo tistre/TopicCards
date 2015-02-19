@@ -35,16 +35,16 @@ class Association extends Core implements \TopicBank\Interfaces\iAssociation
 
         foreach ($this->roles as $role)
         {
-            if (isset($filters[ 'type_id' ]))
-            {
-                if ($role->getTypeId() === $filters[ 'type_id' ])
-                    $result[ ] = $role;
-            }
-            elseif (isset($filters[ 'player_id' ]))
-            {
-                if ($role->getPlayerId() === $filters[ 'player_id' ])
-                    $result[ ] = $role;
-            }
+            $match = true;
+            
+            if (isset($filters[ 'type_id' ]) && ($role->getTypeId() !== $filters[ 'type_id' ]))
+                $match = false;
+                
+            if (isset($filters[ 'player_id' ]) && ($role->getPlayerId() !== $filters[ 'player_id' ]))
+                $match = false;
+                
+            if ($match)
+                $result[ ] = $role;
         }
         
         return $result;
