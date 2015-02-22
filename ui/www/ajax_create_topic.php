@@ -9,6 +9,7 @@ $topic->setId($topicmap->createId());
 $name = $topic->newName();
 $name->setType('http://schema.org/name');
 $name->setValue(trim($_REQUEST[ 'name' ]));
+error_log(print_r($_REQUEST, true));
 
 if (! empty($_REQUEST[ 'type' ]))
 {
@@ -17,7 +18,7 @@ if (! empty($_REQUEST[ 'type' ]))
     if (! is_array($types))
         $types = [ $types ];
         
-    $topic->setTypes($types);
+    $topic->setTypeIds($types);
 }
 
 if (! empty($_REQUEST[ 'subject_identifier' ]))
