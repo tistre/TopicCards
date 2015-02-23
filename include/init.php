@@ -42,6 +42,17 @@ spl_autoload_register(function($class)
 });
 
 define('TOPICBANK_BASE_DIR', dirname(__DIR__));
+
+// Allow passing the TOPICBANK_CONFIG via --config
+
+if (PHP_SAPI === 'cli')
+{
+    $key = array_search('--config', $argv, true);
+    
+    if (($key !== false) && (! empty($argv[ ($key + 1) ])))
+        putenv('TOPICBANK_CONFIG=' . $argv[ ($key + 1) ]);
+}
+
 define('TOPICBANK_CONFIG', getenv('TOPICBANK_CONFIG'));
 
 if (strlen(TOPICBANK_CONFIG) === 0)

@@ -30,6 +30,7 @@ class Reindex
             new Option(null, 'associations', Getopt::REQUIRED_ARGUMENT),
             new Option(null, 'recreate'),
             new Option(null, 'full'),
+            new Option(null, 'config', Getopt::REQUIRED_ARGUMENT),
             new Option('h', 'help')
         ]);
 

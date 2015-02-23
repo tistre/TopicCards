@@ -101,6 +101,7 @@ function getPhpClass($id)
 
 $getopt = new Getopt(
 [
+    new Option(null, 'config', Getopt::REQUIRED_ARGUMENT),
     new Option('h', 'help')
 ]);
 

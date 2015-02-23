@@ -74,6 +74,7 @@ $getopt = new Getopt(
     new Option(null, 'associations'),
     new Option(null, 'with_associations'),
     new Option(null, 'with_reifiers'),
+    new Option(null, 'config', Getopt::REQUIRED_ARGUMENT),
     new Option('h', 'help')
 ]);
 

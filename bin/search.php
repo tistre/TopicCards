@@ -8,6 +8,7 @@ require_once dirname(__DIR__) . '/include/init.php';
 $getopt = new Getopt(
 [
     new Option('l', 'limit', Getopt::REQUIRED_ARGUMENT),
+    new Option(null, 'config', Getopt::REQUIRED_ARGUMENT),
     new Option('h', 'help')
 ]);
 
