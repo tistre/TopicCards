@@ -47,11 +47,9 @@ define('TOPICBANK_CONFIG', getenv('TOPICBANK_CONFIG'));
 if (strlen(TOPICBANK_CONFIG) === 0)
     exit("TOPICBANK_CONFIG environment variable not found.\n");
 
-$config_filename = sprintf('%s/config.%s.php', __DIR__, TOPICBANK_CONFIG);
+if (! file_exists(TOPICBANK_CONFIG))
+    exit(TOPICBANK_CONFIG . " file not found.\n");
 
-if (! file_exists($config_filename))
-    exit($config_filename . " file not found.\n");
-
-require_once $config_filename;
+require_once TOPICBANK_CONFIG;
 
 ?>
