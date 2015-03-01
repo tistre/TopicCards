@@ -9,6 +9,9 @@ trait TopicMapDbAdapter
     {
         if (! isset($filters[ 'limit' ]))
             $filters[ 'limit' ] = 500;
+
+        if (isset($filters[ 'type' ]))
+            $filters[ 'type_id' ] = $this->getTopicIdBySubject($filters[ 'type' ]);
             
         $ok = $this->services->db_utils->connect();
         
@@ -32,7 +35,7 @@ trait TopicMapDbAdapter
             $sql->bindValue(':name_value', $filters[ 'name_like' ], \PDO::PARAM_STR);
             $sql->bindValue(':type_type', $filters[ 'type' ], \PDO::PARAM_STR);
         }
-        elseif (! empty($filters[ 'type' ]))
+        elseif (! empty($filters[ 'type_id' ]))
         {
             $sql = $this->services->db->prepare(sprintf
             (
@@ -41,7 +44,7 @@ trait TopicMapDbAdapter
                 $prefix, $limit_clause
             ));
 
-            $sql->bindValue(':type_type', $filters[ 'type' ], \PDO::PARAM_STR);
+            $sql->bindValue(':type_type', $filters[ 'type_id' ], \PDO::PARAM_STR);
         }
         elseif (! empty($filters[ 'name_like' ]))
         {
