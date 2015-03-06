@@ -298,22 +298,22 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
 
         $name = $topic->newName();
         
-        $name->setType('http://www.strehle.de/schema/fileName');
+        $name->setType('http://dbpedia.org/ontology/filename');
         $name->setValue(pathinfo($filename, PATHINFO_BASENAME));
     
         $topic->setSubjectLocators([ 'file://' . $filename ]);
 
         $occurrence = $topic->newOccurrence();    
         $occurrence->setType('http://schema.org/contentSize');
-        $occurrence->setDatatype('http://www.strehle.de/schema/sizeInBytes');
+        $occurrence->setDatatype('http://www.w3.org/2001/XMLSchema#nonNegativeInteger');
         $occurrence->setValue(filesize($filename));
 
         $occurrence = $topic->newOccurrence();    
-        $occurrence->setType('http://www.strehle.de/schema/fileContentChecksum');
+        $occurrence->setType('http://purl.uniprot.org/core/md5Checksum');
         $occurrence->setDatatype('http://www.w3.org/2001/XMLSchema#string');
         $occurrence->setValue(md5_file($filename));
 
-        $type = 'http://www.strehle.de/schema/file';
+        $type = 'http://dbpedia.org/ontology/File';
     
         $finfo = finfo_open(FILEINFO_MIME_TYPE);    
         $mimetype = finfo_file($finfo, $filename);
@@ -322,7 +322,7 @@ class TopicMap implements \TopicBank\Interfaces\iTopicMap
         if (strlen($mimetype) > 0)
         {
             $occurrence = $topic->newOccurrence();    
-            $occurrence->setType('http://www.strehle.de/schema/mimeType');
+            $occurrence->setType('http://www.w3.org/ns/dcat#mediaType');
             $occurrence->setDatatype('http://www.w3.org/2001/XMLSchema#string');
             $occurrence->setValue($mimetype);
         

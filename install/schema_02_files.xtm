@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topicMap xmlns="http://www.topicmaps.org/xtm/" version="2.1">
+  <topic>
+    <subjectIdentifier href="http://dbpedia.org/ontology/File"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2004/02/skos/core#Concept"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>File</value>
+    </name>
+  </topic>
+  <topic>
+    <subjectIdentifier href="http://dbpedia.org/ontology/filename"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2004/02/skos/core#Concept"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>File name</value>
+    </name>
+  </topic>
+  <topic>
+    <subjectIdentifier href="http://purl.uniprot.org/core/md5Checksum"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2004/02/skos/core#Concept"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>MD5 checksum</value>
+    </name>
+  </topic>
+  <topic>
+    <subjectIdentifier href="http://www.w3.org/ns/dcat#mediaType"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2004/02/skos/core#Concept"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>Media type</value>
+    </name>
+  </topic>
+</topicMap>

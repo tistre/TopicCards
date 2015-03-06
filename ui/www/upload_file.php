@@ -44,7 +44,7 @@ if
 
     // Fix the name: Use the name provided on upload, not the randomly generated name
     
-    foreach ($topic->getNames([ 'type' => 'http://www.strehle.de/schema/fileName' ]) as $name)
+    foreach ($topic->getNames([ 'type' => 'http://dbpedia.org/ontology/filename' ]) as $name)
         $name->setValue(pathinfo($file_arr[ 'name' ], PATHINFO_BASENAME));
     
     $ok = $topic->save();

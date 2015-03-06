@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topicMap xmlns="http://www.topicmaps.org/xtm/" version="2.1">
+  <topic>
+    <subjectIdentifier href="http://schema.org/contentSize"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2004/02/skos/core#Concept"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>File size</value>
+    </name>
+  </topic>
+  <topic>
+    <subjectIdentifier href="http://schema.org/height"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2004/02/skos/core#Concept"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>Height</value>
+    </name>
+  </topic>
+  <topic>
+    <subjectIdentifier href="http://schema.org/ImageObject"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2004/02/skos/core#Concept"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>Image file</value>
+    </name>
+  </topic>
+  <topic>
+    <subjectIdentifier href="http://schema.org/text"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2004/02/skos/core#Concept"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>Text</value>
+    </name>
+  </topic>
+  <topic>
+    <subjectIdentifier href="http://schema.org/width"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2004/02/skos/core#Concept"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>Width</value>
+    </name>
+  </topic>
+</topicMap>

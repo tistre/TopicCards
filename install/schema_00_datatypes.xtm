@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topicMap xmlns="http://www.topicmaps.org/xtm/" version="2.1">
+  <topic>
+    <subjectIdentifier href="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2004/02/skos/core#Concept"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>Datatype</value>
+    </name>
+  </topic>
+  <topic>
+    <subjectIdentifier href="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>Boolean</value>
+    </name>
+  </topic>
+  <topic>
+    <subjectIdentifier href="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>Non-negative integer</value>
+    </name>
+  </topic>
+  <topic>
+    <subjectIdentifier href="http://www.w3.org/2001/XMLSchema#string"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>String</value>
+    </name>
+  </topic>
+  <topic>
+    <subjectIdentifier href="http://www.w3.org/1999/xhtml"/>
+    <instanceOf>
+      <subjectIdentifierRef href="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+    </instanceOf>    
+    <name>
+      <type>
+        <subjectIdentifierRef href="http://schema.org/name"/>
+      </type>
+      <value>XHTML</value>
+    </name>
+  </topic>
+</topicMap>
