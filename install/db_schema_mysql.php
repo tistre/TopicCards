@@ -48,6 +48,10 @@ create table <?=$prefix?>subject
 )
 engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
 
+create index <?=$prefix?>subject_topic_idx on <?=$prefix?>subject (subject_topic);
+create index <?=$prefix?>subject_islocator_idx on <?=$prefix?>subject (subject_islocator);
+create index <?=$prefix?>subject_value_idx on <?=$prefix?>subject (subject_value);
+
 
 create table <?=$prefix?>type
 (
@@ -59,6 +63,8 @@ create table <?=$prefix?>type
     foreign key <?=$prefix?>type_type (type_type) references <?=$prefix?>topic (topic_id)
 )
 engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
+
+create index <?=$prefix?>type_topic_idx on <?=$prefix?>type (type_topic);
 
 
 create table <?=$prefix?>name
@@ -74,6 +80,8 @@ create table <?=$prefix?>name
     foreign key <?=$prefix?>name_reifier (name_reifier) references <?=$prefix?>topic (topic_id)
 )
 engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
+
+create index <?=$prefix?>name_topic_idx on <?=$prefix?>name (name_topic);
 
 
 create table <?=$prefix?>occurrence
@@ -92,6 +100,8 @@ create table <?=$prefix?>occurrence
 )
 engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
 
+create index <?=$prefix?>occurrence_topic_idx on <?=$prefix?>occurrence (occurrence_topic);
+
 
 create table <?=$prefix?>association
 (
@@ -106,6 +116,8 @@ create table <?=$prefix?>association
     foreign key <?=$prefix?>association_reifier (association_reifier) references <?=$prefix?>topic (topic_id)
 )
 engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
+
+create index <?=$prefix?>association_reifier_idx on <?=$prefix?>association (association_reifier);
 
 
 create table <?=$prefix?>role
@@ -123,6 +135,9 @@ create table <?=$prefix?>role
 )
 engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
 
+create index <?=$prefix?>role_association_idx on <?=$prefix?>role (role_association);
+create index <?=$prefix?>role_player_idx on <?=$prefix?>role (role_player);
+
 
 create table <?=$prefix?>scope
 (
@@ -138,3 +153,16 @@ create table <?=$prefix?>scope
     foreign key <?=$prefix?>scope_scope (scope_scope) references <?=$prefix?>topic (topic_id)
 )
 engine = InnoDB character set utf8mb4 collate utf8mb4_bin row_format DYNAMIC;
+
+create index <?=$prefix?>scope_name_idx on <?=$prefix?>scope (scope_name);
+
+
+insert into <?=$prefix?>topic (topic_id) values ('a8ddd773-7ad2-4b44-908c-e0dc7d9d9802');
+insert into <?=$prefix?>name (name_topic, name_type, name_value) values ('a8ddd773-7ad2-4b44-908c-e0dc7d9d9802', 'a8ddd773-7ad2-4b44-908c-e0dc7d9d9802', 'Name');
+insert into <?=$prefix?>subject (subject_topic, subject_value) values ('a8ddd773-7ad2-4b44-908c-e0dc7d9d9802', 'http://schema.org/name');
+
+insert into <?=$prefix?>topic (topic_id) values ('722ac838-4534-4a46-82d1-a60365e37985');
+insert into <?=$prefix?>name (name_topic, name_type, name_value) values ('722ac838-4534-4a46-82d1-a60365e37985', 'a8ddd773-7ad2-4b44-908c-e0dc7d9d9802', 'Concept');
+insert into <?=$prefix?>subject (subject_topic, subject_value) values ('722ac838-4534-4a46-82d1-a60365e37985', 'http://www.w3.org/2004/02/skos/core#Concept');
+
+insert into <?=$prefix?>type (type_topic, type_type) values ('a8ddd773-7ad2-4b44-908c-e0dc7d9d9802', '722ac838-4534-4a46-82d1-a60365e37985');
