@@ -107,3 +107,14 @@ create table <?=$prefix?>scope
 );
 
 create index on <?=$prefix?>scope (scope_name);
+
+
+insert into <?=$prefix?>topic (topic_id) values ('a8ddd773-7ad2-4b44-908c-e0dc7d9d9802');
+insert into <?=$prefix?>name (name_topic, name_type, name_value) values ('a8ddd773-7ad2-4b44-908c-e0dc7d9d9802', 'a8ddd773-7ad2-4b44-908c-e0dc7d9d9802', 'Name');
+insert into <?=$prefix?>subject (subject_topic, subject_value) values ('a8ddd773-7ad2-4b44-908c-e0dc7d9d9802', 'http://schema.org/name');
+
+insert into <?=$prefix?>topic (topic_id) values ('722ac838-4534-4a46-82d1-a60365e37985');
+insert into <?=$prefix?>name (name_topic, name_type, name_value) values ('722ac838-4534-4a46-82d1-a60365e37985', 'a8ddd773-7ad2-4b44-908c-e0dc7d9d9802', 'Concept');
+insert into <?=$prefix?>subject (subject_topic, subject_value) values ('722ac838-4534-4a46-82d1-a60365e37985', 'http://www.w3.org/2004/02/skos/core#Concept');
+
+insert into <?=$prefix?>type (type_topic, type_type) values ('a8ddd773-7ad2-4b44-908c-e0dc7d9d9802', '722ac838-4534-4a46-82d1-a60365e37985');
