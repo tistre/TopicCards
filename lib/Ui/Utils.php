@@ -13,14 +13,17 @@ class Utils
         
         $result = '';
 
-        $objects = $topic->getReifiedObject();
+        $is_reifier = $topic->isReifier($reifies_what, $dummy);
+        
+        if (! $is_reifier)
+            return $result;
+        
+        $objects = $topic->getReifiedObject($reifies_what);
     
         if ($objects === false)
             return $result;
     
-        $is_reifier = $topic->getIsReifier();
-        
-        if ($is_reifier === iTopic::REIFIES_NAME)
+        if ($reifies_what === iTopic::REIFIES_NAME)
         {
             $result = sprintf
             (
@@ -31,7 +34,7 @@ class Utils
                 htmlspecialchars($topicmap->getTopicLabel($objects[ 'topic' ]->getId()))
             );
         }
-        elseif ($is_reifier === iTopic::REIFIES_OCCURRENCE)
+        elseif ($reifies_what === iTopic::REIFIES_OCCURRENCE)
         {
             $result = sprintf
             (
@@ -43,7 +46,7 @@ class Utils
                 htmlspecialchars($topicmap->getTopicLabel($objects[ 'topic' ]->getId()))
             );
         }
-        elseif ($is_reifier === iTopic::REIFIES_ASSOCIATION)
+        elseif ($reifies_what === iTopic::REIFIES_ASSOCIATION)
         {
             $players = [ ];
         
@@ -65,7 +68,7 @@ class Utils
                 implode(' and ', $players)
             );
         }
-        elseif ($is_reifier === iTopic::REIFIES_ROLE)
+        elseif ($reifies_what === iTopic::REIFIES_ROLE)
         {
             $other_players = [ ];
         

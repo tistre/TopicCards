@@ -139,7 +139,49 @@ trait TopicDbAdapter
     }
 
 
-    public function selectReifiedObjectInfo($reifier_topic_id, $reifies_what)
+    public function selectIsReifier(&$reifies_what, &$reifies_id)
+    {
+        $result = $reifies_what = $reifies_id = false;
+        
+        $prefix = $this->topicmap->getDbTablePrefix();
+        
+        $sql = $this->services->db->prepare(sprintf
+        (
+            "select name_id as reifies_id, '%d' as reifies_what"
+            . " from %sname where name_reifier = :topic_id"
+            . " union select occurrence_id as reifies_id, '%d' as reifies_what"
+            . " from %soccurrence where occurrence_reifier = :topic_id"
+            . " union select association_id as reifies_id, '%d' as reifies_what"
+            . " from %sassociation where association_reifier = :topic_id"
+            . " union select role_id as reifies_id, '%d' as reifies_what"
+            . " from %srole where role_reifier = :topic_id",
+            iTopic::REIFIES_NAME, $prefix,
+            iTopic::REIFIES_OCCURRENCE, $prefix,
+            iTopic::REIFIES_ASSOCIATION, $prefix,
+            iTopic::REIFIES_ROLE, $prefix
+        ));
+
+        $sql->bindValue(':topic_id', $this->id, \PDO::PARAM_STR);
+        
+        $ok = $sql->execute();
+        
+        if ($ok === false)
+            return $result;
+
+        $rows = $sql->fetchAll();
+        
+        foreach ($rows as $row)
+        {
+            $reifies_what = intval($row[ 'reifies_what' ]);
+            $reifies_id = $row[ 'reifies_id' ];
+            $result = true;
+        }
+            
+        return $result;
+    }
+    
+    
+    public function selectReifiedObject($reifies_what)
     {
         $result = false;
         
@@ -154,17 +196,17 @@ trait TopicDbAdapter
         if (! isset($map[ $reifies_what ]))
             return false;
         
-        $method = 'selectReifiedObjectInfo_' . $map[ $reifies_what ];
+        $method = 'selectReifiedObject_' . $map[ $reifies_what ];
         
-        return $this->$method($reifier_topic_id);
+        return $this->$method();
     }
     
     
-    protected function selectReifiedObjectInfo_Name($reifier_topic_id)
+    protected function selectReifiedObject_Name()
     {
         $name = new Name($this->services, $this->topicmap);
 
-        $rows = $name->selectAll([ 'reifier' => $reifier_topic_id ]);
+        $rows = $name->selectAll([ 'reifier' => $this->id ]);
     
         if (count($rows) === 0)
             return false;
@@ -175,7 +217,7 @@ trait TopicDbAdapter
         if ($ok < 0)
             return false;
 
-        foreach ($topic->getNames([ 'reifier' => $reifier_topic_id ]) as $name)
+        foreach ($topic->getNames([ 'reifier' => $this->id ]) as $name)
         {
             if ($name->getId() !== $rows[ 0 ][ 'id' ])
                 continue;
@@ -191,11 +233,11 @@ trait TopicDbAdapter
     }
     
     
-    protected function selectReifiedObjectInfo_Occurrence($reifier_topic_id)
+    protected function selectReifiedObject_Occurrence()
     {
         $occurrence = new Occurrence($this->services, $this->topicmap);
 
-        $rows = $occurrence->selectAll([ 'reifier' => $reifier_topic_id ]);
+        $rows = $occurrence->selectAll([ 'reifier' => $this->id ]);
     
         if (count($rows) === 0)
             return false;
@@ -222,11 +264,11 @@ trait TopicDbAdapter
     }
     
     
-    protected function selectReifiedObjectInfo_Association($reifier_topic_id)
+    protected function selectReifiedObject_Association()
     {
         $association = new Association($this->services, $this->topicmap);
 
-        $rows = $association->selectAll([ 'reifier' => $reifier_topic_id ]);
+        $rows = $association->selectAll([ 'reifier' => $this->id ]);
     
         if (count($rows) === 0)
             return false;
@@ -243,11 +285,11 @@ trait TopicDbAdapter
     }
     
     
-    protected function selectReifiedObjectInfo_Role($reifier_topic_id)
+    protected function selectReifiedObject_Role()
     {
         $role = new Role($this->services, $this->topicmap);
 
-        $rows = $role->selectAll([ 'reifier' => $reifier_topic_id ]);
+        $rows = $role->selectAll([ 'reifier' => $this->id ]);
     
         if (count($rows) === 0)
             return false;

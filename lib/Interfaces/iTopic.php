@@ -34,7 +34,6 @@ interface iTopic extends iPersistent
     public function getOccurrences(array $filters = [ ]);
     public function getFirstOccurrence(array $filters = [ ]);
     public function setOccurrences(array $occurrences);
-    public function getIsReifier();
-    public function setIsReifier($is_reifier);
-    public function getReifiedObject();
+    public function isReifier(&$reifies_what, &$reifies_id);
+    public function getReifiedObject($reifies_what);
 }

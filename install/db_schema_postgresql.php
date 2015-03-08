@@ -18,8 +18,7 @@ create table <?=$prefix?>topic
     topic_created timestamp default 'now' not null, 
     topic_id varchar(64) not null primary key, 
     topic_version integer default 1 not null, 
-    topic_updated timestamp not null,
-    topic_isreifier smallint default 0 not null
+    topic_updated timestamp not null
 );
 
 

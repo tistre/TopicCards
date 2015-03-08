@@ -14,7 +14,6 @@ class Topic extends Core implements iTopic
     protected $types = [ ];
     protected $names = [ ];
     protected $occurrences = [ ];
-    protected $isreifier = 0;
 
 
     public function getSubjectIdentifiers()
@@ -292,22 +291,15 @@ class Topic extends Core implements iTopic
     }
 
 
-    public function getIsReifier()
+    public function isReifier(&$reifies_what, &$reifies_id)
     {
-        return $this->isreifier;
+        return $this->selectIsReifier($reifies_what, $reifies_id);
     }
     
 
-    public function setIsReifier($isreifier)
+    public function getReifiedObject($reifies_what)
     {
-        $this->isreifier = intval($isreifier);
-        return 1;
-    }
-    
-    
-    public function getReifiedObject()
-    {
-        return $this->selectReifiedObjectInfo($this->id, $this->isreifier);
+        return $this->selectReifiedObject($reifies_what);
     }
     
     
@@ -339,8 +331,7 @@ class Topic extends Core implements iTopic
             'subject_identifiers' => $this->getSubjectIdentifiers(), 
             'subject_locators' => $this->getSubjectLocators(), 
             'names' => [ ], 
-            'occurrences' => [ ],
-            'isreifier' => $this->getIsReifier()
+            'occurrences' => [ ]
         ];
         
         foreach ($this->names as $name)
@@ -364,8 +355,7 @@ class Topic extends Core implements iTopic
             'subject_identifiers' => [ ], 
             'subject_locators' => [ ], 
             'names' => [ ], 
-            'occurrences' => [ ],
-            'isreifier' => 0
+            'occurrences' => [ ]
         ], $data);
         
         $this->setAllId($data);
@@ -393,8 +383,6 @@ class Topic extends Core implements iTopic
             $occurrence = $this->newOccurrence();
             $occurrence->setAll($occurrence_data);
         }
-        
-        $this->setIsReifier($data[ 'isreifier' ]);
         
         return 1;
     }

@@ -49,26 +49,7 @@ trait Reified
         
         $reifier_topic = $this->topicmap->newTopic();
         $reifier_topic->setId($reifier_id);
-        
-        if ($this instanceof \TopicBank\Interfaces\iName)
-        {
-            $is_reifier = iTopic::REIFIES_NAME;
-        }
-        elseif ($this instanceof \TopicBank\Interfaces\iOccurrence)
-        {
-            $is_reifier = iTopic::REIFIES_OCCURRENCE;
-        }
-        elseif ($this instanceof \TopicBank\Interfaces\iAssociation)
-        {
-            $is_reifier = iTopic::REIFIES_ASSOCIATION;
-        }
-        elseif ($this instanceof \TopicBank\Interfaces\iRole)
-        {
-            $is_reifier = iTopic::REIFIES_ROLE;
-        }
-        
-        $reifier_topic->setIsReifier($is_reifier);
-        
+                
         $this->setReifierId($reifier_id);
         
         return $reifier_topic;
