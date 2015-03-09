@@ -53,11 +53,29 @@ function importFile($filename)
             
         $ok = $object->save();
         
+        $subject = '';
+        
+        if ($object instanceof \TopicBank\Interfaces\iTopic)
+        {
+            foreach ($object->getSubjectIdentifiers() as $subject)
+                break;
+                
+            if ($subject === '')
+            {
+                foreach ($object->getSubjectLocators() as $subject)
+                    break;
+            }
+            
+            if ($subject !== '')
+                $subject = sprintf('[%s] ', $subject);
+        }
+        
         printf
         (
-            "%s: Created %s <%s> (%s)\n",
+            "%s: Created %s %s<%s> (%s)\n",
             $filename,
             ($object instanceof \TopicBank\Interfaces\iTopic ? 'topic' : 'association'),
+            $subject,
             $object->getId(),
             $ok
         );
