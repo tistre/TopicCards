@@ -14,9 +14,7 @@ class StringUtils
     
     protected static function sortByKey($sort_function, array &$arr, $key)
     {
-        // XXX add Collator to PHP installation
-        // $collator = new Collator('en_US');
-        $collator = false;
+        $collator = new \Collator('en_US');
 
         $sort_function
         (
@@ -29,8 +27,7 @@ class StringUtils
                 if ($a === $b)
                     return 0;
             
-                // return $collator->compare($a, $b);
-                return ($a < $b ? -1 : 1);
+                return $collator->compare($a, $b);
             }
         );
     }
