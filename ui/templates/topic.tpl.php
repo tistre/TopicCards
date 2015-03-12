@@ -273,6 +273,15 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 {
                     echo $occurrence[ 'value' ];
                 }
+                elseif ($occurrence[ 'datatype' ] === $tpl[ 'id_anyuri' ])
+                {
+                    printf
+                    (
+                        '<a href="%s">%s</a>', 
+                        htmlspecialchars($occurrence[ 'value' ]),
+                        htmlspecialchars($occurrence[ 'value' ])
+                    );
+                }
                 else
                 {                    
                     echo nl2br(htmlspecialchars($occurrence[ 'value' ]));

@@ -183,6 +183,7 @@ $tpl[ 'delete_url' ] = sprintf('%sdelete_topic/%s', TOPICBANK_BASE_URL, $topic_i
 
 $tpl[ 'id_text' ] = $topicmap->getTopicIdBySubject('http://schema.org/text');
 $tpl[ 'id_xhtml' ] = $topicmap->getTopicIdBySubject('http://www.w3.org/1999/xhtml');
+$tpl[ 'id_anyuri' ] = $topicmap->getTopicIdBySubject('http://www.w3.org/2001/XMLSchema#anyURI');
 
 getTopicVars($topic_id, $topic_vars, $tpl[ 'topic_names' ]);
 
