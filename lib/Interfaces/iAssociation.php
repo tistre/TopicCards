@@ -11,4 +11,5 @@ interface iAssociation extends iPersistent, iReified, iScoped, iTyped
     
     public function getRoles(array $filters = [ ]);
     public function setRoles(array $roles);
+    public function getFirstRole(array $filters = [ ]);
 }

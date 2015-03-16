@@ -57,6 +57,37 @@ class Association extends Core implements \TopicBank\Interfaces\iAssociation
         return 1;
     }
     
+
+    public function getFirstRole(array $filters = [ ])
+    {
+        $roles = $this->getRoles($filters);
+        
+        if (count($roles) > 0)
+            return $roles[ 0 ];
+
+        $role = $this->newRole();
+        
+        if (isset($filters[ 'type' ]))
+        {
+            $role->setType($filters[ 'type' ]);
+        }
+        elseif (isset($filters[ 'type_id' ]))
+        {
+            $role->setTypeId($filters[ 'type_id' ]);
+        }
+        
+        if (isset($filters[ 'player' ]))
+        {
+            $role->setPlayer($filters[ 'player' ]);
+        }
+        elseif (isset($filters[ 'player_id' ]))
+        {
+            $role->setTypeId($filters[ 'player_id' ]);
+        }
+        
+        return $role;
+    }
+
     
     public function validate(&$msg_html)
     {
