@@ -26,7 +26,10 @@ class StringUtils
 
                 if ($a === $b)
                     return 0;
-            
+ 
+                if (is_int($a) && is_int($b))
+                    return ($a < $b ? -1 : 1);
+
                 return $collator->compare($a, $b);
             }
         );
