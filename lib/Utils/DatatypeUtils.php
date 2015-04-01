@@ -147,7 +147,11 @@ class DatatypeUtils
     {
         // XXX What are the datatype URIs for application/xml, something+xml etc.?
         
-        $xml_datatypes = [ 'http://www.w3.org/2001/XMLSchema#anyType' ];
+        $xml_datatypes = 
+        [ 
+            'http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral',
+            'http://www.w3.org/2001/XMLSchema#anyType'
+        ];
         
         return in_array($datatype, $xml_datatypes);
     }
