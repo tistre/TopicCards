@@ -28,4 +28,6 @@ if (! empty($_REQUEST[ 'subject_identifier' ]))
 
 $ok = $topic->save();
 
+header('Content-type: application/json');
+
 echo json_encode(array( 'id' => $topic->getId(), 'name' => $name->getValue() ));
