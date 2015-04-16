@@ -144,21 +144,33 @@ trait TopicDbAdapter
         $result = $reifies_what = $reifies_id = false;
         
         $prefix = $this->topicmap->getDbTablePrefix();
+
+        // PostgreSQL needs a cast() in a union query that joins text and number,
+        // MySQL doesn't
+        
+        $do_cast = ($this->services->db->getAttribute(\PDO::ATTR_DRIVER_NAME) === 'pgsql');
         
         $sql = $this->services->db->prepare(sprintf
         (
-            "select cast(name_id as text) as reifies_id, '%d' as reifies_what"
+            "select %s as reifies_id, '%d' as reifies_what"
             . " from %sname where name_reifier = :topic_id"
-            . " union select cast(occurrence_id as text) as reifies_id, '%d' as reifies_what"
+            . " union select %s as reifies_id, '%d' as reifies_what"
             . " from %soccurrence where occurrence_reifier = :topic_id"
             . " union select association_id as reifies_id, '%d' as reifies_what"
             . " from %sassociation where association_reifier = :topic_id"
-            . " union select cast(role_id as text) as reifies_id, '%d' as reifies_what"
+            . " union select %s as reifies_id, '%d' as reifies_what"
             . " from %srole where role_reifier = :topic_id",
-            iTopic::REIFIES_NAME, $prefix,
-            iTopic::REIFIES_OCCURRENCE, $prefix,
-            iTopic::REIFIES_ASSOCIATION, $prefix,
-            iTopic::REIFIES_ROLE, $prefix
+            ($do_cast ? 'cast(name_id as text)' : 'name_id'),
+            iTopic::REIFIES_NAME, 
+            $prefix,
+            ($do_cast ? 'cast(occurrence_id as text)' : 'occurrence_id'),
+            iTopic::REIFIES_OCCURRENCE, 
+            $prefix,
+            iTopic::REIFIES_ASSOCIATION, 
+            $prefix,
+            ($do_cast ? 'cast(role_id as text)' : 'role_id'),
+            iTopic::REIFIES_ROLE, 
+            $prefix
         ));
 
         $sql->bindValue(':topic_id', $this->id, \PDO::PARAM_STR);
