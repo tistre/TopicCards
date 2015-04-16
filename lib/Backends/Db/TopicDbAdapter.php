@@ -147,13 +147,13 @@ trait TopicDbAdapter
         
         $sql = $this->services->db->prepare(sprintf
         (
-            "select name_id as reifies_id, '%d' as reifies_what"
+            "select cast(name_id as text) as reifies_id, '%d' as reifies_what"
             . " from %sname where name_reifier = :topic_id"
-            . " union select occurrence_id as reifies_id, '%d' as reifies_what"
+            . " union select cast(occurrence_id as text) as reifies_id, '%d' as reifies_what"
             . " from %soccurrence where occurrence_reifier = :topic_id"
             . " union select association_id as reifies_id, '%d' as reifies_what"
             . " from %sassociation where association_reifier = :topic_id"
-            . " union select role_id as reifies_id, '%d' as reifies_what"
+            . " union select cast(role_id as text) as reifies_id, '%d' as reifies_what"
             . " from %srole where role_reifier = :topic_id",
             iTopic::REIFIES_NAME, $prefix,
             iTopic::REIFIES_OCCURRENCE, $prefix,
