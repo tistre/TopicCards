@@ -40,6 +40,8 @@ class DbUtils
 
     public function beginTransaction()
     {
+        $ok = $this->connect();
+
       	// Wrapping PDO transaction functionality because it
         // doesn't support nested transactions
 
