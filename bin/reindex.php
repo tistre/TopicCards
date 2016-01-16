@@ -81,6 +81,22 @@ class Reindex
             'index' => $index,
             'body' => 
             [
+            /*
+                'settings' =>
+                [
+                    'analysis' =>
+                    [
+                        'analyzer' =>
+                        [
+                            'ducet_sort' => 
+                            [
+                                'tokenizer' => 'keyword',
+                                'filter' => [ 'icu_collation' ] 
+                            ]
+                        ]
+                    ]
+                ],
+                */
                 'mappings' =>
                 [
                     'topic' =>

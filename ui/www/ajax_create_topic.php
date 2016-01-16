@@ -9,7 +9,6 @@ $topic->setId($topicmap->createId());
 $name = $topic->newName();
 $name->setType('http://schema.org/name');
 $name->setValue(trim($_REQUEST[ 'name' ]));
-error_log(print_r($_REQUEST, true));
 
 if (! empty($_REQUEST[ 'type' ]))
 {
@@ -27,6 +26,16 @@ if (! empty($_REQUEST[ 'subject_identifier' ]))
 }
 
 $ok = $topic->save();
+
+if (! isset($_SESSION[ 'choose_topic_history' ]))
+    $_SESSION[ 'choose_topic_history' ] = [ ];
+
+$what = $_REQUEST[ 'what' ];
+
+if (! isset($_SESSION[ 'choose_topic_history' ][ $what ]))
+    $_SESSION[ 'choose_topic_history' ][ $what ] = [ ];
+    
+$_SESSION[ 'choose_topic_history' ][ $what ][ ] = $topic->getId();
 
 header('Content-type: application/json');
 

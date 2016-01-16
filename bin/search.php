@@ -18,6 +18,9 @@ if ($getopt[ 'help' ])
 {
     $getopt->setBanner("\nTopicBank topic search, using Elasticsearch\n\n");
     
+    // Add usage example to help text:
+    // php bin/search.php -l 100 'topic_type_id:cad2a9f0-7916-4409-b366-f6216df92b19'
+    
     echo $getopt->getHelpText();
     exit;
 }

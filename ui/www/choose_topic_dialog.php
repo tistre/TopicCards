@@ -8,98 +8,13 @@ $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
 
 $what = $_REQUEST[ 'what' ];
 
-$recent = [ ];
-$params = [ 'get_mode' => 'recent', 'limit' => 5 ];
+if (! isset($_SESSION[ 'choose_topic_history' ]))
+    $_SESSION[ 'choose_topic_history' ] = [ ];
 
-// Topic types
-
-if ($what === 'topic_type')
-{
-    // Most recently used
+if (! isset($_SESSION[ 'choose_topic_history' ][ $what ]))
+    $_SESSION[ 'choose_topic_history' ][ $what ] = [ ];
     
-    $recent = $topicmap->getTopicTypeIds($params);
-}
-
-// Name types
-
-elseif ($what === 'name_type')
-{
-    // Most recently used
-    
-    $recent = $topicmap->getNameTypeIds($params);
-}
-
-// Name scopes
-
-elseif ($what === 'name_scope')
-{
-    // Most recently used
-    
-    $recent = $topicmap->getNameScopeIds($params);
-}
-
-// Occurrence types
-
-elseif ($what === 'occurrence_type')
-{
-    // Most recently used
-    
-    $recent = $topicmap->getOccurrenceTypeIds($params);
-}
-
-// Occurrence datatypes
-
-elseif ($what === 'occurrence_datatype')
-{
-    // Most recently used
-    
-    $recent = $topicmap->getOccurrenceDatatypeIds($params);
-}
-
-// Occurrence scopes
-
-elseif ($what === 'occurrence_scope')
-{
-    // Most recently used
-    
-    $recent = $topicmap->getOccurrenceScopeIds($params);
-}
-
-// Association types
-
-elseif ($what === 'association_type')
-{
-    // Most recently used
-    
-    $recent = $topicmap->getAssociationTypeIds($params);
-}
-
-// Association scopes
-
-elseif ($what === 'association_scope')
-{
-    // Most recently used
-    
-    $recent = $topicmap->getAssociationScopeIds($params);
-}
-
-// Role types
-
-elseif ($what === 'role_type')
-{
-    // Most recently used
-    
-    $recent = $topicmap->getRoleTypeIds($params);
-}
-
-// Role players
-
-elseif ($what === 'role_player')
-{
-    // Most recently used
-    
-    $recent = $topicmap->getRolePlayerIds($params);
-}
+$recent = $_SESSION[ 'choose_topic_history' ][ $what ];
 
 // Add labels
 

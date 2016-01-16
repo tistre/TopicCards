@@ -944,6 +944,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             
             what = $(e.target).data('topicbank_what');
             
+            $choose_topic_dialog.data('what', what);
+            
             $dialog_body.empty().load(topicbank_base_url + 'choose_topic_dialog?what=' + encodeURIComponent(what));
         });
 
@@ -968,7 +970,18 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             
             $target_id.val($source_id.text());
             $target_name.html($source_name.html());
-            
+
+            $.ajax(
+            {
+                url: topicbank_base_url + 'ajax_add_to_history',
+                cache: false,
+                data:
+                {
+                    what: $('#choose_topic_dialog').data('what'),
+                    topic_id: $source_id.text()
+                }
+            });
+                        
             $('#choose_topic_dialog').modal('hide');
         });
 
@@ -1043,7 +1056,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 {
                     name: new_name,
                     type: new_type,
-                    subject_identifier: new_subject
+                    subject_identifier: new_subject,
+                    what: 'XXX'
                 },
                 dataType: 'json'
             }).done(function(data)
