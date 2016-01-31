@@ -7,6 +7,9 @@ use \Ulrichsg\Getopt\Option;
 
 require_once dirname(__DIR__) . '/include/init.php';
 
+// Typical invocation:
+// TOPICBANK_CONFIG=/path/to/config.x.php php bin/reindex.php --recreate --full
+
 
 class Reindex
 {
