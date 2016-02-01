@@ -62,11 +62,3 @@ if (! file_exists(TOPICBANK_CONFIG))
     exit(TOPICBANK_CONFIG . " file not found.\n");
 
 require_once TOPICBANK_CONFIG;
-
-if (PHP_SAPI !== 'cli')
-{
-    session_name(md5(TOPICBANK_CONFIG));
-    session_start();
-}
-
-?>

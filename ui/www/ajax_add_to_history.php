@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(dirname(__DIR__)) . '/include/init.php';
+require_once dirname(dirname(__DIR__)) . '/include/www_init.php';
 
 if (! isset($_SESSION[ 'choose_topic_history' ]))
     $_SESSION[ 'choose_topic_history' ] = [ ];

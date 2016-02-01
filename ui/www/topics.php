@@ -2,7 +2,7 @@
 
 use TopicBank\Interfaces\iTopic;
 
-require_once dirname(dirname(__DIR__)) . '/include/init.php';
+require_once dirname(dirname(__DIR__)) . '/include/www_init.php';
 
 $tpl = [ ];
 

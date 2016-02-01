@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(dirname(__DIR__)) . '/include/init.php';
+require_once dirname(dirname(__DIR__)) . '/include/www_init.php';
 
 $topic = $topicmap->newTopic();
 
