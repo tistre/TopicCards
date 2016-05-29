@@ -1,7 +1,7 @@
-TopicBank (formerly XDDB)
-=========================
+TopicCards (formerly TopicBank)
+===============================
 
-TMDM experiments in PHP
+Topic Maps (TMDM / XTM) experiments in PHP
 
 ![View Topic screenshot](screenshot_view_topic.png)
 
