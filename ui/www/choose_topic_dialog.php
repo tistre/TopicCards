@@ -38,7 +38,7 @@ foreach ($recent as $id)
     ];
 }
 
-TopicBank\Utils\StringUtils::usortByKey($tpl[ 'recent' ], 'label');
+TopicCards\Utils\StringUtils::usortByKey($tpl[ 'recent' ], 'label');
 
 
 $tpl[ 'topic_types' ] = [ ];
@@ -53,7 +53,7 @@ foreach ($topicmap->getTopicTypeIds([ 'get_mode' => 'all' ]) as $id)
     ];
 }
 
-TopicBank\Utils\StringUtils::usortByKey($tpl[ 'topic_types' ], 'label');
+TopicCards\Utils\StringUtils::usortByKey($tpl[ 'topic_types' ], 'label');
 
 
 include TOPICBANK_BASE_DIR . '/ui/templates/choose_topic_dialog.tpl.php';

@@ -114,7 +114,7 @@ else
     }
 }
 
-$exporter = new \TopicBank\Utils\XtmExport();
+$exporter = new \TopicCards\Utils\XtmExport();
 
 echo $exporter->exportObjects($objects);
 

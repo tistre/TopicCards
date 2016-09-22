@@ -1,6 +1,6 @@
 <?php
 
-use TopicBank\Interfaces\iTopic;
+use TopicCards\iTopic;
 
 require_once dirname(dirname(__DIR__)) . '/include/www_init.php';
 
@@ -102,7 +102,7 @@ function getTopicVars($topic_id, &$result, &$topic_names)
         foreach ($association_arr[ 'roles' ] as $key => $role)
             $association_arr[ 'roles' ][ $key ][ 'type_label' ] = $topicmap->getTopicLabel($role[ 'type' ]);
         
-        TopicBank\Utils\StringUtils::usortByKey($association_arr[ 'roles' ], 'type_label');
+        TopicCards\Utils\StringUtils::usortByKey($association_arr[ 'roles' ], 'type_label');
 
         $result[ 'associations' ][ ] = $association_arr;
     }

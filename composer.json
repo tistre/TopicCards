@@ -5,6 +5,7 @@
         "elasticsearch/elasticsearch": "~1.0",
         "tinymce/tinymce": "~4.1",
         "twbs/bootstrap": "~3.3",
-        "ulrichsg/getopt-php": "~2.2"
+        "ulrichsg/getopt-php": "~2.2",
+        "graphaware/neo4j-php-client": "^4.0"
     }
 }

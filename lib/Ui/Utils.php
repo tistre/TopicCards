@@ -2,7 +2,7 @@
 
 namespace TopicBank\Ui;
 
-use \TopicBank\Interfaces\iTopic;
+use \TopicCards\iTopic;
 
 
 class Utils
