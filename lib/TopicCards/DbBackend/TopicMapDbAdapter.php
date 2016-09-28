@@ -3,6 +3,8 @@
 namespace TopicCards\DbBackend;
 
 
+use TopicCards\iTopicMap;
+
 trait TopicMapDbAdapter
 {
     public function selectTopics(array $filters)
@@ -275,138 +277,121 @@ trait TopicMapDbAdapter
     
     public function selectTopicTypes(array $filters)
     {
-        return $this->selectWhat('type', 'type_type', $filters);
+        return $this->selectWhat(iTopicMap::SUBJECT_TOPIC_TYPE, $filters);
     }
     
     
     public function selectNameTypes(array $filters)
     {
-        return $this->selectWhat('name', 'name_type', $filters);
+        return $this->selectWhat(iTopicMap::SUBJECT_TOPIC_NAME_TYPE, $filters);
     }
     
 
     public function selectNameScopes(array $filters)
     {
         // XXX selects all scopes, not just name scopes
-        return $this->selectWhat('scope', 'scope_scope', $filters);
+        return $this->selectWhat(iTopicMap::SUBJECT_SCOPE, $filters);
     }
     
     
     public function selectOccurrenceTypes(array $filters)
     {
-        return $this->selectWhat('occurrence', 'occurrence_type', $filters);
+        return $this->selectWhat(iTopicMap::SUBJECT_OCCURRENCE_TYPE, $filters);
     }
 
 
     public function selectOccurrenceDatatypes(array $filters)
     {
-        return $this->selectWhat('occurrence', 'occurrence_datatype', $filters);
+        return $this->selectWhat(iTopicMap::SUBJECT_DATATYPE, $filters);
     }
 
     
     public function selectOccurrenceScopes(array $filters)
     {
         // XXX selects all scopes, not just occurrence scopes
-        return $this->selectWhat('scope', 'scope_scope', $filters);
+        return $this->selectWhat(iTopicMap::SUBJECT_SCOPE, $filters);
     }
     
     
     public function selectAssociationTypes(array $filters)
     {
-        return $this->selectWhat('association', 'association_type', $filters);
+        return $this->selectWhat(iTopicMap::SUBJECT_ASSOCIATION_TYPE, $filters);
     }
     
     
     public function selectAssociationScopes(array $filters)
     {
         // XXX selects all scopes, not just association scopes
-        return $this->selectWhat('scope', 'scope_scope', $filters);
+        return $this->selectWhat(iTopicMap::SUBJECT_SCOPE, $filters);
     }
     
     
     public function selectRoleTypes(array $filters)
     {
-        return $this->selectWhat('role', 'role_type', $filters);
+        return $this->selectWhat(iTopicMap::SUBJECT_ASSOCIATION_ROLE_TYPE, $filters);
     }
     
     
     public function selectRolePlayers(array $filters)
     {
-        return $this->selectWhat('role', 'role_player', $filters);
+        // TODO: Currently not implemented
+        return [ ];
     }
     
     
-    protected function selectWhat($table, $column, array $filters)
+    protected function selectWhat($what, array $filters)
     {
+        $what_id = $this->getTopicIdBySubject($what);
+        
+        if (strlen($what_id) === 0)
+        {
+            return -1;
+        }
+        
+        // TODO: Implement both "all" and "recent"; currently it's only "all"
+        
         if (! isset($filters[ 'get_mode' ]))
+        {
             $filters[ 'get_mode' ] = 'all';
+        }
 
         if (! isset($filters[ 'limit' ]))
+        {
             $filters[ 'limit' ] = 500;
-
+        }
+        
         $ok = $this->services->db_utils->connect();
         
         if ($ok < 0)
+        {
             return $ok;
-
-        $sort_column = '';
-        
-        if ($filters[ 'get_mode' ] === 'recent')
-        {
-            // XXX not so nice: associations ordered by updated, others by created...
-            $table_sortcolumn =
-            [
-                'association' => 'association_updated',
-                'name' => 'name_id',
-                'occurrence' => 'occurrence_id',
-                'role' => 'role_id',
-                'scope' => 'scope_id',
-                'type' => 'type_id'
-            ];
-            
-            if (isset($table_sortcolumn[ $table ]))
-                $sort_column = $table_sortcolumn[ $table ];
-        }
-        
-        $prefix = $this->getDbTablePrefix();
-
-        if ($sort_column === '')
-        {
-            $sql_stmt = sprintf
-            (
-                'select distinct %s from %s%s limit %d',
-                $column,
-                $prefix,
-                $table,
-                $filters[ 'limit' ]
-            );
-        }
-        else
-        {
-            $sql_stmt = sprintf
-            (
-                'select distinct a.%s from (select %s, %s from %s%s order by %s desc) a limit %d',
-                $column,
-                $column,
-                $sort_column,
-                $prefix,
-                $table,
-                $sort_column,
-                $filters[ 'limit' ]
-            );
         }
 
-        $sql = $this->services->db->prepare($sql_stmt);
+        $query = sprintf
+        (
+            'MATCH (t%s) RETURN t.id',
+            $this->services->db_utils->labelsString([ 'Topic', $what_id ])
+        );
 
-        $ok = $sql->execute();
-        
-        if ($ok === false)
+        $this->logger->addInfo($query);
+
+        try
+        {
+            $qresult = $this->services->db->run($query);
+        }
+        catch (\GraphAware\Neo4j\Client\Exception\Neo4jException $exception)
+        {
+            $this->logger->addError($exception->getMessage());
+            // TODO: Error handling
             return -1;
+        }
 
         $result = [ ];
 
-        foreach ($sql->fetchAll() as $row)
-            $result[ ] = $row[ $column ];
+        foreach ($qresult->getRecords() as $record)
+        {
+            $result[ ] = $record->get('t.id');
+        }
 
         return $result;
     }

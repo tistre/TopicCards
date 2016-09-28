@@ -5,6 +5,14 @@ namespace TopicCards;
 
 interface iTopicMap
 {    
+    const SUBJECT_ASSOCIATION_ROLE_TYPE = 'http://psi.topicmaps.org/iso13250/glossary/association-role-type';
+    const SUBJECT_ASSOCIATION_TYPE = 'http://psi.topicmaps.org/iso13250/glossary/association-type';
+    const SUBJECT_OCCURRENCE_TYPE = 'http://psi.topicmaps.org/iso13250/glossary/occurrence-type';
+    const SUBJECT_SCOPE = 'http://psi.topicmaps.org/iso13250/glossary/scope';
+    const SUBJECT_TOPIC_NAME_TYPE = 'http://psi.topicmaps.org/iso13250/glossary/topic-name-type';
+    const SUBJECT_TOPIC_TYPE = 'http://psi.topicmaps.org/iso13250/glossary/topic-type';
+    const SUBJECT_DATATYPE = 'http://www.w3.org/2000/01/rdf-schema#Datatype';
+    
     public function __construct(iServices $services);
     
     /** @var iServices */

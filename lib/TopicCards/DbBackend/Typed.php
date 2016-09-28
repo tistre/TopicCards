@@ -31,10 +31,12 @@ trait Typed
     
     public function setType($topic_subject)
     {
-        $topic_id = $this->getTopicMap()->getTopicIdBySubject($topic_subject);
+        $topic_id = $this->getTopicMap()->getTopicIdBySubject($topic_subject, true);
         
         if (strlen($topic_id) === 0)
+        {
             return -1;
+        }
             
         return $this->setTypeId($topic_id);
     }

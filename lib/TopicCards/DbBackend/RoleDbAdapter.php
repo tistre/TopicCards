@@ -3,6 +3,8 @@
 namespace TopicCards\DbBackend;
 
 
+use TopicCards\iTopicMap;
+
 trait RoleDbAdapter
 {
     public function selectAll(array $filters)
@@ -185,6 +187,21 @@ trait RoleDbAdapter
 
         $transaction->push($query, $bind);
 
+        // Mark type topics
+
+        $type_queries = $this->services->db_utils->tmConstructLabelQueries
+        (
+            $this->topicmap,
+            [ $data[ 'type' ] ],
+            iTopicMap::SUBJECT_ASSOCIATION_ROLE_TYPE
+        );
+
+        foreach ($type_queries as $type_query)
+        {
+            $this->logger->addInfo($type_query['query'], $type_query['bind']);
+            $transaction->push($type_query['query'], $type_query['bind']);
+        }
+        
         // TODO: error handling
         return 1;
     }

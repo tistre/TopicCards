@@ -47,7 +47,7 @@ class Occurrence extends Core implements \TopicCards\iOccurrence
     
     public function setDatatype($topic_subject)
     {
-        $topic_id = $this->getTopicMap()->getTopicIdBySubject($topic_subject);
+        $topic_id = $this->getTopicMap()->getTopicIdBySubject($topic_subject, true);
         
         if (strlen($topic_id) === 0)
             return -1;

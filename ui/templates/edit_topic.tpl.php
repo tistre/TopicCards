@@ -1,10 +1,10 @@
 <?php
 
-function button_remove()
+function button_remove(array $params)
 {
     ?>
     
-    <button class="btn btn-link" type="button" data-topicbank_event="remove">
+    <button class="btn btn-link" type="button" data-topicbank_event="remove" <?=(isset($params['remove_hide']) ? 'data-topicbank_remove_hide="' . htmlspecialchars($params['remove_hide']) . '"' : '')?>>
       <span class="glyphicon glyphicon-remove"></span>
     </button>
 
@@ -146,7 +146,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <?php button_choose_topic([ 'what' => 'topic_type', 'label' => $tpl[ 'topic_names' ][ $type_id ] ]); ?>
                     <input type="hidden" name="types[]" value="<?=htmlspecialchars($type_id)?>" data-topicbank_element="id" />
                   </td>
-                  <td><?php button_remove(); ?></td>
+                  <td><?php button_remove([ ]); ?></td>
                 </tr>
                 <?php
             }
@@ -158,7 +158,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <?php button_choose_topic([ 'what' => 'topic_type', 'label' => 'Type' ]); ?>
                     <input type="hidden" name="types[]" value="" data-topicbank_element="id" />
                   </td>
-                  <td><?php button_remove(); ?></td>
+                  <td><?php button_remove([ ]); ?></td>
                 </tr>
                 
                 <tr>
@@ -205,6 +205,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                   <input type="text" name="names[<?=$i?>][value]" value="<?=htmlspecialchars($name[ 'value' ])?>" style="width:100%;" />
                   <input type="hidden" name="names[<?=$i?>][id]" value="<?=htmlspecialchars($name[ 'id' ])?>" />
+                  <input type="hidden" name="names[<?=$i?>][delete]" value="0" />
                   
                   <table>
                     <tr>
@@ -217,7 +218,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                               <?php button_choose_topic([ 'what' => 'name_scope', 'label' => $tpl[ 'topic_names' ][ $scope ] ]); ?>
                               <input type="hidden" name="names[<?=$i?>][scope][<?=$j?>]" value="<?=htmlspecialchars($scope)?>" data-topicbank_element="id" />
                             </td>
-                            <td><?php button_remove(); ?></td>
+                            <td><?php button_remove([ ]); ?></td>
                           </tr>              
                           <?php } $j++; ?>
               
@@ -226,7 +227,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                               <?php button_choose_topic([ 'what' => 'name_scope', 'label' => '[Scope]' ]); ?>
                               <input type="hidden" name="names[<?=$i?>][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                             </td>
-                            <td><?php button_remove(); ?></td>
+                            <td><?php button_remove([ ]); ?></td>
                           </tr>
                 
                           <tr>
@@ -244,7 +245,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     </tr>
                   </table>
                 </td>
-                <td width="5%" valign="top"><?php button_remove(); ?></td>
+                <td width="5%" valign="top"><?php button_remove([ 'remove_hide' => 'names[' . $i . '][delete]' ]); ?></td>
               </tr>
           
             <?php } $i++; ?>
@@ -259,6 +260,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                   <input type="text" name="names[TOPICBANK_COUNTER1][value]" value="" style="width:100%;" />
                   <input type="hidden" name="names[TOPICBANK_COUNTER1][id]" value="" />
+                  <input type="hidden" name="names[TOPICBANK_COUNTER1][delete]" value="0" />
                 
                   <table>
                     <tr>
@@ -270,7 +272,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                               <?php button_choose_topic([ 'what' => 'name_scope', 'label' => '[Scope]' ]); ?>
                               <input type="hidden" name="names[TOPICBANK_COUNTER1][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                             </td>
-                            <td><?php button_remove(); ?></td>
+                            <td><?php button_remove([ ]); ?></td>
                           </tr>
                 
                           <tr>
@@ -289,7 +291,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   </table>
 
                 </td>
-                <td width="5%" valign="top"><?php button_remove(); ?></td>
+                <td width="5%" valign="top"><?php button_remove([ 'remove_hide' => 'names[TOPICBANK_COUNTER1][delete]' ]); ?></td>
               </tr>
 
               <tr>
@@ -319,7 +321,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <td width="95%" valign="top">
                     <input type="text" name="subject_identifiers[]" value="<?=htmlspecialchars($url)?>" style="width: 100%;" />
                   </td>
-                  <td width="5%" valign="top"><?php button_remove(); ?></td>
+                  <td width="5%" valign="top"><?php button_remove([ ]); ?></td>
                 </tr>
                 <?php
             }
@@ -330,7 +332,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <td width="95%" valign="top">
                   <input type="text" name="subject_identifiers[]" value="" style="width: 100%;" />
                 </td>
-                <td width="5%" valign="top"><?php button_remove(); ?></td>
+                <td width="5%" valign="top"><?php button_remove([ ]); ?></td>
               </tr>
               
               <tr>
@@ -360,7 +362,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                   <td width="95%" valign="top">
                     <input type="text" name="subject_locators[]" value="<?=htmlspecialchars($url)?>" style="width: 100%;" />
                   </td>
-                  <td width="5%" valign="top"><?php button_remove(); ?></td>
+                  <td width="5%" valign="top"><?php button_remove([ ]); ?></td>
                 </tr>
                 <?php
             }
@@ -371,7 +373,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <td width="95%" valign="top">
                   <input type="text" name="subject_locators[]" value="" style="width: 100%;" />
                 </td>
-                <td width="5%" valign="top"><?php button_remove(); ?></td>
+                <td width="5%" valign="top"><?php button_remove([ ]); ?></td>
               </tr>
                 
               <tr>
@@ -406,7 +408,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                   <?php button_choose_topic([ 'what' => 'occurrence_type', 'label' => $tpl[ 'topic_names' ][ $occurrence[ 'type' ] ] ]); ?>
                   <input type="hidden" name="occurrences[<?=$i?>][type]" value="<?=htmlspecialchars($occurrence[ 'type' ])?>" data-topicbank_element="id" />
-
+                  
                 <?php if ($occurrence[ 'type' ] !== $tpl[ 'id_text' ]) { ?>                
                 </td>
                 <?php } ?>
@@ -418,6 +420,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 <?php } ?>
                 
                   <textarea name="occurrences[<?=$i?>][value]" style="width:100%; <?php if ($occurrence[ 'datatype' ] === $tpl[ 'id_xhtml' ]) { ?>height: 300px;<?php } ?>" <?php if ($occurrence[ 'datatype' ] === $tpl[ 'id_xhtml' ]) { ?>data-topicbank_html_editor="enabled"<?php } ?>><?=htmlspecialchars($occurrence[ 'value' ])?></textarea>
+
+                  <input type="hidden" name="occurrences[<?=$i?>][id]" value="<?=htmlspecialchars($occurrence[ 'id' ])?>" />
+                  <input type="hidden" name="occurrences[<?=$i?>][delete]" value="0" />
+
                   <table>
                     <tr>
                       <td valign="top">
@@ -437,7 +443,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                               <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => $tpl[ 'topic_names' ][ $scope ] ]); ?>
                               <input type="hidden" name="occurrences[<?=$i?>][scope][<?=$j?>]" value="<?=htmlspecialchars($scope)?>" data-topicbank_element="id" />
                             </td>
-                            <td><?php button_remove(); ?></td>
+                            <td><?php button_remove([ ]); ?></td>
                           </tr>              
                         <?php } $j++; ?>
               
@@ -446,7 +452,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                               <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => '[Scope]' ]); ?>
                               <input type="hidden" name="occurrences[<?=$i?>][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                             </td>
-                            <td><?php button_remove(); ?></td>
+                            <td><?php button_remove([ ]); ?></td>
                           </tr>
                 
                           <tr>
@@ -466,7 +472,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     </tr>
                   </table>
                 </td>
-                <td width="5%" valign="top"><?php button_remove(); ?></td>
+                <td width="5%" valign="top"><?php button_remove([ 'remove_hide' => 'occurrences[' . $i . '][delete]' ]); ?></td>
               </tr>
           
             <?php } $i++; ?>
@@ -484,7 +490,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 
                 <td width="70%" valign="top">
                   <textarea name="occurrences[TOPICBANK_COUNTER1][value]" style="width:100%;"></textarea>
-                  
+
+                  <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][id]" value="" />
+                  <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][delete]" value="0" />
+
                   <table>
                     <tr>
                       <td valign="top">
@@ -503,7 +512,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                               <?php button_choose_topic([ 'what' => 'occurrence_scope', 'label' => '[Scope]' ]); ?>
                               <input type="hidden" name="occurrences[TOPICBANK_COUNTER1][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                             </td>
-                            <td><?php button_remove(); ?></td>
+                            <td><?php button_remove([ ]); ?></td>
                           </tr>
                 
                           <tr>
@@ -522,7 +531,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     </tr>
                   </table>
                 </td>
-                <td width="5%" valign="top"><?php button_remove(); ?></td>
+                <td width="5%" valign="top"><?php button_remove([ 'remove_hide' => 'occurrences[TOPICBANK_COUNTER1][delete]' ]); ?></td>
               </tr>
 
               <tr>
@@ -606,7 +615,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <input type="hidden" name="associations[<?=$i?>][roles][<?=$j?>][reifier]" value="<?=htmlspecialchars($role[ 'reifier' ])?>" />
                   </td>
                   <td>
-                    <?php if (! $role[ 'this_topic' ]) button_remove(); ?>
+                    <input type="hidden" name="associations[<?=$i?>][roles][<?=$j?>][id]" value="<?=htmlspecialchars($role[ 'id' ])?>" />
+                    <input type="hidden" name="associations[<?=$i?>][roles][<?=$j?>][delete]" value="0" />
+                    <?php if (! $role[ 'this_topic' ]) button_remove([ 'remove_hide' => 'associations[' . $i. '][roles][' . $j . '][delete]' ]); ?>
                   </td>
                 </tr>
                 <?php } $j++; ?>
@@ -624,7 +635,11 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <?php button_reify([ 'reifies_type' => 'role' ]); ?>
                     <input type="hidden" name="associations[<?=$i?>][roles][TOPICBANK_COUNTER2][reifier]" value="" />
                   </td>
-                  <td><?php button_remove(); ?></td>
+                  <td>
+                    <input type="hidden" name="associations[<?=$i?>][roles][TOPICBANK_COUNTER2][id]" value="" />
+                    <input type="hidden" name="associations[<?=$i?>][roles][TOPICBANK_COUNTER2][delete]" value="0" />
+                    <?php button_remove([ 'remove_hide' => 'associations[' . $i . '][roles][TOPICBANK_COUNTER2][delete]' ]); ?>
+                  </td>
                 </tr>
 
                 <tr>
@@ -648,7 +663,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <?php button_choose_topic([ 'what' => 'association_scope', 'label' => $tpl[ 'topic_names' ][ $scope ] ]); ?>
                     <input type="hidden" name="associations[<?=$i?>][scope][<?=$j?>]" value="<?=htmlspecialchars($scope)?>" data-topicbank_element="id" />
                   </td>
-                  <td><?php button_remove(); ?></td>
+                  <td><?php button_remove([ ]); ?></td>
                 </tr>              
               <?php } $j++; ?>
               
@@ -657,7 +672,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <?php button_choose_topic([ 'what' => 'association_scope', 'label' => '[Scope]' ]); ?>
                     <input type="hidden" name="associations[<?=$i?>][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                   </td>
-                  <td><?php button_remove(); ?></td>
+                  <td><?php button_remove([ ]); ?></td>
                 </tr>
                 
                 <tr>
@@ -679,9 +694,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             <!-- Remove association -->
             
             <td>
-              <button class="btn btn-link" type="button" data-topicbank_event="remove" data-topicbank_remove_hide="associations[<?=$i?>][delete]">
-                <span class="glyphicon glyphicon-remove"></span>
-              </button>
+              <?php button_remove([ 'remove_hide' => 'associations[' . $i . '][delete]' ]); ?>
             </td>
           </tr>
       
@@ -721,6 +734,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][0][reifier]" value="" />
                   </td>
                   <td>
+                    <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][0][id]" value="" />
+                    <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][0][delete]" value="0" />
                   </td>
                 </tr>
 
@@ -737,7 +752,11 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <?php button_reify([ 'reifies_type' => 'role' ]); ?>
                     <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][reifier]" value="" />
                   </td>
-                  <td><?php button_remove(); ?></td>
+                  <td>
+                    <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][id]" value="" />
+                    <input type="hidden" name="associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][delete]" value="0" />
+                    <?php button_remove([ 'remove_hide' => 'associations[TOPICBANK_COUNTER1][roles][TOPICBANK_COUNTER2][delete]' ]); ?>
+                  </td>
                 </tr>
 
                 <tr>
@@ -760,7 +779,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                     <?php button_choose_topic([ 'what' => 'association_scope', 'label' => '[Scope]' ]); ?>
                     <input type="hidden" name="associations[TOPICBANK_COUNTER1][scope][TOPICBANK_COUNTER2]" value="" data-topicbank_element="id" />
                   </td>
-                  <td><?php button_remove(); ?></td>
+                  <td><?php button_remove([ ]); ?></td>
                 </tr>
                 
                 <tr>
@@ -781,7 +800,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
             <!-- Remove new association -->
             
-            <td><?php button_remove(); ?></td>
+            <td><?php button_remove([ ]); ?></td>
             
           </tr>
 

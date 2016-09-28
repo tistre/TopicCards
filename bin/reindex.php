@@ -2,6 +2,8 @@
 
 namespace TopicBank\Bin;
 
+use TopicCards\DbBackend\Search;
+use TopicCards\iTopicMap;
 use \Ulrichsg\Getopt\Getopt;
 use \Ulrichsg\Getopt\Option;
 
@@ -17,7 +19,7 @@ class Reindex
     protected $getopt;
     
     
-    public function __construct(\TopicBank\Interfaces\iTopicMap $topicmap)
+    public function __construct(iTopicMap $topicmap)
     {
         $this->topicmap = $topicmap;
     }
@@ -41,7 +43,7 @@ class Reindex
     
         if ($this->getopt[ 'help' ])
         {
-            $this->getopt->setBanner("\nTopicBank Elasticsearch reindex\n\n");
+            $this->getopt->setBanner("\nTopicCards Elasticsearch reindex\n\n");
     
             echo $this->getopt->getHelpText();
             exit;
@@ -179,7 +181,7 @@ class Reindex
 
         $this->topicmap->trigger
         (
-            \TopicBank\Backends\Db\Search::EVENT_INDEX_PARAMS, 
+            Search::EVENT_INDEX_PARAMS, 
             [ 'index_params' => $params ],
             $callback_result
         );

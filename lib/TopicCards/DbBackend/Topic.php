@@ -75,7 +75,7 @@ class Topic extends Core implements iTopic
         
         foreach ($topic_subjects as $topic_subject)
         {
-            $topic_id = $this->getTopicMap()->getTopicIdBySubject($topic_subject);
+            $topic_id = $this->getTopicMap()->getTopicIdBySubject($topic_subject, true);
             
             if (strlen($topic_id) === 0)
             {
@@ -178,6 +178,10 @@ class Topic extends Core implements iTopic
         {
             $name->setTypeId($filters[ 'type_id' ]);
         }
+        elseif (isset($filters[ 'id' ]))
+        {
+            $name->setId($filters[ 'id' ]);
+        }
         
         return $name;
     }
@@ -236,7 +240,12 @@ class Topic extends Core implements iTopic
                     return $values[ 0 ];
             }
         }
-                
+
+        foreach ($this->getSubjectIdentifiers() as $value)
+        {
+            return $value;
+        }
+        
         return '';
     }
 
@@ -269,6 +278,12 @@ class Topic extends Core implements iTopic
                     continue;
             }
 
+            if (isset($filters[ 'id' ]))
+            {
+                if ($occurrence->getId() !== $filters[ 'id' ])
+                    continue;
+            }
+
             if (isset($filters[ 'value' ]))
             {
                 if ($occurrence->getValue() !== $filters[ 'value' ])
@@ -298,6 +313,10 @@ class Topic extends Core implements iTopic
         elseif (isset($filters[ 'type_id' ]))
         {
             $occurrence->setTypeId($filters[ 'type_id' ]);
+        }
+        elseif (isset($filters[ 'id' ]))
+        {
+            $occurrence->setId($filters[ 'id' ]);
         }
         
         return $occurrence;

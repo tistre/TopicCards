@@ -3,6 +3,7 @@
 namespace TopicCards\DbBackend;
 
 use \TopicCards\iAssociation;
+use TopicCards\iTopicMap;
 
 
 trait AssociationDbAdapter
@@ -114,7 +115,7 @@ trait AssociationDbAdapter
 
         $classes = [ 'Association', $data[ 'type' ] ];
 
-        $transaction = $this->services->db->transaction();
+        $this->services->db_utils->beginTransaction($transaction);
 
         $query = sprintf
         (
@@ -127,6 +128,28 @@ trait AssociationDbAdapter
 
         $transaction->push($query, $bind);
 
+        // Mark type topics
+
+        $type_queries = $this->services->db_utils->tmConstructLabelQueries
+        (
+            $this->topicmap,
+            [ $data[ 'type' ] ],
+            iTopicMap::SUBJECT_ASSOCIATION_TYPE
+        );
+
+        $type_queries = array_merge($type_queries, $this->services->db_utils->tmConstructLabelQueries
+        (
+            $this->topicmap,
+            $data[ 'scope' ],
+            iTopicMap::SUBJECT_SCOPE
+        ));
+
+        foreach ($type_queries as $type_query)
+        {
+            $this->logger->addInfo($type_query['query'], $type_query['bind']);
+            $transaction->push($type_query['query'], $type_query['bind']);
+        }
+
         // TODO: Error handling
 
         $role = new Role($this->services, $this->topicmap);
@@ -134,7 +157,7 @@ trait AssociationDbAdapter
 
         try
         {
-            $transaction->commit();
+            $this->services->db_utils->commit($transaction);
         }
         catch (\GraphAware\Neo4j\Client\Exception\Neo4jException $exception)
         {
@@ -193,6 +216,24 @@ trait AssociationDbAdapter
             }
 
             $property_data[ $key ] = $data[ $key ];
+            
+            if ($key === 'scope')
+            {
+                // Mark type topics
+
+                $type_queries = $this->services->db_utils->tmConstructLabelQueries
+                (
+                    $this->topicmap,
+                    $data[ $key ],
+                    iTopicMap::SUBJECT_SCOPE
+                );
+
+                foreach ($type_queries as $type_query)
+                {
+                    $this->logger->addInfo($type_query['query'], $type_query['bind']);
+                    $transaction->push($type_query['query'], $type_query['bind']);
+                }
+            }
         }
 
         $bind = [ 'id' => $data[ 'id' ] ];
@@ -217,11 +258,26 @@ trait AssociationDbAdapter
                 ' SET node%s',
                 $this->services->db_utils->labelsString([ $data[ 'type' ] ])
             );
+
+            // Mark type topics
+
+            $type_queries = $this->services->db_utils->tmConstructLabelQueries
+            (
+                $this->topicmap,
+                [ $data[ 'type' ] ],
+                iTopicMap::SUBJECT_ASSOCIATION_ROLE_TYPE
+            );
+
+            foreach ($type_queries as $type_query)
+            {
+                $this->logger->addInfo($type_query['query'], $type_query['bind']);
+                $transaction->push($type_query['query'], $type_query['bind']);
+            }
         }
 
         $this->logger->addInfo($query, $bind);
 
-        $transaction = $this->services->db->transaction();
+        $this->services->db_utils->beginTransaction($transaction);
 
         $transaction->push($query, $bind);
 
@@ -246,7 +302,7 @@ trait AssociationDbAdapter
 
         try
         {
-            $transaction->commit();
+            $this->services->db_utils->commit($transaction);
         }
         catch (\GraphAware\Neo4j\Client\Exception\Neo4jException $exception)
         {

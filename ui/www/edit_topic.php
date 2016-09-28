@@ -29,8 +29,6 @@ $tpl[ 'error_html' ] = '';
 
 if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
 {
-    $services->db_utils->beginTransaction();
-
     // When creating a new topic
     
     if (! $topic->isLoaded())
@@ -38,26 +36,22 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
     
     // Names
     
-    $old_names = [ ];
-    $new_names = [ ];
-    
-    foreach ($topic->getNames([ ]) as $name)
-        $old_names[ $name->getId() ] = $name;
-    
     foreach ($_REQUEST[ 'names' ] as $name_arr)
     {
         $name_arr[ 'value' ] = trim($name_arr[ 'value' ]);
-        
-        if ($name_arr[ 'value' ] === '')
-            continue;
-        
-        if (isset($old_names[ $name_arr[ 'id' ] ]))
+
+        if ($name_arr[ 'delete' ] === '1')
         {
-            $name = $old_names[ $name_arr[ 'id' ] ];
+            $name_arr[ 'value' ] = '';
+        }
+
+        if (strlen($name_arr[ 'id' ]) === 0)
+        {
+            $name = $topic->newName();
         }
         else
         {
-            $name = $topic->newName();
+            $name = $topic->getFirstName([ 'id' => $name_arr[ 'id' ] ]);
         }
         
         $name->setTypeId($name_arr[ 'type' ]);
@@ -81,11 +75,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
         
         if (count($scopes) > 0)
             $name->setScopeIds($scopes);
-            
-        $new_names[ ] = $name;
     }
-    
-    $topic->setNames($new_names);
     
     // Types
     
@@ -137,17 +127,23 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
 
     // Occurrences
     
-    // XXX don't re-add all the occurrences, losing their IDs
-    $topic->setOccurrences([ ]);
-    
     foreach ($_REQUEST[ 'occurrences' ] as $occ_arr)
     {
         $occ_arr[ 'value' ] = trim($occ_arr[ 'value' ]);
+
+        if ($occ_arr[ 'delete' ] === '1')
+        {
+            $occ_arr[ 'value' ] = '';
+        }
         
-        if ($occ_arr[ 'value' ] === '')
-            continue;
-            
-        $occurrence = $topic->newOccurrence();
+        if (strlen($occ_arr[ 'id' ]) === 0)
+        {
+            $occurrence = $topic->newOccurrence();
+        }
+        else
+        {
+            $occurrence = $topic->getFirstOccurrence([ 'id' => $occ_arr[ 'id' ] ]);
+        }
         
         $occurrence->setTypeId($occ_arr[ 'type' ]);
         $occurrence->setValue($occ_arr[ 'value' ]);
@@ -180,7 +176,7 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
         $ok = $topic->save();
 
     // Associations
-    
+
     if ($ok >= 0)
     {
         foreach ($_REQUEST[ 'associations' ] as $assoc_arr)
@@ -235,21 +231,30 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
         
             $association->setScopeIds($scopes);
     
-            // XXX don't re-add all the roles, losing their IDs
-            $association->setRoles([ ]);
-    
             foreach ($assoc_arr[ 'roles' ] as $role_arr)
             {
                 $role_arr[ 'type' ] = trim($role_arr[ 'type' ]);
                 $role_arr[ 'player' ] = trim($role_arr[ 'player' ]);
-                
-                if ($role_arr[ 'player' ] === '{this_topic}')
-                    $role_arr[ 'player' ] = $topic_id;
-            
+
                 if (($role_arr[ 'type' ] === '') || ($role_arr[ 'player' ] === ''))
                     continue;
                 
-                $role = $association->newRole();
+                if ($role_arr[ 'player' ] === '{this_topic}')
+                    $role_arr[ 'player' ] = $topic_id;
+
+                if ($role_arr[ 'delete' ] === '1')
+                {
+                    $role_arr[ 'player' ] = '';
+                }
+
+                if (strlen($role_arr[ 'id' ]) === 0)
+                {
+                    $role = $association->newRole();
+                }
+                else
+                {
+                    $role = $association->getFirstRole([ 'id' => $role_arr[ 'id' ] ]);
+                }
         
                 $role->setTypeId($role_arr[ 'type' ]);
                 $role->setPlayerId($role_arr[ 'player' ]);
@@ -268,13 +273,10 @@ if (($_SERVER[ 'REQUEST_METHOD' ] === 'POST') && isset($_REQUEST[ 'names' ]))
 
     if ($ok < 0)
     {
-        $services->db_utils->rollBack();
         $tpl[ 'error_html' ] = htmlspecialchars(sprintf('Could not save topic. Error code: %s', $ok));
     }
     else
     {
-        $services->db_utils->commit();
-        
         if (! empty($_REQUEST[ 'close_after_save' ]))
         {
             $topic_url = sprintf

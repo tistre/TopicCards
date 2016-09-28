@@ -3,6 +3,8 @@
 namespace TopicCards\DbBackend;
 
 
+use TopicCards\iTopicMap;
+
 trait NameDbAdapter
 {
     public function selectAll(array $filters)
@@ -206,6 +208,28 @@ trait NameDbAdapter
 
         $transaction->push($query, $bind);
 
+        // Mark type topics
+
+        $type_queries = $this->services->db_utils->tmConstructLabelQueries
+        (
+            $this->topicmap,
+            [ $data[ 'type' ] ],
+            iTopicMap::SUBJECT_TOPIC_NAME_TYPE
+        );
+
+        $type_queries = array_merge($type_queries, $this->services->db_utils->tmConstructLabelQueries
+        (
+            $this->topicmap,
+            $data[ 'scope' ],
+            iTopicMap::SUBJECT_SCOPE
+        ));
+
+        foreach ($type_queries as $type_query)
+        {
+            $this->logger->addInfo($type_query['query'], $type_query['bind']);
+            $transaction->push($type_query['query'], $type_query['bind']);
+        }
+
         // TODO: error handling
         return 1;
     }
@@ -247,6 +271,24 @@ trait NameDbAdapter
             }
 
             $property_data[ $key ] = $data[ $key ];
+            
+            if ($key === 'scope')
+            {
+                // Mark type topics
+
+                $type_queries = $this->services->db_utils->tmConstructLabelQueries
+                (
+                    $this->topicmap,
+                    $data[ $key ],
+                    iTopicMap::SUBJECT_SCOPE
+                );
+
+                foreach ($type_queries as $type_query)
+                {
+                    $this->logger->addInfo($type_query['query'], $type_query['bind']);
+                    $transaction->push($type_query['query'], $type_query['bind']);
+                }
+            }
         }
         
         $bind = [ 'id' => $data[ 'id' ] ];
@@ -274,7 +316,22 @@ trait NameDbAdapter
                 ' SET node%s',
                 $this->services->db_utils->labelsString([ $data[ 'type' ] ])
             );
-            
+
+            // Mark type topics
+
+            $type_queries = $this->services->db_utils->tmConstructLabelQueries
+            (
+                $this->topicmap,
+                [ $data[ 'type' ] ],
+                iTopicMap::SUBJECT_TOPIC_NAME_TYPE
+            );
+
+            foreach ($type_queries as $type_query)
+            {
+                $this->logger->addInfo($type_query['query'], $type_query['bind']);
+                $transaction->push($type_query['query'], $type_query['bind']);
+            }
+
             $dirty = true;
         }
 

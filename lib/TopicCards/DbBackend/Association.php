@@ -36,7 +36,10 @@ class Association extends Core implements \TopicCards\iAssociation
         foreach ($this->roles as $role)
         {
             $match = true;
-            
+
+            if (isset($filters[ 'id' ]) && ($role->getId() !== $filters[ 'id' ]))
+                $match = false;
+
             if (isset($filters[ 'type_id' ]) && ($role->getTypeId() !== $filters[ 'type_id' ]))
                 $match = false;
                 
@@ -74,6 +77,10 @@ class Association extends Core implements \TopicCards\iAssociation
         elseif (isset($filters[ 'type_id' ]))
         {
             $role->setTypeId($filters[ 'type_id' ]);
+        }
+        elseif (isset($filters[ 'id' ]))
+        {
+            $role->setId($filters[ 'id' ]);
         }
         
         if (isset($filters[ 'player' ]))

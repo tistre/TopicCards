@@ -3,6 +3,7 @@
 namespace TopicCards\DbBackend;
 
 use \TopicCards\iTopic;
+use TopicCards\iTopicMap;
 
 
 trait TopicDbAdapter
@@ -249,8 +250,8 @@ trait TopicDbAdapter
 
         $classes = array_merge([ 'Topic' ], $data[ 'types' ]);
 
-        $transaction = $this->services->db->transaction();
-
+        $this->services->db_utils->beginTransaction($transaction);
+        
         $query = sprintf
         (
             'CREATE (n%s { %s })',
@@ -261,6 +262,21 @@ trait TopicDbAdapter
         $this->logger->addInfo($query, $bind);
         
         $transaction->push($query, $bind);
+        
+        // Mark type topics
+
+        $type_queries = $this->services->db_utils->tmConstructLabelQueries
+        (
+            $this->topicmap,
+            $data[ 'types' ], 
+            iTopicMap::SUBJECT_TOPIC_TYPE
+        );
+        
+        foreach ($type_queries as $type_query)
+        {
+            $this->logger->addInfo($type_query['query'], $type_query['bind']);
+            $transaction->push($type_query['query'], $type_query['bind']);
+        }
 
         // TODO: Error handling
         
@@ -280,7 +296,7 @@ trait TopicDbAdapter
 
         try
         {
-            $transaction->commit();
+            $this->services->db_utils->commit($transaction);
         }
         catch (\GraphAware\Neo4j\Client\Exception\Neo4jException $exception)
         {
@@ -371,11 +387,26 @@ trait TopicDbAdapter
                 ' SET node%s',
                 $this->services->db_utils->labelsString($added_types)
             );
+            
+            // Mark type topics
+
+            $type_queries = $this->services->db_utils->tmConstructLabelQueries
+            (
+                $this->topicmap,
+                $added_types,
+                iTopicMap::SUBJECT_TOPIC_TYPE
+            );
+
+            foreach ($type_queries as $type_query)
+            {
+                $this->logger->addInfo($type_query['query'], $type_query['bind']);
+                $transaction->push($type_query['query'], $type_query['bind']);
+            }
         }
 
         $this->logger->addInfo($query, $bind);
 
-        $transaction = $this->services->db->transaction();
+        $this->services->db_utils->beginTransaction($transaction);
 
         $transaction->push($query, $bind);
 
@@ -414,7 +445,7 @@ trait TopicDbAdapter
 
         try
         {
-            $transaction->commit();
+            $this->services->db_utils->commit($transaction);
         }
         catch (\GraphAware\Neo4j\Client\Exception\Neo4jException $exception)
         {

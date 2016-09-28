@@ -10,8 +10,6 @@ $ok = $services->db_utils->connect();
 if ($ok < 0)
     die('ERROR');
     
-$services->db_utils->beginTransaction();
-
 if (in_array($_REQUEST[ 'reifies_type' ], [ 'name', 'occurrence' ]))
 {
     $topic = $topicmap->newTopic();
@@ -81,14 +79,10 @@ elseif (in_array($_REQUEST[ 'reifies_type' ], [ 'association', 'role' ]))
 
 if ($ok < 0)
 {
-    $services->db_utils->rollBack();
-    
     echo 'ERROR ' . $ok;
 }
 else
 {
-    $services->db_utils->commit();
-
     $edit_topic_url = sprintf
     (
         '%sedit_topic/%s',

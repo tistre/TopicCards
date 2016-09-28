@@ -227,7 +227,9 @@ class XtmImport
             $scope = $this->getTopicRef($subnode);
             
             if (strlen($scope) > 0)
+            {
                 $result[ ] = $scope;
+            }
         }
         
         return $result;
@@ -239,7 +241,9 @@ class XtmImport
         foreach ($node->childNodes as $subnode)
         {
             if ($subnode->nodeType !== XML_ELEMENT_NODE)
+            {
                 continue;
+            }
                 
             if 
             (
@@ -248,10 +252,12 @@ class XtmImport
                 && (strlen($subnode->getAttribute('href')) > 0)
             )
             {
-                $topic_id = $this->topicmap->getTopicIdBySubject($subnode->getAttribute('href'));
+                $topic_id = $this->topicmap->getTopicIdBySubject($subnode->getAttribute('href'), true);
                 
                 if (strlen($topic_id) > 0)
+                {
                     return $topic_id;
+                }
             }
             elseif 
             (
@@ -273,11 +279,13 @@ class XtmImport
                 {
                     // Subject identifier or locator
                     
-                    $topic_id = $this->topicmap->getTopicIdBySubject($href);
+                    $topic_id = $this->topicmap->getTopicIdBySubject($href, true);
                 
                     if (strlen($topic_id) > 0)
+                    {
                         return $topic_id;
-                        
+                    }
+
                     return $href;
                 }
             }

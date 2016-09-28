@@ -3,6 +3,8 @@
 namespace TopicCards\DbBackend;
 
 
+use TopicCards\Utils\DebugUtils;
+
 class TopicMap implements \TopicCards\iTopicMap
 {
     use TopicMapDbAdapter;
@@ -168,9 +170,23 @@ class TopicMap implements \TopicCards\iTopicMap
     }
     
 
-    public function getTopicIdBySubject($uri)
+    public function getTopicIdBySubject($uri, $create_topic = false)
     {
-        return $this->selectTopicBySubject($uri);
+        $result = $this->selectTopicBySubject($uri);
+        
+        if ((strlen($result) === 0) && $create_topic)
+        {
+            $topic = $this->newTopic();
+            $topic->setSubjectIdentifiers([ $uri ]);
+            $ok = $topic->save();
+            
+            if ($ok >= 0)
+            {
+                $result = $topic->getId();
+            }
+        }
+        
+        return $result;
     }
     
     

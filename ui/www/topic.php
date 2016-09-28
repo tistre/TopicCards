@@ -1,13 +1,10 @@
 <?php
 
-use TopicCards\iTopic;
-
 require_once dirname(dirname(__DIR__)) . '/include/www_init.php';
 
 
 function getTopicVars($topic_id, &$result, &$topic_names)
 {
-    global $services;
     global $topicmap;
     
     $result = [ ];

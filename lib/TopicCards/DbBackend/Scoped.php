@@ -39,7 +39,7 @@ trait Scoped
         
         foreach ($topic_subjects as $topic_subject)
         {
-            $topic_id = $this->getTopicMap()->getTopicIdBySubject($topic_subject);
+            $topic_id = $this->getTopicMap()->getTopicIdBySubject($topic_subject, true);
             
             if (strlen($topic_id) === 0)
             {
@@ -54,7 +54,9 @@ trait Scoped
         $ok = $this->setScopeIds($topic_ids);
         
         if ($ok < 0)
+        {
             $result = $ok;
+        }
         
         return $result;
     }

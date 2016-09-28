@@ -20,7 +20,9 @@ if ($getopt->getOperand(0) === '-')
         $filename = trim(fgets(STDIN));
         
         if ($filename === '')
+        {
             continue;
+        }
             
         importFile($filename);
     }
@@ -36,45 +38,48 @@ else
 function importFile($filename)
 {
     global $topicmap;
-    global $services;
     
-    $objects = new \TopicBank\Utils\XtmReader($filename, $topicmap);
-
-    $services->db_utils->connect();
-
-    $services->db_utils->beginTransaction();
+    $objects = new \TopicCards\Utils\XtmReader($filename, $topicmap);
 
     $ok = 0;
 
     foreach ($objects as $object)
     {
         if (! is_object($object))
+        {
             continue;
+        }
             
         $ok = $object->save();
         
         $subject = '';
         
-        if ($object instanceof \TopicBank\Interfaces\iTopic)
+        if ($object instanceof \TopicCards\iTopic)
         {
             foreach ($object->getSubjectIdentifiers() as $subject)
+            {
                 break;
+            }
                 
             if ($subject === '')
             {
                 foreach ($object->getSubjectLocators() as $subject)
+                {
                     break;
+                }
             }
             
             if ($subject !== '')
+            {
                 $subject = sprintf('[%s] ', $subject);
+            }
         }
         
         printf
         (
             "%s: Created %s %s<%s> (%s)\n",
             $filename,
-            ($object instanceof \TopicBank\Interfaces\iTopic ? 'topic' : 'association'),
+            ($object instanceof \TopicCards\iTopic ? 'topic' : 'association'),
             $subject,
             $object->getId(),
             $ok
@@ -82,11 +87,7 @@ function importFile($filename)
     
         if ($ok < 0)
         {
-            $services->db_utils->rollback();
             break;
         }
     }
-
-    if ($ok >= 0)
-        $services->db_utils->commit();
 }
