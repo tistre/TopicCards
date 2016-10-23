@@ -1,13 +1,15 @@
 <?php
 
-namespace TopicBank\Bin;
+namespace TopicBankUi\Bin;
 
-use TopicCards\DbBackend\Search;
-use TopicCards\iTopicMap;
+use TopicCards\Interfaces\iTopicMap;
+use TopicCards\Search\Search;
 use \Ulrichsg\Getopt\Getopt;
 use \Ulrichsg\Getopt\Option;
 
 require_once dirname(__DIR__) . '/include/init.php';
+
+/** @var iTopicMap $topicmap */
 
 // Typical invocation:
 // TOPICBANK_CONFIG=/path/to/config.x.php php bin/reindex.php --recreate --full
@@ -15,7 +17,10 @@ require_once dirname(__DIR__) . '/include/init.php';
 
 class Reindex
 {
+    /** @var iTopicMap */
     protected $topicmap;
+    
+    /** @var Getopt */
     protected $getopt;
     
     
@@ -51,7 +56,7 @@ class Reindex
         
         $start_time = microtime(true);
         
-        $index = $this->topicmap->getSearchIndex();
+        $index = $this->topicmap->getSearch()->getIndexName();
         
         if ($this->getopt[ 'index' ])
             $index = $this->getopt[ 'index' ];
@@ -195,12 +200,8 @@ class Reindex
     
     protected function recreateIndex($index, $params)
     {
-        $services = $this->topicmap->getServices();
+        $elasticsearch = $this->topicmap->getSearch()->getConnection();
         
-        $services->search->init();
-
-        $elasticsearch = $services->search->getElasticSearchClient();
-
         if ($elasticsearch->indices()->exists([ 'index' => $index ]))
         {
             printf("Deleting index %s...\n", $index);
@@ -242,7 +243,7 @@ class Reindex
             $ok = $topic->load($topic_id);
     
             if ($ok >= 0)
-                $ok = $topic->index();
+                $ok = $topic->getSearchAdapter()->index();
     
             printf("#%d %s (%s)\n", ++$cnt, $topic->getId(), $ok);
     
@@ -277,7 +278,7 @@ class Reindex
             $ok = $association->load($association_id);
     
             if ($ok >= 0)
-                $ok = $association->index();
+                $ok = $association->getSearchAdapter()->index();
     
             printf("#%d %s (%s)\n", ++$cnt, $association->getId(), $ok);
     
