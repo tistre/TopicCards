@@ -2,6 +2,8 @@
 
 require_once dirname(dirname(__DIR__)) . '/include/www_init.php';
 
+/** @var \TopicCards\Interfaces\iTopicMap $topicmap */
+
 $tpl = [ ];
 
 $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
@@ -336,7 +338,7 @@ foreach ($tpl[ 'topic' ][ 'names' ] as $i => $name)
         $tpl[ 'topic_names' ][ $scope ] = false;
 }
 
-$tpl[ 'topic' ][ 'reifies_summary_html' ] = \TopicBank\Ui\Utils::getReifiesSummary($topic);
+$tpl[ 'topic' ][ 'reifies_summary_html' ] = \TopicBankUi\Utils::getReifiesSummary($topic);
 
 // Fill associations
 
@@ -367,7 +369,6 @@ foreach ($association_ids as $association_id)
     usort($association_arr[ 'roles' ], function($a, $b)
     {
         $a = $a[ 'this_topic' ];
-        $b = $b[ 'this_topic' ];
         
         return ($a === true ? 0 : 1);
     });

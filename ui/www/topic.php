@@ -2,6 +2,8 @@
 
 require_once dirname(dirname(__DIR__)) . '/include/www_init.php';
 
+/** @var \TopicCards\Interfaces\iTopicMap $topicmap */
+
 
 function getTopicVars($topic_id, &$result, &$topic_names)
 {
@@ -153,7 +155,7 @@ function getTopicVars($topic_id, &$result, &$topic_names)
     
     // Topic is a reifier?
 
-    $result[ 'topic' ][ 'reifies_summary_html' ] = \TopicBank\Ui\Utils::getReifiesSummary($topic);
+    $result[ 'topic' ][ 'reifies_summary_html' ] = \TopicBankUi\Utils::getReifiesSummary($topic);
     
     return $result;
 }

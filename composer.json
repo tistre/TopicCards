@@ -1,6 +1,13 @@
 {
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/home/tstrehle/TopicCards-lib"
+        }
+    ],
     "require": 
     {
+        "tistre/topiccards-lib": "dev-master",
         "components/jquery": "~2.1",
         "elasticsearch/elasticsearch": "~1.0",
         "tinymce/tinymce": "~4.1",

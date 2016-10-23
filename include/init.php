@@ -12,10 +12,10 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 spl_autoload_register(function($class) 
 {
     // project-specific namespace prefix
-    $prefix = 'TopicCards\\';
+    $prefix = 'TopicCardsUi\\';
 
     // base directory for the namespace prefix
-    $base_dir = dirname(__DIR__) . '/lib/TopicCards/';
+    $base_dir = dirname(__DIR__) . '/lib/';
 
     // does the class use the namespace prefix?
     $len = strlen($prefix);

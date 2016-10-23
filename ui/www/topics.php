@@ -1,8 +1,10 @@
 <?php
 
-use TopicCards\iTopic;
+use \TopicCards\Utils\StringUtils;
 
 require_once dirname(dirname(__DIR__)) . '/include/www_init.php';
+
+/** @var \TopicCards\Interfaces\iTopicMap $topicmap */
 
 $tpl = [ ];
 
@@ -50,13 +52,13 @@ else
     $query[ 'facets' ][ 'types' ] = [ 'terms' => [ 'field' => 'topic_type_id' ] ];
 }
         
-$response = [ ];
-    
-$response = $services->search->search($topicmap,
-[
-    'type' => 'topic',
-    'body' => $query
-]);
+$response = $topicmap->getSearch()->search
+(
+    [
+        'type' => 'topic',
+        'body' => $query
+    ]
+);
 
 $tpl[ 'fulltext_query' ] = $fulltext_query;
 
@@ -130,7 +132,7 @@ foreach ($topicmap->getTopicTypeIds([ 'get_mode' => 'all' ]) as $id)
     ];
 }
 
-TopicCards\Utils\StringUtils::usortByKey($tpl[ 'topic_types' ], 'label');
+StringUtils::usortByKey($tpl[ 'topic_types' ], 'label');
 
 $tpl[ 'type_facets' ] = [ ];
 

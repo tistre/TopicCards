@@ -1,8 +1,8 @@
 <?php
 
-namespace TopicBank\Ui;
+namespace TopicBankUi;
 
-use \TopicCards\iTopic;
+use TopicCards\Interfaces\iTopic;
 
 
 class Utils

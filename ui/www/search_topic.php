@@ -2,6 +2,8 @@
 
 require_once dirname(dirname(__DIR__)) . '/include/www_init.php';
 
+/** @var \TopicCards\Interfaces\iTopicMap $topicmap */
+
 $tpl = [ ];
 
 $tpl[ 'topicbank_base_url' ] = TOPICBANK_BASE_URL;
@@ -33,11 +35,13 @@ if (strlen($type_query) > 0)
     
 $response = [ ];
     
-$response = $services->search->search($topicmap,
-[
-    'type' => 'topic',
-    'body' => $query
-]);
+$response = $topicmap->getSearch()->search
+(
+    [
+        'type' => 'topic',
+        'body' => $query
+    ]
+);
 
 $tpl[ 'results' ] = [ ];
 
