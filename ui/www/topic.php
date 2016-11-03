@@ -2,7 +2,7 @@
 
 require_once dirname(dirname(__DIR__)) . '/include/www_init.php';
 
-/** @var \TopicCards\Interfaces\iTopicMap $topicmap */
+/** @var \TopicCards\Interfaces\TopicMapInterface $topicmap */
 
 
 function getTopicVars($topic_id, &$result, &$topic_names)

@@ -2,12 +2,12 @@
 
 namespace TopicBankUi;
 
-use TopicCards\Interfaces\iTopic;
+use TopicCards\Interfaces\TopicInterface;
 
 
 class Utils
 {
-    public static function getReifiesSummary(iTopic $topic)
+    public static function getReifiesSummary(TopicInterface $topic)
     {
         $topicmap = $topic->getTopicMap();
         
@@ -18,12 +18,12 @@ class Utils
         if (! $is_reifier)
             return $result;
         
-        $objects = $topic->getReifiedObject($reifies_what);
+        $objects = $topic->getReifiedObject();
     
         if ($objects === false)
             return $result;
     
-        if ($reifies_what === iTopic::REIFIES_NAME)
+        if ($reifies_what === TopicInterface::REIFIES_NAME)
         {
             $result = sprintf
             (
@@ -34,7 +34,7 @@ class Utils
                 htmlspecialchars($topicmap->getTopicLabel($objects[ 'topic' ]->getId()))
             );
         }
-        elseif ($reifies_what === iTopic::REIFIES_OCCURRENCE)
+        elseif ($reifies_what === TopicInterface::REIFIES_OCCURRENCE)
         {
             $result = sprintf
             (
@@ -46,7 +46,7 @@ class Utils
                 htmlspecialchars($topicmap->getTopicLabel($objects[ 'topic' ]->getId()))
             );
         }
-        elseif ($reifies_what === iTopic::REIFIES_ASSOCIATION)
+        elseif ($reifies_what === TopicInterface::REIFIES_ASSOCIATION)
         {
             $players = [ ];
         
@@ -68,7 +68,7 @@ class Utils
                 implode(' and ', $players)
             );
         }
-        elseif ($reifies_what === iTopic::REIFIES_ROLE)
+        elseif ($reifies_what === TopicInterface::REIFIES_ROLE)
         {
             $other_players = [ ];
         

@@ -4,7 +4,7 @@ use \TopicCards\Utils\StringUtils;
 
 require_once dirname(dirname(__DIR__)) . '/include/www_init.php';
 
-/** @var \TopicCards\Interfaces\iTopicMap $topicmap */
+/** @var \TopicCards\Interfaces\TopicMapInterface $topicmap */
 
 $tpl = [ ];
 

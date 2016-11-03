@@ -1,15 +1,15 @@
 <?php
 
-namespace TopicBankUi\Bin;
+namespace TopicCardsUi\Bin;
 
-use TopicCards\Interfaces\iTopicMap;
-use TopicCards\Search\Search;
+use \TopicCards\Interfaces\TopicMapInterface;
+use \TopicCards\Search\Search;
 use \Ulrichsg\Getopt\Getopt;
 use \Ulrichsg\Getopt\Option;
 
 require_once dirname(__DIR__) . '/include/init.php';
 
-/** @var iTopicMap $topicmap */
+/** @var TopicMapInterface $topicmap */
 
 // Typical invocation:
 // TOPICBANK_CONFIG=/path/to/config.x.php php bin/reindex.php --recreate --full
@@ -17,14 +17,14 @@ require_once dirname(__DIR__) . '/include/init.php';
 
 class Reindex
 {
-    /** @var iTopicMap */
+    /** @var TopicMapInterface */
     protected $topicmap;
     
     /** @var Getopt */
     protected $getopt;
     
     
-    public function __construct(iTopicMap $topicmap)
+    public function __construct(TopicMapInterface $topicmap)
     {
         $this->topicmap = $topicmap;
     }

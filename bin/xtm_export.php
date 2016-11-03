@@ -1,9 +1,15 @@
 <?php
 
-use Ulrichsg\Getopt\Getopt;
-use Ulrichsg\Getopt\Option;
+namespace TopicCardsUi\Bin;
+
+use \TopicCards\Interfaces\TopicMapInterface;
+use \TopicCards\Utils\XtmExport;
+use \Ulrichsg\Getopt\Getopt;
+use \Ulrichsg\Getopt\Option;
 
 require_once dirname(__DIR__) . '/include/init.php';
+
+/** @var TopicMapInterface $topicmap */
 
 
 function addObject($id)
@@ -29,17 +35,33 @@ function addTopic($topic_id)
     
     $topic = $topicmap->newTopic();
 
+    // Allow specifying topic ID or subject identifier
+    
     $ok = $topic->load($topic_id);
 
     if ($ok < 0)
+    {
+        $topic_id = $topicmap->getTopicIdBySubject($topic_id);
+        
+        if (strlen($topic_id) > 0)
+        {
+            $ok = $topic->load($topic_id);
+        }
+    }
+    
+    if ($ok < 0)
+    {
         return;
+    }
 
     $objects[ ] = $topic;
     
     if ($getopt[ 'with_associations' ])
     {
         foreach ($topicmap->getAssociationIds([ 'role_player_id' => $topic_id ]) as $association_id)
+        {
             addAssociation($association_id);
+        }
     }    
 }
 
@@ -114,7 +136,7 @@ else
     }
 }
 
-$exporter = new \TopicCards\Utils\XtmExport();
+$exporter = new XtmExport();
 
 echo $exporter->exportObjects($objects);
 

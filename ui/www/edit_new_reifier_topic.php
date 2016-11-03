@@ -2,14 +2,11 @@
 
 require_once dirname(dirname(__DIR__)) . '/include/www_init.php';
 
+/** @var \TopicCards\Interfaces\TopicMapInterface $topicmap */
+
 if ($_SERVER[ 'REQUEST_METHOD' ] !== 'POST')
     die('Please POST');
 
-$ok = $services->db_utils->connect();
-
-if ($ok < 0)
-    die('ERROR');
-    
 if (in_array($_REQUEST[ 'reifies_type' ], [ 'name', 'occurrence' ]))
 {
     $topic = $topicmap->newTopic();
@@ -74,7 +71,9 @@ elseif (in_array($_REQUEST[ 'reifies_type' ], [ 'association', 'role' ]))
     }
 
     if ($ok >= 0)
+    {
         $ok = $association->save();
+    }
 }
 
 if ($ok < 0)
