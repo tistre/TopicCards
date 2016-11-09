@@ -79,7 +79,7 @@ function importFile($filename)
         (
             "%s: Created %s %s<%s> (%s)\n",
             $filename,
-            ($object instanceof \TopicCards\iTopic ? 'topic' : 'association'),
+            ($object instanceof \TopicCards\Interfaces\TopicInterface ? 'topic' : 'association'),
             $subject,
             $object->getId(),
             $ok
