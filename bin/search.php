@@ -38,11 +38,13 @@ $query =
     'query' => [ 'query_string' => [ 'query' => $qstring ] ]
 ];
 
-$response = $services->search->search($topicmap,
-[
-    'type' => 'topic',
-    'body' => $query
-]);
+$response = $topicmap->getSearch()->search
+(
+    [
+        'type' => 'topic',
+        'body' => $query
+    ]
+);
 
 if ($response === false)
     exit;
