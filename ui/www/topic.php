@@ -72,7 +72,7 @@ function getTopicVars($topic_id, &$result, &$topic_names)
     // Fill occurrence_type_index
 
     $result[ 'occurrence_type_index' ] = [ ];
-
+    
     foreach ($result[ 'topic' ][ 'occurrences' ] as $key => $occurrence)
     {
         $occurrence_type = $occurrence[ 'type' ];
@@ -84,7 +84,7 @@ function getTopicVars($topic_id, &$result, &$topic_names)
     
         $topic_names[ $occurrence_type ] = false;
     }
-
+    
     // Fill associations and associations_type_index, group by type and role
 
     $association_ids = $topicmap->getAssociationIds([ 'role_player_id' => $topic_id ]);
@@ -180,9 +180,9 @@ if (strlen($topic_id) === 0)
 $tpl[ 'edit_url' ] = sprintf('%sedit_topic/%s', TOPICBANK_BASE_URL, $topic_id);
 $tpl[ 'delete_url' ] = sprintf('%sdelete_topic/%s', TOPICBANK_BASE_URL, $topic_id);
 
-$tpl[ 'id_text' ] = $topicmap->getTopicIdBySubject('http://schema.org/text');
-$tpl[ 'id_xhtml' ] = $topicmap->getTopicIdBySubject('http://www.w3.org/1999/xhtml');
-$tpl[ 'id_anyuri' ] = $topicmap->getTopicIdBySubject('http://www.w3.org/2001/XMLSchema#anyURI');
+$tpl[ 'id_text' ] = $topicmap->getTopicIdBySubject('http://schema.org/text', true);
+$tpl[ 'id_xhtml' ] = $topicmap->getTopicIdBySubject('http://www.w3.org/1999/xhtml', true);
+$tpl[ 'id_anyuri' ] = $topicmap->getTopicIdBySubject('http://www.w3.org/2001/XMLSchema#anyURI', true);
 
 getTopicVars($topic_id, $topic_vars, $tpl[ 'topic_names' ]);
 

@@ -305,8 +305,8 @@ $tpl[ 'topic' ] = $topic->getAll();
 foreach ($tpl[ 'topic' ][ 'types' ] as $helper_topic_id)
     $tpl[ 'topic_names' ][ $helper_topic_id ] = false;
 
-$tpl[ 'id_text' ] = $topicmap->getTopicIdBySubject('http://schema.org/text');
-$tpl[ 'id_xhtml' ] = $topicmap->getTopicIdBySubject('http://www.w3.org/1999/xhtml');
+$tpl[ 'id_text' ] = $topicmap->getTopicIdBySubject('http://schema.org/text', true);
+$tpl[ 'id_xhtml' ] = $topicmap->getTopicIdBySubject('http://www.w3.org/1999/xhtml', true);
 
 foreach ($tpl[ 'topic' ][ 'occurrences' ] as $i => $occurrence_arr)
 {
