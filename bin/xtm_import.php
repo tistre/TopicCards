@@ -49,8 +49,24 @@ function importFile($filename)
         {
             continue;
         }
-            
-        $ok = $object->save();
+        
+        try
+        {
+            $ok = $object->save();
+        }
+        catch (\TopicCards\Exception\TopicCardsException $exception)
+        {
+            printf
+            (
+                "%s: ERROR trying to create %s %s<%s> (%s: %s)\n",
+                $filename,
+                ($object instanceof \TopicCards\Interfaces\TopicInterface ? 'topic' : 'association'),
+                $subject,
+                $object->getId(),
+                $exception->getCode(),
+                $exception->getMessage()
+            );
+        }
         
         $subject = '';
         
