@@ -8,6 +8,13 @@ require_once dirname(dirname(__DIR__)) . '/include/www_init.php';
 function getTopicVars($topic_id, &$result, &$topic_names)
 {
     global $topicmap;
+    static $cache = [ ];
+    
+    if (isset($cache[ $topic_id ]))
+    {
+        $result = $cache[ $topic_id ];
+        return;
+    }
     
     $result = [ ];
     
@@ -156,6 +163,8 @@ function getTopicVars($topic_id, &$result, &$topic_names)
     // Topic is a reifier?
 
     $result[ 'topic' ][ 'reifies_summary_html' ] = \TopicBankUi\Utils::getReifiesSummary($topic);
+    
+    $cache[ $topic_id ] = $result;
     
     return $result;
 }
