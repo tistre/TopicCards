@@ -1,6 +1,7 @@
 # Config files
 
 include/config.*.php
+httpd.*.conf
 users.htpasswd
 
 # Composer related
