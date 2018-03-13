@@ -14,7 +14,8 @@ trait AssociationSearchAdapter
     protected function getIndexFields()
     {
         $result = 
-        [ 
+        [
+            'type' => $this->getSearchType(),
             // XXX add sort date
             'association_type_id' => $this->getTypeId(),
             'has_role_type_id' => [ ],

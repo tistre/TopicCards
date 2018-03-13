@@ -14,7 +14,8 @@ trait TopicSearchAdapter
     protected function getIndexFields()
     {
         $result = 
-        [ 
+        [
+            'type' => $this->getSearchType(),
             // XXX add sort date
             'label' => $this->getLabel(),
             'name' => [ ],

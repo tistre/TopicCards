@@ -35,26 +35,27 @@ $query =
     'size' => $page_size,
     'from' => ($page_size * ($page_num - 1)),
     // XXX add date sorting
-    'sort' => (strlen($fulltext_query) > 0 ? '_score' : 'label.raw')
+    //'sort' => (strlen($fulltext_query) > 0 ? '_score' : 'label.raw')
+    'query' => ['bool' => ['filter' => [['term' => ['type' => 'topic']]]]]
 ];
 
 if (strlen($fulltext_query) > 0)
-    $query[ 'query' ][ 'filtered' ][ 'query' ][ 'match' ][ '_all' ] = $fulltext_query;
+    $query['query']['bool']['must'] = [['match' => ['fulltext' => $fulltext_query]]];
 
 if (strlen($type_query) > 0)
 {
-    $query[ 'query' ][ 'filtered' ][ 'filter' ][ 'term' ][ 'topic_type_id' ] = $type_query;
+    $query['query']['bool']['filter'][] = ['term' => ['topic_type_id' => $type_query]];
 }
 else
 {
-    $query[ 'facets' ][ 'types' ] = [ 'terms' => [ 'field' => 'topic_type_id' ] ];
+    //$query[ 'facets' ][ 'types' ] = [ 'terms' => [ 'field' => 'topic_type_id' ] ];
 }
         
 $response = [ ];
     
 $response = $services->search->search($topicmap,
 [
-    'type' => 'topic',
+    'type' => '_doc',
     'body' => $query
 ]);
 

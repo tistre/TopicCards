@@ -9,7 +9,7 @@ trait Searchable
     {
         $response = $this->services->search->index($this->topicmap, 
         [
-            'type' => $this->getSearchType(),
+            'type' => '_doc',
             'id' => $this->getId(),
             'body' => $this->getIndexFields()
         ]);
@@ -25,7 +25,7 @@ trait Searchable
     {
         $response = $this->services->search->delete($this->topicmap,
         [
-            'type' => $this->getSearchType(),
+            'type' => '_doc',
             'id' => $this->getId()
         ]);
 
@@ -40,7 +40,7 @@ trait Searchable
     {
         return $this->services->search->get($this->topicmap,
         [
-            'type' => $this->getSearchType(),
+            'type' => '_doc',
             'id' => $this->getId()
         ]);
     }    

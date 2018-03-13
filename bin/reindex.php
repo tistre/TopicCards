@@ -15,14 +15,14 @@ class Reindex
 {
     protected $topicmap;
     protected $getopt;
-    
-    
+
+
     public function __construct(\TopicBank\Interfaces\iTopicMap $topicmap)
     {
         $this->topicmap = $topicmap;
     }
-    
-    
+
+
     public function execute()
     {
         $this->getopt = new Getopt(
@@ -38,34 +38,34 @@ class Reindex
         ]);
 
         $this->getopt->parse();
-    
+
         if ($this->getopt[ 'help' ])
         {
             $this->getopt->setBanner("\nTopicBank Elasticsearch reindex\n\n");
-    
+
             echo $this->getopt->getHelpText();
             exit;
         }
-        
+
         $start_time = microtime(true);
-        
+
         $index = $this->topicmap->getSearchIndex();
-        
+
         if ($this->getopt[ 'index' ])
             $index = $this->getopt[ 'index' ];
-        
+
         if ($this->getopt[ 'recreate' ])
         {
             $this->recreateIndex
             (
-                $index, 
+                $index,
                 $this->getIndexParams($index)
             );
         }
-        
+
         $this->indexTopics($topic_summary);
         $this->indexAssociations($association_summary);
-        
+
         echo "Done.\n";
 
         echo $topic_summary . $association_summary;
@@ -75,14 +75,14 @@ class Reindex
 
         printf("Total time: %.1f s = %d minutes\n", $seconds, $minutes);
     }
-    
-    
+
+
     protected function getIndexParams($index)
     {
         $params =
         [
             'index' => $index,
-            'body' => 
+            'body' =>
             [
             /*
                 'settings' =>
@@ -91,10 +91,10 @@ class Reindex
                     [
                         'analyzer' =>
                         [
-                            'ducet_sort' => 
+                            'ducet_sort' =>
                             [
                                 'tokenizer' => 'keyword',
-                                'filter' => [ 'icu_collation' ] 
+                                'filter' => [ 'icu_collation' ]
                             ]
                         ]
                     ]
@@ -102,73 +102,69 @@ class Reindex
                 */
                 'mappings' =>
                 [
-                    'topic' =>
+                    '_doc' =>
                     [
                         '_source' => [ 'enabled' => true ],
-                        'properties' => 
+                        'properties' =>
                         [
-                            'label' => 
-                            [ 
-                                'type' => 'string',
+                            'association_type_id' =>
+                            [
+                                'type' => 'keyword'
+                            ],
+                            'fulltext' =>
+                            [
+                                'type' => 'text'
+                            ],
+                            'has_name_type_id' =>
+                            [
+                                'type' => 'keyword'
+                            ],
+                            'has_occurrence_type_id' =>
+                            [
+                                'type' => 'keyword'
+                            ],
+                            'has_player_id' =>
+                            [
+                                'type' => 'keyword'
+                            ],
+                            'has_role_type_id' =>
+                            [
+                                'type' => 'keyword'
+                            ],
+                            'label' =>
+                            [
+                                'type' => 'text',
+                                'copy_to' => 'fulltext',
                                 'fields' =>
                                 [
-                                    'raw' => 
+                                    'raw' =>
                                     [
-                                        'type' => 'string',
-                                        'index' => 'not_analyzed'
+                                        'type' => 'keyword'
                                     ]
                                 ]
                             ],
-                            'name' => 
-                            [ 
-                                'type' => 'string'
+                            'name' =>
+                            [
+                                'type' => 'text',
+                                'copy_to' => 'fulltext'
                             ],
-                            'has_name_type_id' => 
-                            [ 
-                                'type' => 'string',
-                                'index' => 'not_analyzed'
+                            'occurrence' =>
+                            [
+                                'type' => 'text',
+                                'copy_to' => 'fulltext'
                             ],
-                            'topic_type_id' => 
-                            [ 
-                                'type' => 'string',
-                                'index' => 'not_analyzed'
+                            'topic_type_id' =>
+                            [
+                                'type' => 'keyword'
                             ],
-                            'subject' => 
-                            [ 
-                                'type' => 'string',
-                                'index' => 'not_analyzed'
+                            'type' =>
+                            [
+                                'type' => 'keyword'
                             ],
-                            'occurrence' => 
-                            [ 
-                                'type' => 'string'
+                            'subject' =>
+                            [
+                                'type' => 'keyword'
                             ],
-                            'has_occurrence_type_id' => 
-                            [ 
-                                'type' => 'string',
-                                'index' => 'not_analyzed'
-                            ]
-                        ]
-                    ],
-                    'association' => 
-                    [
-                        '_source' => [ 'enabled' => true ],
-                        'properties' => 
-                        [
-                            'association_type_id' => 
-                            [ 
-                                'type' => 'string',
-                                'index' => 'not_analyzed'
-                            ],
-                            'has_role_type_id' => 
-                            [ 
-                                'type' => 'string',
-                                'index' => 'not_analyzed'
-                            ],
-                            'has_player_id' => 
-                            [ 
-                                'type' => 'string',
-                                'index' => 'not_analyzed'
-                            ]
                         ]
                     ]
                 ]
@@ -179,22 +175,22 @@ class Reindex
 
         $this->topicmap->trigger
         (
-            \TopicBank\Backends\Db\Search::EVENT_INDEX_PARAMS, 
+            \TopicBank\Backends\Db\Search::EVENT_INDEX_PARAMS,
             [ 'index_params' => $params ],
             $callback_result
         );
 
         if (isset($callback_result[ 'index_params' ]) && is_array($callback_result[ 'index_params' ]))
             $params = $callback_result[ 'index_params' ];
-    
+
         return $params;
     }
-    
-    
+
+
     protected function recreateIndex($index, $params)
     {
         $services = $this->topicmap->getServices();
-        
+
         $services->search->init();
 
         $elasticsearch = $services->search->getElasticSearchClient();
@@ -225,10 +221,10 @@ class Reindex
         if ($this->getopt[ 'full' ])
         {
             $limit = 0;
-        
+
             if ($this->getopt[ 'limit' ])
                 $limit = $this->getopt[ 'limit' ];
-                
+
             $topic_ids = $this->topicmap->getTopicIds([ 'limit' => $limit ]);
         }
 
@@ -238,12 +234,12 @@ class Reindex
         foreach ($topic_ids as $topic_id)
         {
             $ok = $topic->load($topic_id);
-    
+
             if ($ok >= 0)
                 $ok = $topic->index();
-    
+
             printf("#%d %s (%s)\n", ++$cnt, $topic->getId(), $ok);
-    
+
             if (($limit > 0) && ($cnt >= $limit))
                 break;
         }
@@ -255,7 +251,7 @@ class Reindex
     protected function indexAssociations(&$summary)
     {
         $limit = 0;
-        
+
         if ($this->getopt[ 'full' ])
         {
             if ($this->getopt[ 'limit' ])
@@ -263,7 +259,7 @@ class Reindex
 
             $association_ids = $this->topicmap->getAssociationIds([ 'limit' => $limit ]);
         }
-        
+
         echo "Indexing associations...\n";
 
         $association = $this->topicmap->newAssociation();
@@ -273,20 +269,20 @@ class Reindex
         foreach ($association_ids as $association_id)
         {
             $ok = $association->load($association_id);
-    
+
             if ($ok >= 0)
                 $ok = $association->index();
-    
+
             printf("#%d %s (%s)\n", ++$cnt, $association->getId(), $ok);
-    
+
             if (($limit > 0) && ($cnt >= $limit))
                 break;
         }
 
         $summary = $this->formatSummary('association', $cnt, $start_time);
     }
-    
-    
+
+
     protected function formatSummary($type, $cnt, $start_time)
     {
         $total_time = (microtime(true) - $start_time);

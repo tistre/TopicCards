@@ -22,7 +22,8 @@ class Search
         if ($this->elasticsearch !== false)
             return 0;
         
-        $this->elasticsearch = new \Elasticsearch\Client($this->services->getSearchParams());
+        // Ignoring $this->services->getSearchParams() for now, seems unused
+        $this->elasticsearch = \Elasticsearch\ClientBuilder::create()->build();
         
         return 1;
     }
