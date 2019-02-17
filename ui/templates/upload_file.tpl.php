@@ -56,7 +56,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     
     <script src="<?=$tpl[ 'topicbank_base_url' ]?>jquery/jquery.min.js"></script>
     <script src="<?=$tpl[ 'topicbank_base_url' ]?>bootstrap/js/bootstrap.min.js"></script>
-    <script src="<?=$tpl[ 'topicbank_base_url' ]?>tinymce/tinymce.jquery.min.js"></script>
+    <script src="<?=$tpl[ 'topicbank_base_url' ]?>tinymce/tinymce.min.js"></script>
     
   </body>
 </html>

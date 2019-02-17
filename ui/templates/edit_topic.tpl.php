@@ -831,7 +831,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     
     <script src="<?=$tpl[ 'topicbank_base_url' ]?>jquery/jquery.min.js"></script>
     <script src="<?=$tpl[ 'topicbank_base_url' ]?>bootstrap/js/bootstrap.min.js"></script>
-    <script src="<?=$tpl[ 'topicbank_base_url' ]?>tinymce/tinymce.jquery.min.js"></script>
+    <script src="<?=$tpl[ 'topicbank_base_url' ]?>tinymce/tinymce.js"></script>
     
     <script>
     // <![CDATA[
@@ -1126,6 +1126,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         tinymce.init(
         {
             entity_encoding: 'raw',
+            doctype:"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' "
+                + "'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>",
             gecko_spellcheck: true,
             menubar: false,
             plugins: [ 'link', 'code' ],
