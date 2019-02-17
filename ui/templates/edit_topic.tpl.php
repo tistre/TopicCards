@@ -958,7 +958,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
                 return;
             }
             
-            $source = $(e.target);
+            $source = $(e.target).closest('button');
             
             $source_id = $source.find('span[data-topicbank_element="id"]');
             $source_name = $source.find('span[data-topicbank_element="name"]');
