@@ -3,25 +3,23 @@ var/
 
 # Config files
 
-app/include/config.*.php
-app/httpd.*.conf
-app/users.htpasswd
+topicbank/include/config.*.php
+topicbank/httpd.*.conf
+topicbank/users.htpasswd
 
 # Composer related
 
-app/components/
-app/composer.phar
-app/vendor/
+topicbank/vendor/
 
 # Experimental
 
-app/bin/getopt-test.php
-app/bin/test.php
-app/bin/xmlreader.php
-app/bin/xtm-20-schema.dtd
-app/bin/xtm-20-schema.relax
-app/tests/config.php
-app/ui/templates/association.tpl.php
-app/ui/templates/topic.tpl.php.association_link
-app/ui/www/association.php
-app/ui/www/phpinfo.php
+topicbank/bin/getopt-test.php
+topicbank/bin/test.php
+topicbank/bin/xmlreader.php
+topicbank/bin/xtm-20-schema.dtd
+topicbank/bin/xtm-20-schema.relax
+topicbank/tests/config.php
+topicbank/ui/templates/association.tpl.php
+topicbank/ui/templates/topic.tpl.php.association_link
+topicbank/ui/www/association.php
+topicbank/ui/www/phpinfo.php

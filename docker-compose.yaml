@@ -20,7 +20,7 @@ services:
     ports:
     - "8084:80"
     volumes:
-    - ./app:/opt/app
+    - ./topicbank:/opt/topicbank
     - ./docker/web/httpd.conf:/etc/apache2/sites-enabled/100-app.conf
     - ./docker/web/php-app.ini:/usr/local/etc/php/conf.d/php-app.ini
     - ./var/topicbank-data:/var/opt/topicbank
