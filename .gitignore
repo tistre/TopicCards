@@ -1,3 +1,6 @@
+# Data
+var/
+
 # Config files
 
 app/include/config.*.php

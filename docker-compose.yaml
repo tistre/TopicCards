@@ -1,0 +1,26 @@
+version: '3.0'
+
+services:
+  db:
+    image: postgres:12
+    volumes:
+    - ./var/postgres-data:/var/lib/postgresql/data
+    - ./var/tmp:/tmp/app-tmp
+    restart: always
+    environment:
+      POSTGRES_USER: topicbank
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: topicbank
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/web/Dockerfile
+    depends_on:
+      - db
+    ports:
+    - "8084:80"
+    volumes:
+    - ./app:/opt/app
+    - ./docker/web/httpd.conf:/etc/apache2/sites-enabled/100-app.conf
+    - ./docker/web/php-app.ini:/usr/local/etc/php/conf.d/php-app.ini
+    - ./var/topicbank-data:/var/opt/topicbank
