@@ -11,6 +11,12 @@ services:
       POSTGRES_USER: topicbank
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: topicbank
+  search:
+    image: library/elasticsearch:6.8.13
+    volumes:
+    - ./var/elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+    - discovery.type=single-node
   web:
     build:
       context: .

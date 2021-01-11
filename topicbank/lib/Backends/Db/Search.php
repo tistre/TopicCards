@@ -21,10 +21,18 @@ class Search
     {
         if ($this->elasticsearch !== false)
             return 0;
-        
-        // Ignoring $this->services->getSearchParams() for now, seems unused
-        $this->elasticsearch = \Elasticsearch\ClientBuilder::create()->build();
-        
+
+
+        $clientBuilder = \Elasticsearch\ClientBuilder::create();
+
+        $search_params = $this->services->getSearchParams();
+
+        if (!empty($search_params['hosts'])) {
+            $clientBuilder->setHosts($search_params['hosts']);
+        }
+
+        $this->elasticsearch = $clientBuilder->build();
+
         return 1;
     }
     
