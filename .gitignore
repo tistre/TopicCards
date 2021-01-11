@@ -1,25 +1,24 @@
 # Config files
 
-include/config.*.php
-httpd.*.conf
-users.htpasswd
+app/include/config.*.php
+app/httpd.*.conf
+app/users.htpasswd
 
 # Composer related
 
-components/
-composer.phar
-vendor/
+app/components/
+app/composer.phar
+app/vendor/
 
 # Experimental
 
-bin/getopt-test.php
-bin/test.php
-bin/xmlreader.php
-bin/xtm-20-schema.dtd
-bin/xtm-20-schema.relax
-tests/config.php
-ui/templates/association.tpl.php
-ui/templates/topic.tpl.php.association_link
-ui/www/association.php
-ui/www/phpinfo.php
-
+app/bin/getopt-test.php
+app/bin/test.php
+app/bin/xmlreader.php
+app/bin/xtm-20-schema.dtd
+app/bin/xtm-20-schema.relax
+app/tests/config.php
+app/ui/templates/association.tpl.php
+app/ui/templates/topic.tpl.php.association_link
+app/ui/www/association.php
+app/ui/www/phpinfo.php
