@@ -1,8 +1,14 @@
-TopicCards (formerly TopicBank)
-===============================
+TopicCards
+==========
 
-Topic Maps (TMDM / XTM) experiments in PHP
+Build the PHP Docker image:
 
-![View Topic screenshot](screenshot_view_topic.png)
+```
+$ docker compose build php
+```
 
-![Edit Topic screenshot](screenshot_edit_topic.png)
+Install dependencies:
+
+```
+$ docker compose run --workdir /opt/app php composer install
+```
