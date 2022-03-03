@@ -1,0 +1,12 @@
+elasticsearch:
+  hosts:
+  - search
+  index: topiccards-0001
+neo4j:
+  driver:
+    alias: bolt
+    url: "bolt://neo4j:secret@host.docker.internal"
+indexing:
+  node_query: >-
+    MATCH (n {uuid: $uuid})
+    RETURN n {_label: labels(n), .*}

@@ -1,0 +1,51 @@
+{
+  "mappings": {
+    "properties": {
+      "_label": {
+        "type": "keyword"
+      },
+      "fulltext": {
+        "type": "text"
+      },
+      "name": {
+        "type": "text",
+        "copy_to": [
+          "fulltext"
+        ],
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "sameAs": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "text": {
+        "type": "text",
+        "copy_to": [
+          "fulltext"
+        ]
+      },
+      "url": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "uuid": {
+        "type": "keyword"
+      }
+    }
+  }
+}

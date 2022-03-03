@@ -27,6 +27,7 @@ services:
         image: strehle-de/topiccards-php
         volumes:
             - ./app:/opt/app
+            - ./var/tmp:/opt/tmp
             - ./docker/php/zz-log.conf:/usr/local/etc/php-fpm.d/zz-log.conf
         restart: unless-stopped
     web:
