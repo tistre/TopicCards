@@ -1,8 +1,26 @@
 version: '3.0'
 
 services:
+    search:
+        image: elasticsearch:7.16.3
+        volumes:
+        - ./var/elasticsearch-data:/usr/share/elasticsearch/data
+        restart: unless-stopped
+        environment:
+        - discovery.type=single-node
+    neo4j:
+        image: neo4j:4.4
+        environment:
+        - "NEO4J_AUTH=neo4j/secret"
+        - "NEO4J_dbms_allow__upgrade=true"
+        ports:
+        - "7474:7474"
+        - "7687:7687"
+        volumes:
+        - ./var/neo4j-data:/data
+        - ./var/neo4j-logs:/logs
+        restart: unless-stopped
     php:
-        container_name: topiccards_php
         build:
             context: .
             dockerfile: ./docker/php/Dockerfile
@@ -10,15 +28,19 @@ services:
         volumes:
             - ./app:/opt/app
             - ./docker/php/zz-log.conf:/usr/local/etc/php-fpm.d/zz-log.conf
+        restart: unless-stopped
     web:
         build:
             context: .
             dockerfile: ./docker/web/Dockerfile
         hostname: web
         depends_on:
+            - neo4j
             - php
+            - search
         ports:
             - "8080:80"
         volumes:
             - ./app:/opt/app
             - ./docker/web/default.conf:/etc/nginx/conf.d/default.conf
+        restart: unless-stopped
