@@ -10,7 +10,7 @@ Build the PHP Docker image:
 Install dependencies:
 
 ```
-% docker compose run --workdir /opt/app php composer install
+% docker compose run --rm --workdir /opt/app php composer install
 ```
 
 Start application:
