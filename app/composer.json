@@ -7,7 +7,7 @@
         "php": ">=8.0.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "strehle-de/topiccards-lib": "^0.5.0",
+        "strehle-de/topiccards-lib": ">=0.6.1",
         "symfony/console": "6.0.*",
         "symfony/dotenv": "6.0.*",
         "symfony/flex": "^2",
